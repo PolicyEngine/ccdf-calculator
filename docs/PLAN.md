@@ -29,9 +29,9 @@ Development Fund (CCDF) and encoded in policyengine-us.
 - 30 states read `county_fips`; the reference households use each state's
   most populous county (see `scripts/state_config.py`).
 - Subsidy formula shape is common: `min(provider charge, state max rate) -
-  family copay`, summed over eligible children. The precomputed grid assumes a
-  provider charge at or above the state maximum, so it reports the maximum
-  subsidy for that household, and separately reports the copay.
+  family copay`, summed over eligible children. Colorado, Washington and
+  Minnesota effectively pay the provider's charge, so the grid carries a
+  provider-charge axis rather than assuming one value.
 
 ## Reference household grid (precomputed)
 
@@ -39,13 +39,14 @@ Development Fund (CCDF) and encoded in policyengine-us.
 |---|---|
 | Adults | 1, 2 (second adult also works 40 hours) |
 | Children | one of: `infant` (age 1), `preschool` (age 3), `school` (age 7), `two` (3 + 7), `three` (1 + 3 + 7) |
-| Earned income | $0 to $150,000 per year in $1,000 steps (151 points), via PolicyEngine axes |
+| Earned income | $0 to $200,000 per year in $1,000 steps (201 points), via PolicyEngine axes |
+| Provider charge | $1,000, $1,500 (default), $2,000, $2,500, $3,000 per child per month, as a second axis group |
 | Care schedule | under 5: 8 h/day, 5 days/week; school age: 3 h/day, 5 days/week; 22 attending days/month |
 | Provider | the state's default provider type (a licensed center) and base quality tier |
 | Outputs | monthly subsidy, monthly copay, eligible flag, plus SMI and FPL for the unit |
 
-10 structures × 151 income points per state, computed with one simulation
-per structure. Output: `public/data/{ST}.json` and `public/data/metadata.json`.
+10 structures × 201 income points × 5 charge levels per state, computed with
+one two-axis simulation per structure (about one second each). Output: `public/data/{ST}.json` and `public/data/metadata.json`.
 
 ## Live calculation
 
@@ -67,8 +68,8 @@ scripts/
   policy_index.py        parameter YAML -> public/data/policy_index.json
   microsim.py            Microcosm run -> public/data/impact.json
 src/app/                 Next.js App Router pages (calculator, compare, impact)
-src/components/          InputPanel, ResultsPanel, BenefitChart, StateMap, StateRanking, PolicyTable
-src/lib/                 dataLookup.ts, api.ts, situation.ts, niceTicks.js
+src/components/          Calculator*, Compare*, Impact, PolicyRules, StateMap, charts
+src/lib/                 dataLookup.ts, api.ts, situation.ts, household.ts, format.ts
 public/data/             generated JSON (committed)
 ```
 
@@ -77,9 +78,33 @@ public/data/             generated JSON (committed)
 Vercel project `ccdf-calculator`, base path `/us/ccdf-calculator`, registered
 in policyengine-app-v2 `appZoneRoutes.ts` and `apps.json` like tanf-calculator.
 
+## Population estimates (done 2026-09-09)
+
+`scripts/microsim.py --dataset-path data/populace_us_2024_year_2026.h5` runs
+the certified Microcosm 2026 dataset (downloaded with
+`scripts/download_dataset.py`, which needs the `policyengine` package) under
+the locally installed policyengine-us. Peak memory is under 4 GB and the two
+passes take about five minutes. The `policyengine` package itself pins an
+older model (1.764.6 at 5.3.0) that lacks 14 state programs, which is why
+the dev model is used and recorded in the output.
+
+Headline measure: children under 13 whose parents all work at least 20
+hours a week and whom the model would pay for if they used full-time care
+at $1,500 per child per month. National result: 16.9 million eligible
+children (31% of children under 13) in 9.4 million families; potential
+annual subsidy $151 billion if all of them used care (an upper bound).
+Restricting to families that report child care expenses in the CPS gives
+3.2 million children and $10.0 billion, but CPS expense reporters skew
+high-income and small states have 30 to 90 sampled families, so that
+subset is shown as secondary with sample sizes.
+
 ## Open items
 
-- Microsim requires the `policyengine` package and the Microcosm dataset;
-  childcare schedule inputs are not in the dataset and must be imputed
-  (see `scripts/microsim.py` header).
+- Production household API lags the repo (1.764.6 vs 1.824.7 on
+  2026-09-09); the live mode gates on `/us/metadata` and keeps the grid
+  estimate as the headline when the API model is older.
 - Verify per-state copay period conversion (weekly, daily) against labels.
+- Register the deployed app in policyengine-app-v2 (`appZoneRoutes.ts`,
+  `apps.json`) after the Vercel project exists.
+- Consider the state-calibrated `populace_us_2024_acs_local` dataset for
+  the population page once a machine with enough memory is available.

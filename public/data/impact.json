@@ -1,0 +1,796 @@
+{
+ "year": 2026,
+ "dataset": "../data/populace_us_2024_year_2026.h5",
+ "policyengine_version": null,
+ "policyengine_us_version": "1.824.7",
+ "bundle": null,
+ "assumed_charge_per_child_month": 1500,
+ "min_sample_units": 30,
+ "assumptions": [
+  "Eligible population: every child under 13 is assumed to be in full-time care (8 h/day under 5, 3 h/day at 5-12, 5 days/week, 22 days/month) at $1,500 per child per month, or the family's reported expenses if higher.",
+  "Parents meet the activity test when every adult in the family reports at least 20 usual weekly hours of work.",
+  "Provider type and quality tier are the model defaults (a licensed center, base tier).",
+  "Potential annual subsidy is what the model would pay if every eligible child used care at the assumed charge: an upper bound, not spending.",
+  "The paid-care subset restricts to families reporting child care expenses in the CPS; those families skew high-income and small states have few sampled units, so per-state values are noisy.",
+  "Counts are children and families the model would pay a positive subsidy, not actual caseloads, which are limited by funding, waitlists and take-up."
+ ],
+ "national": {
+  "eligible_children": 16853856.450301602,
+  "eligible_families": 9372601.38936203,
+  "potential_annual_subsidy": 151456497923.1199,
+  "children_under_13": 53683548.0,
+  "paid_care": {
+   "eligible_children": 3209892.449662397,
+   "eligible_families": 1729868.321699596,
+   "annual_subsidy": 9973323424.434437,
+   "children_in_paid_care": 13725309.07307053
+  }
+ },
+ "states": {
+  "AK": {
+   "eligible_children": 30981.726627515964,
+   "eligible_families": 16561.6216589088,
+   "potential_annual_subsidy": 280183617.0335571,
+   "children_under_13": 121950.953125,
+   "eligible_share": 0.2540507132876577,
+   "paid_care": {
+    "eligible_children": 4057.4366351737845,
+    "eligible_families": 1436.3943398636038,
+    "annual_subsidy": 7282491.998531347,
+    "children_in_paid_care": 33059.80122135136,
+    "sample_units": 46,
+    "small_sample": false
+   }
+  },
+  "AL": {
+   "eligible_children": 163742.022756155,
+   "eligible_families": 95993.24940234923,
+   "potential_annual_subsidy": 653224144.2601392,
+   "children_under_13": 863424.875,
+   "eligible_share": 0.1896424662958141,
+   "paid_care": {
+    "eligible_children": 44081.756193503505,
+    "eligible_families": 22317.55096399295,
+    "annual_subsidy": 57420434.57887585,
+    "children_in_paid_care": 121732.30897498073,
+    "sample_units": 57,
+    "small_sample": false
+   }
+  },
+  "AR": {
+   "eligible_children": 144507.40410904904,
+   "eligible_families": 93549.69161750452,
+   "potential_annual_subsidy": 685443490.4997215,
+   "children_under_13": 506014.0,
+   "eligible_share": 0.2855798537373453,
+   "paid_care": {
+    "eligible_children": 42170.76131685614,
+    "eligible_families": 31733.315610423335,
+    "annual_subsidy": 81173404.68079644,
+    "children_in_paid_care": 88313.6692966386,
+    "sample_units": 55,
+    "small_sample": false
+   }
+  },
+  "AZ": {
+   "eligible_children": 306528.7650090456,
+   "eligible_families": 160482.86926272296,
+   "potential_annual_subsidy": 2996090134.748101,
+   "children_under_13": 1191052.5,
+   "eligible_share": 0.2573595748374195,
+   "paid_care": {
+    "eligible_children": 38712.43121389742,
+    "eligible_families": 19355.604182794923,
+    "annual_subsidy": 21566084.61712978,
+    "children_in_paid_care": 221957.5830450774,
+    "sample_units": 67,
+    "small_sample": false
+   }
+  },
+  "CA": {
+   "eligible_children": 2707461.85588903,
+   "eligible_families": 1588673.4406028562,
+   "potential_annual_subsidy": 26420660056.90779,
+   "children_under_13": 6258063.0,
+   "eligible_share": 0.4326357621981482,
+   "paid_care": {
+    "eligible_children": 594384.204794672,
+    "eligible_families": 324222.579551685,
+    "annual_subsidy": 2199894080.357126,
+    "children_in_paid_care": 1303034.992582383,
+    "sample_units": 160,
+    "small_sample": false
+   }
+  },
+  "CO": {
+   "eligible_children": 358268.66647277365,
+   "eligible_families": 191859.60169486795,
+   "potential_annual_subsidy": 5885732144.658736,
+   "children_under_13": 865165.0,
+   "eligible_share": 0.41410443842824624,
+   "paid_care": {
+    "eligible_children": 28325.847748127766,
+    "eligible_families": 19117.59984231647,
+    "annual_subsidy": 224447422.38650906,
+    "children_in_paid_care": 163527.55518449447,
+    "sample_units": 71,
+    "small_sample": false
+   }
+  },
+  "CT": {
+   "eligible_children": 172859.39137610135,
+   "eligible_families": 122289.34204573266,
+   "potential_annual_subsidy": 1395787344.768436,
+   "children_under_13": 527536.0625,
+   "eligible_share": 0.32767312732501835,
+   "paid_care": {
+    "eligible_children": 109073.3051312716,
+    "eligible_families": 82091.68690517533,
+    "annual_subsidy": 841263476.5154232,
+    "children_in_paid_care": 295565.4078706455,
+    "sample_units": 69,
+    "small_sample": false
+   }
+  },
+  "DC": {
+   "eligible_children": 45141.77869760599,
+   "eligible_families": 26738.361124549105,
+   "potential_annual_subsidy": 609847131.0060047,
+   "children_under_13": 104913.890625,
+   "eligible_share": 0.43027456544299697,
+   "paid_care": {
+    "eligible_children": 12654.449905976668,
+    "eligible_families": 6750.156580503259,
+    "annual_subsidy": 37741573.8968889,
+    "children_in_paid_care": 23793.144104494764,
+    "sample_units": 54,
+    "small_sample": false
+   }
+  },
+  "DE": {
+   "eligible_children": 38194.30622671571,
+   "eligible_families": 20595.905538472667,
+   "potential_annual_subsidy": 358520826.2607472,
+   "children_under_13": 158531.0625,
+   "eligible_share": 0.2409263246230732,
+   "paid_care": {
+    "eligible_children": 16141.801640673773,
+    "eligible_families": 12405.903294283256,
+    "annual_subsidy": 41921986.7858792,
+    "children_in_paid_care": 52142.86095194041,
+    "sample_units": 75,
+    "small_sample": false
+   }
+  },
+  "FL": {
+   "eligible_children": 1404596.6681377706,
+   "eligible_families": 705134.9996742025,
+   "potential_annual_subsidy": 9032056010.75679,
+   "children_under_13": 3265354.5,
+   "eligible_share": 0.4301513566559988,
+   "paid_care": {
+    "eligible_children": 187018.62872544606,
+    "eligible_families": 100841.17231785902,
+    "annual_subsidy": 765369286.9221618,
+    "children_in_paid_care": 528214.2256896733,
+    "sample_units": 103,
+    "small_sample": false
+   }
+  },
+  "GA": {
+   "eligible_children": 315516.24544069706,
+   "eligible_families": 182199.76344430813,
+   "potential_annual_subsidy": 2352229321.1978593,
+   "children_under_13": 1831979.25,
+   "eligible_share": 0.17222697551879862,
+   "paid_care": {
+    "eligible_children": 54660.53662845655,
+    "eligible_families": 21166.87413680856,
+    "annual_subsidy": 92916118.3386964,
+    "children_in_paid_care": 488268.44467707374,
+    "sample_units": 65,
+    "small_sample": false
+   }
+  },
+  "HI": {
+   "eligible_children": 28696.948205299355,
+   "eligible_families": 21181.651967875718,
+   "potential_annual_subsidy": 255472400.38488892,
+   "children_under_13": 218380.8125,
+   "eligible_share": 0.13140782780675547,
+   "paid_care": {
+    "eligible_children": 5055.398238160444,
+    "eligible_families": 1685.1329569708469,
+    "annual_subsidy": 451870.7403615713,
+    "children_in_paid_care": 30812.058102744704,
+    "sample_units": 34,
+    "small_sample": false
+   }
+  },
+  "IA": {
+   "eligible_children": 74208.89642664063,
+   "eligible_families": 39191.83606284554,
+   "potential_annual_subsidy": 424119568.98266745,
+   "children_under_13": 523559.125,
+   "eligible_share": 0.1417392857523792,
+   "paid_care": {
+    "eligible_children": 0.1036660181125626,
+    "eligible_families": 0.060050737811252475,
+    "annual_subsidy": 65.70055402650536,
+    "children_in_paid_care": 153807.85871318227,
+    "sample_units": 85,
+    "small_sample": false
+   }
+  },
+  "ID": {
+   "eligible_children": 40851.19906950006,
+   "eligible_families": 19103.50457362525,
+   "potential_annual_subsidy": 319880978.6866509,
+   "children_under_13": 331973.0,
+   "eligible_share": 0.12305578787883369,
+   "paid_care": {
+    "eligible_children": 2413.6346927944687,
+    "eligible_families": 2413.489762685087,
+    "annual_subsidy": 14144423.38113666,
+    "children_in_paid_care": 42869.226314161206,
+    "sample_units": 47,
+    "small_sample": false
+   }
+  },
+  "IL": {
+   "eligible_children": 586998.2367333286,
+   "eligible_families": 270875.6234150976,
+   "potential_annual_subsidy": 4639974862.582161,
+   "children_under_13": 1905714.875,
+   "eligible_share": 0.30801996900681616,
+   "paid_care": {
+    "eligible_children": 185714.98109658586,
+    "eligible_families": 63791.836744241766,
+    "annual_subsidy": 633156012.3577106,
+    "children_in_paid_care": 736697.3624413767,
+    "sample_units": 113,
+    "small_sample": false
+   }
+  },
+  "IN": {
+   "eligible_children": 205876.39405849169,
+   "eligible_families": 105726.32022214786,
+   "potential_annual_subsidy": 1182355564.7787838,
+   "children_under_13": 1132894.875,
+   "eligible_share": 0.1817259470420781,
+   "paid_care": {
+    "eligible_children": 21191.80530247098,
+    "eligible_families": 10016.873374787217,
+    "annual_subsidy": 33910484.48527668,
+    "children_in_paid_care": 238108.45189890364,
+    "sample_units": 89,
+    "small_sample": false
+   }
+  },
+  "KS": {
+   "eligible_children": 180935.85814950947,
+   "eligible_families": 115384.61552217184,
+   "potential_annual_subsidy": 1083564123.1402187,
+   "children_under_13": 516164.21875,
+   "eligible_share": 0.35053932755680667,
+   "paid_care": {
+    "eligible_children": 58843.6192946168,
+    "eligible_families": 34255.79657429806,
+    "annual_subsidy": 140778278.3720433,
+    "children_in_paid_care": 167250.34841597133,
+    "sample_units": 75,
+    "small_sample": false
+   }
+  },
+  "KY": {
+   "eligible_children": 223409.27693960618,
+   "eligible_families": 116702.44655738992,
+   "potential_annual_subsidy": 1582225247.210778,
+   "children_under_13": 757628.25,
+   "eligible_share": 0.29487981333801394,
+   "paid_care": {
+    "eligible_children": 16956.09567979467,
+    "eligible_families": 8478.025598389562,
+    "annual_subsidy": 11346233.745229421,
+    "children_in_paid_care": 183465.56568364275,
+    "sample_units": 50,
+    "small_sample": false
+   }
+  },
+  "LA": {
+   "eligible_children": 283602.3193864005,
+   "eligible_families": 162082.0363450387,
+   "potential_annual_subsidy": 1764230922.508266,
+   "children_under_13": 723219.125,
+   "eligible_share": 0.3921388547162667,
+   "paid_care": {
+    "eligible_children": 87276.21934333048,
+    "eligible_families": 44419.13730975008,
+    "annual_subsidy": 132915398.56443776,
+    "children_in_paid_care": 236225.4503325626,
+    "sample_units": 60,
+    "small_sample": false
+   }
+  },
+  "MA": {
+   "eligible_children": 371213.81605432264,
+   "eligible_families": 199301.4186213889,
+   "potential_annual_subsidy": 4200029561.9198394,
+   "children_under_13": 979825.5625,
+   "eligible_share": 0.378857043806022,
+   "paid_care": {
+    "eligible_children": 7391.932115950098,
+    "eligible_families": 7391.483727824059,
+    "annual_subsidy": 62133346.166976504,
+    "children_in_paid_care": 279129.34696003736,
+    "sample_units": 116,
+    "small_sample": false
+   }
+  },
+  "MD": {
+   "eligible_children": 306493.02523833944,
+   "eligible_families": 199186.45174024056,
+   "potential_annual_subsidy": 2109173220.9985685,
+   "children_under_13": 1015714.375,
+   "eligible_share": 0.30175119382192406,
+   "paid_care": {
+    "eligible_children": 43925.170180861605,
+    "eligible_families": 21962.60278197727,
+    "annual_subsidy": 154354079.72012496,
+    "children_in_paid_care": 204100.75436800963,
+    "sample_units": 69,
+    "small_sample": false
+   }
+  },
+  "ME": {
+   "eligible_children": 108335.28637634029,
+   "eligible_families": 51392.76733128633,
+   "potential_annual_subsidy": 819805429.0844781,
+   "children_under_13": 178808.6875,
+   "eligible_share": 0.605872611062817,
+   "paid_care": {
+    "eligible_children": 24538.206543455948,
+    "eligible_families": 12269.099118167767,
+    "annual_subsidy": 55328185.919386595,
+    "children_in_paid_care": 67284.85710482206,
+    "sample_units": 57,
+    "small_sample": false
+   }
+  },
+  "MI": {
+   "eligible_children": 441161.7976698253,
+   "eligible_families": 204102.94462049432,
+   "potential_annual_subsidy": 4505259840.303608,
+   "children_under_13": 1618786.75,
+   "eligible_share": 0.27252619757965363,
+   "paid_care": {
+    "eligible_children": 148342.3908172371,
+    "eligible_families": 43864.87648979714,
+    "annual_subsidy": 224346925.306306,
+    "children_in_paid_care": 473385.11210540833,
+    "sample_units": 85,
+    "small_sample": false
+   }
+  },
+  "MN": {
+   "eligible_children": 188098.0487854242,
+   "eligible_families": 86180.76539439062,
+   "potential_annual_subsidy": 2770904956.9978757,
+   "children_under_13": 905714.25,
+   "eligible_share": 0.20767924186400313,
+   "paid_care": {
+    "eligible_children": 20533.63253407192,
+    "eligible_families": 10266.811554239015,
+    "annual_subsidy": 117989744.10216394,
+    "children_in_paid_care": 358605.3834641243,
+    "sample_units": 105,
+    "small_sample": false
+   }
+  },
+  "MO": {
+   "eligible_children": 186908.7857913375,
+   "eligible_families": 125271.98826406035,
+   "potential_annual_subsidy": 1644655206.7217584,
+   "children_under_13": 1013493.875,
+   "eligible_share": 0.1844202420970107,
+   "paid_care": {
+    "eligible_children": 36862.716633163625,
+    "eligible_families": 26548.747672325582,
+    "annual_subsidy": 154176950.73125324,
+    "children_in_paid_care": 354197.7279297889,
+    "sample_units": 66,
+    "small_sample": false
+   }
+  },
+  "MS": {
+   "eligible_children": 180881.67062153737,
+   "eligible_families": 122763.11626747079,
+   "potential_annual_subsidy": 736634286.7760551,
+   "children_under_13": 499040.65625,
+   "eligible_share": 0.36245878638577833,
+   "paid_care": {
+    "eligible_children": 48303.8318944404,
+    "eligible_families": 32696.500329478964,
+    "annual_subsidy": 92619678.43323733,
+    "children_in_paid_care": 104692.57067306596,
+    "sample_units": 54,
+    "small_sample": false
+   }
+  },
+  "MT": {
+   "eligible_children": 29658.1246684278,
+   "eligible_families": 10054.190493827162,
+   "potential_annual_subsidy": 383397021.02024007,
+   "children_under_13": 173275.03125,
+   "eligible_share": 0.1711621371785371,
+   "paid_care": {
+    "eligible_children": 0.0007565623382106423,
+    "eligible_families": 0.00037828116910532117,
+    "annual_subsidy": 0.8155957190267173,
+    "children_in_paid_care": 40007.80423948524,
+    "sample_units": 32,
+    "small_sample": false
+   }
+  },
+  "NC": {
+   "eligible_children": 651501.792410699,
+   "eligible_families": 306740.1132532533,
+   "potential_annual_subsidy": 3676220233.338721,
+   "children_under_13": 1822866.125,
+   "eligible_share": 0.35740517829344104,
+   "paid_care": {
+    "eligible_children": 43677.44997179683,
+    "eligible_families": 18119.25217693008,
+    "annual_subsidy": 159144140.04379928,
+    "children_in_paid_care": 630667.0911584946,
+    "sample_units": 94,
+    "small_sample": false
+   }
+  },
+  "ND": {
+   "eligible_children": 24970.194326189623,
+   "eligible_families": 9677.324083632018,
+   "potential_annual_subsidy": 159865863.0517481,
+   "children_under_13": 130536.421875,
+   "eligible_share": 0.19128909746048317,
+   "paid_care": {
+    "eligible_children": 0.20256971707567573,
+    "eligible_families": 0.07362765414291061,
+    "annual_subsidy": 481.8599537068228,
+    "children_in_paid_care": 31106.79919529843,
+    "sample_units": 46,
+    "small_sample": false
+   }
+  },
+  "NE": {
+   "eligible_children": 42340.936839283415,
+   "eligible_families": 21063.288978697994,
+   "potential_annual_subsidy": 478946310.24047995,
+   "children_under_13": 362412.875,
+   "eligible_share": 0.11683066403003319,
+   "paid_care": {
+    "eligible_children": 0.1369774416089058,
+    "eligible_families": 0.0456591472029686,
+    "annual_subsidy": 603.4729801596623,
+    "children_in_paid_care": 143839.83289385302,
+    "sample_units": 88,
+    "small_sample": false
+   }
+  },
+  "NH": {
+   "eligible_children": 68798.83102832481,
+   "eligible_families": 41845.893727251416,
+   "potential_annual_subsidy": 626541792.4663429,
+   "children_under_13": 174589.78125,
+   "eligible_share": 0.39405989592145624,
+   "paid_care": {
+    "eligible_children": 6303.185727495089,
+    "eligible_families": 3287.458313864292,
+    "annual_subsidy": 9136680.20626144,
+    "children_in_paid_care": 21404.25621971354,
+    "sample_units": 53,
+    "small_sample": false
+   }
+  },
+  "NJ": {
+   "eligible_children": 285145.7302443593,
+   "eligible_families": 154086.2298274259,
+   "potential_annual_subsidy": 2622070334.8982277,
+   "children_under_13": 1436785.0,
+   "eligible_share": 0.19846095988220874,
+   "paid_care": {
+    "eligible_children": 167058.41142204055,
+    "eligible_families": 81197.68973284907,
+    "annual_subsidy": 150419060.2132198,
+    "children_in_paid_care": 441837.8093274406,
+    "sample_units": 110,
+    "small_sample": false
+   }
+  },
+  "NM": {
+   "eligible_children": 164466.99924644962,
+   "eligible_families": 107032.09657236439,
+   "potential_annual_subsidy": 1273867806.6948075,
+   "children_under_13": 311019.75,
+   "eligible_share": 0.5287992137041124,
+   "paid_care": {
+    "eligible_children": 21408.635742718994,
+    "eligible_families": 14895.718756267655,
+    "annual_subsidy": 70160592.05255851,
+    "children_in_paid_care": 24830.573348307982,
+    "sample_units": 41,
+    "small_sample": false
+   }
+  },
+  "NV": {
+   "eligible_children": 67184.51974589637,
+   "eligible_families": 45013.25243691148,
+   "potential_annual_subsidy": 554283534.7101758,
+   "children_under_13": 515597.1875,
+   "eligible_share": 0.13030427895011815,
+   "paid_care": {
+    "eligible_children": 0.00169306097086519,
+    "eligible_families": 0.00169306097086519,
+    "annual_subsidy": 1.4076270529653954,
+    "children_in_paid_care": 136890.2093538054,
+    "sample_units": 51,
+    "small_sample": false
+   }
+  },
+  "NY": {
+   "eligible_children": 991506.9380886267,
+   "eligible_families": 683279.920933903,
+   "potential_annual_subsidy": 13748632713.416798,
+   "children_under_13": 2928908.75,
+   "eligible_share": 0.3385243524874671,
+   "paid_care": {
+    "eligible_children": 113215.47624511394,
+    "eligible_families": 100916.61149422533,
+    "annual_subsidy": 448356437.1696806,
+    "children_in_paid_care": 671309.9513276662,
+    "sample_units": 128,
+    "small_sample": false
+   }
+  },
+  "OH": {
+   "eligible_children": 457308.88446839526,
+   "eligible_families": 214680.85574667668,
+   "potential_annual_subsidy": 3409930706.7825756,
+   "children_under_13": 1908823.0,
+   "eligible_share": 0.2395763695577826,
+   "paid_care": {
+    "eligible_children": 124573.1004281711,
+    "eligible_families": 69895.12247962796,
+    "annual_subsidy": 138988266.9070832,
+    "children_in_paid_care": 635856.3123170887,
+    "sample_units": 100,
+    "small_sample": false
+   }
+  },
+  "OK": {
+   "eligible_children": 261545.4849747778,
+   "eligible_families": 127424.43627497775,
+   "potential_annual_subsidy": 692900672.522048,
+   "children_under_13": 747812.625,
+   "eligible_share": 0.34974735145020824,
+   "paid_care": {
+    "eligible_children": 6549.705341763329,
+    "eligible_families": 6549.700327131664,
+    "annual_subsidy": 19884891.751564916,
+    "children_in_paid_care": 243302.63910192734,
+    "sample_units": 61,
+    "small_sample": false
+   }
+  },
+  "OR": {
+   "eligible_children": 149728.02159359952,
+   "eligible_families": 73495.48567308468,
+   "potential_annual_subsidy": 1573156897.5828547,
+   "children_under_13": 623178.75,
+   "eligible_share": 0.2402649666626141,
+   "paid_care": {
+    "eligible_children": 38506.689888842986,
+    "eligible_families": 15669.843257337925,
+    "annual_subsidy": 43462913.43867984,
+    "children_in_paid_care": 162983.7872146328,
+    "sample_units": 86,
+    "small_sample": false
+   }
+  },
+  "PA": {
+   "eligible_children": 235125.86000602366,
+   "eligible_families": 170711.07519647956,
+   "potential_annual_subsidy": 1834781180.5386863,
+   "children_under_13": 1790197.0,
+   "eligible_share": 0.13134077423100568,
+   "paid_care": {
+    "eligible_children": 16018.874813929666,
+    "eligible_families": 16018.367936572758,
+    "annual_subsidy": 64362776.83346249,
+    "children_in_paid_care": 406156.83849227545,
+    "sample_units": 131,
+    "small_sample": false
+   }
+  },
+  "RI": {
+   "eligible_children": 21895.46710757741,
+   "eligible_families": 17355.12293942152,
+   "potential_annual_subsidy": 144613005.15028304,
+   "children_under_13": 149019.203125,
+   "eligible_share": 0.14693050726630913,
+   "paid_care": {
+    "eligible_children": 4184.3641586545855,
+    "eligible_families": 4184.356254747487,
+    "annual_subsidy": 3190640.5451293495,
+    "children_in_paid_care": 24085.415326187416,
+    "sample_units": 45,
+    "small_sample": false
+   }
+  },
+  "SC": {
+   "eligible_children": 260517.04016140028,
+   "eligible_families": 177158.1661467775,
+   "potential_annual_subsidy": 1459194058.8544505,
+   "children_under_13": 822765.4375,
+   "eligible_share": 0.31663585790986787,
+   "paid_care": {
+    "eligible_children": 131765.30270477931,
+    "eligible_families": 72643.31545355672,
+    "annual_subsidy": 240241510.62235552,
+    "children_in_paid_care": 185532.19362902897,
+    "sample_units": 52,
+    "small_sample": false
+   }
+  },
+  "SD": {
+   "eligible_children": 30087.567503933562,
+   "eligible_families": 13213.473193898913,
+   "potential_annual_subsidy": 73559664.0860533,
+   "children_under_13": 176882.28125,
+   "eligible_share": 0.17009938639025532,
+   "paid_care": {
+    "eligible_children": 2865.4027761123143,
+    "eligible_families": 1432.7121659331024,
+    "annual_subsidy": 3792289.597250305,
+    "children_in_paid_care": 38888.940671947596,
+    "sample_units": 59,
+    "small_sample": false
+   }
+  },
+  "TN": {
+   "eligible_children": 407655.9391554995,
+   "eligible_families": 227629.5957563973,
+   "potential_annual_subsidy": 2311265390.8856363,
+   "children_under_13": 1216478.25,
+   "eligible_share": 0.3351115724062469,
+   "paid_care": {
+    "eligible_children": 206663.781430681,
+    "eligible_families": 74857.14054563688,
+    "annual_subsidy": 388137412.97796893,
+    "children_in_paid_care": 439647.97599012835,
+    "sample_units": 77,
+    "small_sample": false
+   }
+  },
+  "TX": {
+   "eligible_children": 2344887.63357425,
+   "eligible_families": 1237243.188161951,
+   "potential_annual_subsidy": 22146483246.62108,
+   "children_under_13": 5698549.5,
+   "eligible_share": 0.4114885083606364,
+   "paid_care": {
+    "eligible_children": 271764.9470950328,
+    "eligible_families": 153173.58592965966,
+    "annual_subsidy": 730403781.5901116,
+    "children_in_paid_care": 1195392.5826034774,
+    "sample_units": 137,
+    "small_sample": false
+   }
+  },
+  "UT": {
+   "eligible_children": 208414.86112562515,
+   "eligible_families": 115090.42057216883,
+   "potential_annual_subsidy": 1720722554.910113,
+   "children_under_13": 664858.0,
+   "eligible_share": 0.31347274324085017,
+   "paid_care": {
+    "eligible_children": 41852.849018377485,
+    "eligible_families": 19548.93213378603,
+    "annual_subsidy": 54765875.92599542,
+    "children_in_paid_care": 144922.00220314658,
+    "sample_units": 40,
+    "small_sample": false
+   }
+  },
+  "VA": {
+   "eligible_children": 383417.13436782523,
+   "eligible_families": 220289.99210265442,
+   "potential_annual_subsidy": 4109745028.4234066,
+   "children_under_13": 1411750.25,
+   "eligible_share": 0.2715899178114721,
+   "paid_care": {
+    "eligible_children": 57670.193870350486,
+    "eligible_families": 34347.93035723572,
+    "annual_subsidy": 291233964.86242294,
+    "children_in_paid_care": 366908.2024773015,
+    "sample_units": 90,
+    "small_sample": false
+   }
+  },
+  "VT": {
+   "eligible_children": 56162.582209946486,
+   "eligible_families": 31282.08212585887,
+   "potential_annual_subsidy": 748725804.4944713,
+   "children_under_13": 76449.765625,
+   "eligible_share": 0.7346338049672273,
+   "paid_care": {
+    "eligible_children": 4927.675620465743,
+    "eligible_families": 31282.08212585887,
+    "annual_subsidy": 534217919.1045157,
+    "children_in_paid_care": 10451.40186575419,
+    "sample_units": 27,
+    "small_sample": true
+   }
+  },
+  "WA": {
+   "eligible_children": 375476.58084828826,
+   "eligible_families": 200721.92903884815,
+   "potential_annual_subsidy": 6198040093.129652,
+   "children_under_13": 1238636.0,
+   "eligible_share": 0.30313714509209183,
+   "paid_care": {
+    "eligible_children": 65241.216496733716,
+    "eligible_families": 25871.770902949385,
+    "annual_subsidy": 312405323.74156696,
+    "children_in_paid_care": 313722.265933448,
+    "sample_units": 81,
+    "small_sample": false
+   }
+  },
+  "WI": {
+   "eligible_children": 189381.26496154926,
+   "eligible_families": 98901.16212850035,
+   "potential_annual_subsidy": 2440140363.603135,
+   "children_under_13": 935859.25,
+   "eligible_share": 0.20236084107898625,
+   "paid_care": {
+    "eligible_children": 34073.449377748184,
+    "eligible_families": 17036.73157104454,
+    "annual_subsidy": 25743254.918414842,
+    "children_in_paid_care": 378023.88360291836,
+    "sample_units": 75,
+    "small_sample": false
+   }
+  },
+  "WV": {
+   "eligible_children": 28074.45515700418,
+   "eligible_families": 14416.76983414439,
+   "potential_annual_subsidy": 239425120.03817242,
+   "children_under_13": 259896.40625,
+   "eligible_share": 0.10802171358229075,
+   "paid_care": {
+    "eligible_children": 10999.172040341422,
+    "eligible_families": 5499.580849363236,
+    "annual_subsidy": 72827031.02095082,
+    "children_in_paid_care": 54419.62407854694,
+    "sample_units": 44,
+    "small_sample": false
+   }
+  },
+  "WY": {
+   "eligible_children": 23133.216239289628,
+   "eligible_families": 11668.99119092332,
+   "potential_annual_subsidy": 121928132.48528343,
+   "children_under_13": 91500.40625,
+   "eligible_share": 0.2528209129048498,
+   "paid_care": {
+    "eligible_children": 1941.325527457957,
+    "eligible_families": 1940.985805498145,
+    "annual_subsidy": 13799534.551069781,
+    "children_in_paid_care": 32878.61239210231,
+    "sample_units": 34,
+    "small_sample": false
+   }
+  }
+ }
+}

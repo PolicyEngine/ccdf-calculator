@@ -1,0 +1,3463 @@
+{
+ "year": 2026,
+ "states": {
+  "AK": {
+   "code": "AK",
+   "name": "Alaska",
+   "program": "Child Care Assistance Program (PASS)",
+   "main": "ak_ccap",
+   "copay": "ak_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "ak_ccap_eligible",
+   "county": "ANCHORAGE_MUNICIPALITY_AK",
+   "copay_entity": "spm_unit",
+   "copay_label": "Alaska CCAP family monthly copay",
+   "main_label": "Alaska CCAP monthly benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "ak_ccap",
+    "ak_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ak_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ak_ccap_care_schedule",
+     "label": "Alaska CCAP care schedule (provider billing)",
+     "entity": "person",
+     "type": "enum",
+     "default": "FT_MONTH",
+     "options": [
+      {
+       "value": "FT_MONTH",
+       "label": "Full-time month"
+      },
+      {
+       "value": "PT_MONTH",
+       "label": "Part-time month"
+      },
+      {
+       "value": "FT_DAY",
+       "label": "Full-time day"
+      },
+      {
+       "value": "PT_DAY",
+       "label": "Part-time day"
+      }
+     ]
+    },
+    {
+     "name": "ak_ccap_provider_type",
+     "label": "Alaska CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed or military child care center"
+      },
+      {
+       "value": "LICENSED_GROUP_HOME",
+       "label": "Licensed group home"
+      },
+      {
+       "value": "LICENSED_HOME",
+       "label": "Licensed or military family home"
+      },
+      {
+       "value": "APPROVED_RELATIVE_IN_HOME",
+       "label": "Approved relative or in-home care"
+      }
+     ]
+    }
+   ]
+  },
+  "AL": {
+   "code": "AL",
+   "name": "Alabama",
+   "program": "Child Care Subsidy Program",
+   "main": "al_ccsp",
+   "copay": "al_ccsp_weekly_copay_per_child",
+   "copay_factor": 4.333333333333333,
+   "eligible": "al_ccsp_eligible",
+   "county": "JEFFERSON_COUNTY_AL",
+   "copay_entity": "spm_unit",
+   "copay_label": "Alabama CCSP weekly per-child parental fee",
+   "main_label": "Alabama Child Care Subsidy Program benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "al_ccsp",
+    "al_ccsp_weekly_copay_per_child",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "al_ccsp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "al_ccsp_enrolled",
+     "label": "Whether the family is currently enrolled in Alabama CCSP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "al_ccsp_provider_type",
+     "label": "Alabama CCSP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "GFDC",
+       "label": "Group Family Day Care Home"
+      },
+      {
+       "value": "FDC",
+       "label": "Family Day Care Home"
+      },
+      {
+       "value": "INFORMAL",
+       "label": "Informal (License-Exempt) Provider"
+      }
+     ]
+    },
+    {
+     "name": "al_ccsp_quality_tier",
+     "label": "Alabama CCSP provider quality tier",
+     "entity": "person",
+     "type": "enum",
+     "default": "BASE",
+     "options": [
+      {
+       "value": "BASE",
+       "label": "Base"
+      },
+      {
+       "value": "STAR_1",
+       "label": "1 Star"
+      },
+      {
+       "value": "STAR_2",
+       "label": "2 Star"
+      },
+      {
+       "value": "STAR_3",
+       "label": "3 Star"
+      },
+      {
+       "value": "STAR_4",
+       "label": "4 Star"
+      },
+      {
+       "value": "STAR_5",
+       "label": "5 Star"
+      }
+     ]
+    }
+   ]
+  },
+  "AR": {
+   "code": "AR",
+   "name": "Arkansas",
+   "program": "School Readiness Assistance",
+   "main": "ar_sra",
+   "copay": "ar_sra_daily_copay",
+   "copay_factor": "days",
+   "eligible": "is_ar_sra_eligible",
+   "county": "PULASKI_COUNTY_AR",
+   "copay_entity": "person",
+   "copay_label": "Arkansas SRA daily family copay",
+   "main_label": "Arkansas School Readiness Assistance benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ar_sra",
+    "ar_sra_daily_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "is_ar_sra_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ar_sra_care_type",
+     "label": "Arkansas SRA care type",
+     "entity": "person",
+     "type": "enum",
+     "default": "REGULAR",
+     "options": [
+      {
+       "value": "REGULAR",
+       "label": "Regular"
+      },
+      {
+       "value": "NIGHT_WEEKEND",
+       "label": "Night/Weekend"
+      },
+      {
+       "value": "SN1",
+       "label": "Special Needs Level 1"
+      },
+      {
+       "value": "SN2",
+       "label": "Special Needs Level 2"
+      },
+      {
+       "value": "SN3",
+       "label": "Special Needs Level 3"
+      }
+     ]
+    }
+   ]
+  },
+  "AZ": {
+   "code": "AZ",
+   "name": "Arizona",
+   "program": "Child Care Assistance Program",
+   "main": "az_ccap",
+   "copay": "az_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "az_ccap_eligible",
+   "county": "MARICOPA_COUNTY_AZ",
+   "copay_entity": "spm_unit",
+   "copay_label": "Arizona Child Care Assistance Program copay",
+   "main_label": "Arizona Child Care Assistance Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "az_ccap",
+    "az_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "az_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "az_ccap_enrolled",
+     "label": "Enrolled in Arizona Child Care Assistance Program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "az_ccap_provider_type",
+     "label": "Arizona Child Care Assistance Program provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Group home"
+      },
+      {
+       "value": "CERTIFIED_FAMILY",
+       "label": "Certified family home or certified in-home provider"
+      },
+      {
+       "value": "RELATIVE",
+       "label": "Non-certified relative provider"
+      }
+     ]
+    },
+    {
+     "name": "az_ccap_quality_enhanced_provider",
+     "label": "Arizona Child Care Assistance Program quality enhanced provider",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    }
+   ]
+  },
+  "CA": {
+   "code": "CA",
+   "name": "California",
+   "program": "CalWORKs child care and CAPP",
+   "main": "ca_child_care_subsidies",
+   "copay": "ca_child_care_family_fee",
+   "copay_factor": 1,
+   "eligible": null,
+   "county": "LOS_ANGELES_COUNTY_CA",
+   "copay_entity": "spm_unit",
+   "copay_label": "California child care family fee",
+   "main_label": "California child care subsidies",
+   "outputs": [
+    "child_care_subsidies",
+    "ca_child_care_subsidies",
+    "ca_child_care_family_fee",
+    "spm_unit_fpg",
+    "hhs_smi"
+   ],
+   "inputs": [
+    {
+     "name": "ca_calworks_child_care_factor_category",
+     "label": "California CalWORKs Child Care factor category",
+     "entity": "person",
+     "type": "enum",
+     "default": "STANDARD",
+     "options": [
+      {
+       "value": "STANDARD",
+       "label": "Standard Rate Ceilings"
+      },
+      {
+       "value": "EVENING_AND_WEEKEND_I",
+       "label": "Evening/Weekend Care Rate Ceilings (50% or more of time)"
+      },
+      {
+       "value": "EVENING_AND_WEEKEND_II",
+       "label": "Evening/Weekend Care Rate Ceilings (at least 10% but less than 50% of time)"
+      },
+      {
+       "value": "EXCEPTIONAL_NEEDS",
+       "label": "Exceptional Needs Care Rate Ceilings"
+      },
+      {
+       "value": "SEVERELY_DISABLED",
+       "label": "Severely Disabled Care Rate Ceilings"
+      }
+     ]
+    },
+    {
+     "name": "ca_calworks_child_care_provider_category",
+     "label": "California CalWORKs Child Care provider categroy",
+     "entity": "person",
+     "type": "enum",
+     "default": "CHILD_CARE_CENTER",
+     "options": [
+      {
+       "value": "CHILD_CARE_CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "FAMILY_CHILD_CARE_HOME",
+       "label": "Family and child care home"
+      },
+      {
+       "value": "LICENSE_EXEMPT",
+       "label": "License exempt"
+      }
+     ]
+    },
+    {
+     "name": "ca_calworks_child_care_time_category",
+     "label": "California CalWORKs Child Care time category",
+     "entity": "person",
+     "type": "enum",
+     "default": "WEEKLY",
+     "options": [
+      {
+       "value": "HOURLY",
+       "label": "Hourly"
+      },
+      {
+       "value": "DAILY",
+       "label": "Daily"
+      },
+      {
+       "value": "WEEKLY",
+       "label": "Weekly"
+      },
+      {
+       "value": "MONTHLY",
+       "label": "Monthly"
+      }
+     ]
+    }
+   ]
+  },
+  "CO": {
+   "code": "CO",
+   "name": "Colorado",
+   "program": "Colorado Child Care Assistance Program",
+   "main": "co_ccap_subsidy",
+   "copay": "co_ccap_parent_fee",
+   "copay_factor": 1,
+   "eligible": "co_ccap_eligible",
+   "county": "DENVER_COUNTY_CO",
+   "copay_entity": "spm_unit",
+   "copay_label": "Colorado Child Care Assistance Program parent fee",
+   "main_label": "Colorado Child Care Assistance Program",
+   "outputs": [
+    "child_care_subsidies",
+    "co_ccap_subsidy",
+    "co_ccap_parent_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "co_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "co_ccap_is_in_entry_process",
+     "label": "Whether applicants are in the entry process of the Colorado Child Care Assistance Program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": true
+    },
+    {
+     "name": "co_ccap_is_in_re_determination_process",
+     "label": "Whether applicants are in the re-determination process of the Colorado Child Care Assistance Program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "co_quality_rating_of_child_care_facility",
+     "label": "Quality rating of child care facility for Colorado Child Care Assistance Program",
+     "entity": "person",
+     "type": "number",
+     "default": 0.0
+    }
+   ]
+  },
+  "CT": {
+   "code": "CT",
+   "name": "Connecticut",
+   "program": "Care 4 Kids",
+   "main": "ct_c4k",
+   "copay": "ct_c4k_family_fee",
+   "copay_factor": 1,
+   "eligible": "ct_c4k_eligible",
+   "county": "FAIRFIELD_COUNTY_CT",
+   "copay_entity": "spm_unit",
+   "copay_label": "Connecticut Care 4 Kids family fee",
+   "main_label": "Connecticut Care 4 Kids subsidy amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ct_c4k",
+    "ct_c4k_family_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ct_c4k_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ct_c4k_provider_accredited",
+     "label": "Whether the child's Care 4 Kids provider is accredited",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ct_c4k_provider_type",
+     "label": "Connecticut Care 4 Kids provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Centers/Group Homes/School Programs"
+      },
+      {
+       "value": "FAMILY",
+       "label": "Licensed Family Child Care Homes"
+      },
+      {
+       "value": "RELATIVE",
+       "label": "Unlicensed Relative Care"
+      },
+      {
+       "value": "RECREATIONAL",
+       "label": "Recreational Programs (Summer)"
+      }
+     ]
+    }
+   ]
+  },
+  "DC": {
+   "code": "DC",
+   "name": "District of Columbia",
+   "program": "Child Care Subsidy Program",
+   "main": "dc_ccsp",
+   "copay": "dc_ccsp_copay",
+   "copay_factor": 1,
+   "eligible": "dc_ccsp_eligible",
+   "county": "DISTRICT_OF_COLUMBIA_DC",
+   "copay_entity": "spm_unit",
+   "copay_label": "DC Child Care Subsidy Program (CCSP) copay",
+   "main_label": "DC Child Care Subsidy Program (CCSP) benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "dc_ccsp",
+    "dc_ccsp_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "dc_ccsp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "dc_ccsp_childcare_provider_category",
+     "label": "DC Child Care Subsidy Program (CCSP) child care provider category",
+     "entity": "person",
+     "type": "enum",
+     "default": "CHILD_CENTER",
+     "options": [
+      {
+       "value": "CHILD_CENTER",
+       "label": "Child Center"
+      },
+      {
+       "value": "CHILD_HOME_AND_EXPANDED_HOME",
+       "label": "Child Home and Expanded Home"
+      },
+      {
+       "value": "IN_HOME_CHILD_CARE",
+       "label": "In-Home Child Care"
+      }
+     ]
+    },
+    {
+     "name": "dc_ccsp_enrolled",
+     "label": "Whether the family is currently enrolled in DC Child Care Subsidy Program (CCSP)",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "dc_ccsp_schedule_type",
+     "label": "DC Child Care Subsidy Program (CCSP) schedule type",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_TIME_TRADITIONAL",
+     "options": [
+      {
+       "value": "FULL_TIME_TRADITIONAL",
+       "label": "Full-Time Traditional"
+      },
+      {
+       "value": "PART_TIME_TRADITIONAL",
+       "label": "Part-Time Traditional"
+      },
+      {
+       "value": "EXTENDED_DAY_FULL_TIME",
+       "label": "Extended Day Full-Time"
+      },
+      {
+       "value": "EXTENDED_DAY_PART_TIME",
+       "label": "Extended Day Part-Time"
+      },
+      {
+       "value": "FULL_TIME_NONTRADITIONAL",
+       "label": "Full-Time Nontraditional"
+      },
+      {
+       "value": "PART_TIME_NONTRADITIONAL",
+       "label": "Part-Time Nontraditional"
+      }
+     ]
+    }
+   ]
+  },
+  "DE": {
+   "code": "DE",
+   "name": "Delaware",
+   "program": "Purchase of Care",
+   "main": "de_poc",
+   "copay": "de_poc_copay",
+   "copay_factor": 1,
+   "eligible": "de_poc_eligible",
+   "county": "NEW_CASTLE_COUNTY_DE",
+   "copay_entity": "spm_unit",
+   "copay_label": "Delaware Purchase of Care family copayment",
+   "main_label": "Delaware Purchase of Care benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "de_poc",
+    "de_poc_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "de_poc_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "de_poc_enrolled",
+     "label": "Whether the family is currently enrolled in Delaware Purchase of Care",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "de_poc_provider_type",
+     "label": "Delaware Purchase of Care child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "FAMILY_HOME",
+       "label": "Family Home"
+      },
+      {
+       "value": "CENTER",
+       "label": "Center"
+      }
+     ]
+    }
+   ]
+  },
+  "FL": {
+   "code": "FL",
+   "name": "Florida",
+   "program": "School Readiness Program",
+   "main": "fl_sr",
+   "copay": "fl_sr_copay",
+   "copay_factor": 1,
+   "eligible": "is_fl_sr_eligible",
+   "county": "MIAMI_DADE_COUNTY_FL",
+   "copay_entity": "spm_unit",
+   "copay_label": "Florida School Readiness family copay",
+   "main_label": "Florida School Readiness program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "fl_sr",
+    "fl_sr_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "is_fl_sr_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "fl_sr_enrolled",
+     "label": "Currently enrolled in the Florida School Readiness program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "fl_sr_provider_type",
+     "label": "Florida School Readiness child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_EXEMPT",
+     "options": [
+      {
+       "value": "LICENSED_EXEMPT",
+       "label": "Licensed/Exempt"
+      },
+      {
+       "value": "LICENSED_FAMILY_CHILD_CARE_HOME",
+       "label": "Licensed Family Child Care Home"
+      },
+      {
+       "value": "REGISTERED_FAMILY_CHILD_CARE_HOME",
+       "label": "Registered Family Child Care Home"
+      }
+     ]
+    }
+   ]
+  },
+  "GA": {
+   "code": "GA",
+   "name": "Georgia",
+   "program": "Childcare and Parent Services (CAPS)",
+   "main": "ga_caps",
+   "copay": "ga_caps_family_fee",
+   "copay_factor": 1,
+   "eligible": "ga_caps_eligible",
+   "county": "FULTON_COUNTY_GA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Georgia CAPS family fee (co-payment)",
+   "main_label": "Georgia CAPS benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ga_caps",
+    "ga_caps_family_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ga_caps_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ga_caps_care_type",
+     "label": "Georgia CAPS care type",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_TIME",
+     "options": [
+      {
+       "value": "FULL_TIME",
+       "label": "Full Time"
+      },
+      {
+       "value": "PART_TIME",
+       "label": "Part Time"
+      },
+      {
+       "value": "BEFORE_AFTER_SCHOOL",
+       "label": "Before and After School"
+      }
+     ]
+    },
+    {
+     "name": "ga_caps_enrolled",
+     "label": "Whether the family is currently enrolled in Georgia CAPS",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ga_caps_provider_type",
+     "label": "Georgia CAPS child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Center"
+      },
+      {
+       "value": "FAMILY",
+       "label": "Family"
+      },
+      {
+       "value": "INFORMAL",
+       "label": "Informal"
+      }
+     ]
+    },
+    {
+     "name": "ga_caps_quality_rating",
+     "label": "Georgia CAPS provider Quality Rated designation",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "ONE_STAR",
+       "label": "1 Star"
+      },
+      {
+       "value": "TWO_STAR",
+       "label": "2 Stars"
+      },
+      {
+       "value": "THREE_STAR",
+       "label": "3 Stars"
+      },
+      {
+       "value": "NONE",
+       "label": "None"
+      }
+     ]
+    }
+   ]
+  },
+  "HI": {
+   "code": "HI",
+   "name": "Hawaii",
+   "program": "Child Care Subsidy",
+   "main": "hi_ccap",
+   "copay": "hi_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "hi_ccap_eligible",
+   "county": "HONOLULU_COUNTY_HI",
+   "copay_entity": "spm_unit",
+   "copay_label": "Hawaii CCAP family co-payment",
+   "main_label": "Hawaii CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "hi_ccap",
+    "hi_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "hi_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "hi_ccap_provider_category",
+     "label": "Hawaii CCAP provider category",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER_OR_GROUP_HOME",
+     "options": [
+      {
+       "value": "LICENSED_CENTER_OR_GROUP_HOME",
+       "label": "Licensed center or group child care home"
+      },
+      {
+       "value": "ACCREDITED_CENTER",
+       "label": "NAEYC/NECPA/Hawaiian-medium accredited center-based"
+      },
+      {
+       "value": "NAFCC_ACCREDITED_FAMILY",
+       "label": "NAFCC accredited family child care home"
+      },
+      {
+       "value": "REGISTERED_FAMILY",
+       "label": "Registered family child care home"
+      },
+      {
+       "value": "LEGALLY_EXEMPT",
+       "label": "Legally exempt relative/non-relative/center"
+      },
+      {
+       "value": "LICENSED_SCHOOL_AGE_INTERSESSION_SUMMER",
+       "label": "Licensed school-age intersession/summer"
+      },
+      {
+       "value": "LICENSED_BEFORE_AFTER_SCHOOL",
+       "label": "Licensed before/after school"
+      },
+      {
+       "value": "EXEMPT_BEFORE_AFTER_SCHOOL",
+       "label": "Legally exempt before/after school"
+      }
+     ]
+    }
+   ]
+  },
+  "IA": {
+   "code": "IA",
+   "name": "Iowa",
+   "program": "Child Care Assistance",
+   "main": "ia_cca",
+   "copay": "ia_cca_copay",
+   "copay_factor": 1,
+   "eligible": "ia_cca_eligible",
+   "county": "POLK_COUNTY_IA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Iowa CCA family fee",
+   "main_label": "Iowa CCA benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ia_cca",
+    "ia_cca_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ia_cca_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ia_cca_enrolled",
+     "label": "Currently enrolled in Iowa CCA",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ia_cca_provider_type",
+     "label": "Iowa CCA child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Center"
+      },
+      {
+       "value": "CHILD_DEVELOPMENT_HOME_AB",
+       "label": "Child Development Home A or B"
+      },
+      {
+       "value": "CHILD_DEVELOPMENT_HOME_C",
+       "label": "Child Development Home C"
+      },
+      {
+       "value": "CHILD_CARE_HOME_NOT_REGISTERED",
+       "label": "Child Care Home (Not Registered)"
+      },
+      {
+       "value": "IN_HOME",
+       "label": "In-Home Provider"
+      }
+     ]
+    },
+    {
+     "name": "ia_cca_quality_rating",
+     "label": "Iowa CCA provider quality rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "NO_RATING",
+     "options": [
+      {
+       "value": "RATING_1_OR_2",
+       "label": "Quality Rating 1 or 2"
+      },
+      {
+       "value": "RATING_3_OR_4",
+       "label": "Quality Rating 3 or 4"
+      },
+      {
+       "value": "RATING_5",
+       "label": "Quality Rating 5"
+      },
+      {
+       "value": "NO_RATING",
+       "label": "No Quality Rating"
+      }
+     ]
+    }
+   ]
+  },
+  "ID": {
+   "code": "ID",
+   "name": "Idaho",
+   "program": "Idaho Child Care Program",
+   "main": "id_iccp",
+   "copay": "id_iccp_copay",
+   "copay_factor": 1,
+   "eligible": "id_iccp_eligible",
+   "county": "ADA_COUNTY_ID",
+   "copay_entity": "spm_unit",
+   "copay_label": "Idaho Child Care Program family copay",
+   "main_label": "Idaho Child Care Program benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "id_iccp",
+    "id_iccp_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "id_iccp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "id_iccp_enrolled",
+     "label": "Whether the family is currently enrolled in the Idaho Child Care Program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "id_iccp_provider_type",
+     "label": "Idaho Child Care Program provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "FAMILY",
+       "label": "Group or Family Care"
+      }
+     ]
+    }
+   ]
+  },
+  "IL": {
+   "code": "IL",
+   "name": "Illinois",
+   "program": "Child Care Assistance Program",
+   "main": "il_ccap",
+   "copay": "il_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "il_ccap_eligible",
+   "county": "COOK_COUNTY_IL",
+   "copay_entity": "spm_unit",
+   "copay_label": "Illinois CCAP monthly family copayment",
+   "main_label": "Illinois CCAP ordinary child care subsidy",
+   "outputs": [
+    "child_care_subsidies",
+    "il_ccap",
+    "il_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "il_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "childcare_provider_type_group",
+     "label": "Childcare provider type group",
+     "entity": "person",
+     "type": "enum",
+     "default": "DCC_SACC",
+     "options": [
+      {
+       "value": "DCC_SACC",
+       "label": "Licenced/registered/permitted day care center; registered school-age child care"
+      },
+      {
+       "value": "FDC_GFDC",
+       "label": "Registered family day care homes; licensed group family day care"
+      },
+      {
+       "value": "LE_GC",
+       "label": "Legally exempt group child care programs"
+      },
+      {
+       "value": "LE_STD",
+       "label": "Informal child care standard rate"
+      },
+      {
+       "value": "LE_ENH",
+       "label": "Informal child care enhanced rate"
+      }
+     ]
+    },
+    {
+     "name": "il_ccap_enrolled",
+     "label": "Whether the family is currently enrolled in Illinois Child Care Assistance Program (CCAP)",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "il_ccap_non_parent_relative_child_only_tanf",
+     "label": "Illinois CCAP non-parent relative child-only TANF copay exemption",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "il_ccap_protective_care_override",
+     "label": "Illinois CCAP protective child care copay exemption override",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    }
+   ]
+  },
+  "IN": {
+   "code": "IN",
+   "name": "Indiana",
+   "program": "CCDF Voucher Program",
+   "main": "in_ccdf",
+   "copay": "in_ccdf_copay",
+   "copay_factor": 1,
+   "eligible": "in_ccdf_eligible",
+   "county": "MARION_COUNTY_IN",
+   "copay_entity": "spm_unit",
+   "copay_label": "Indiana CCDF copayment",
+   "main_label": "Indiana CCDF benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "in_ccdf",
+    "in_ccdf_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "in_ccdf_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "in_ccdf_provider_type",
+     "label": "Indiana CCDF provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed center"
+      },
+      {
+       "value": "LICENSED_HOME",
+       "label": "Licensed home"
+      },
+      {
+       "value": "REGISTERED_MINISTRY",
+       "label": "Registered child care ministry"
+      },
+      {
+       "value": "EXEMPT_CENTER",
+       "label": "Legally license exempt center"
+      },
+      {
+       "value": "ACCREDITED_EXEMPT_CENTER",
+       "label": "Accredited legally license exempt center"
+      },
+      {
+       "value": "EXEMPT_HOME",
+       "label": "Legally license exempt home"
+      }
+     ]
+    },
+    {
+     "name": "in_ccdf_ptq_level",
+     "label": "Indiana CCDF Paths to QUALITY level",
+     "entity": "person",
+     "type": "enum",
+     "default": "BASE",
+     "options": [
+      {
+       "value": "BASE",
+       "label": "Unrated"
+      },
+      {
+       "value": "PTQ_1",
+       "label": "Paths to QUALITY Level 1"
+      },
+      {
+       "value": "PTQ_2",
+       "label": "Paths to QUALITY Level 2"
+      },
+      {
+       "value": "PTQ_3",
+       "label": "Paths to QUALITY Level 3"
+      },
+      {
+       "value": "PTQ_4",
+       "label": "Paths to QUALITY Level 4"
+      }
+     ]
+    }
+   ]
+  },
+  "KS": {
+   "code": "KS",
+   "name": "Kansas",
+   "program": "Child Care Assistance Program",
+   "main": "ks_ccap",
+   "copay": "ks_ccap_family_share",
+   "copay_factor": 1,
+   "eligible": "ks_ccap_eligible",
+   "county": "JOHNSON_COUNTY_KS",
+   "copay_entity": "spm_unit",
+   "copay_label": "Kansas CCAP family share deduction",
+   "main_label": "Kansas CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ks_ccap",
+    "ks_ccap_family_share",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ks_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ks_ccap_provider_type",
+     "label": "Kansas CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "LICENSED_HOME",
+       "label": "Licensed Child Care Home"
+      },
+      {
+       "value": "OUT_OF_HOME_RELATIVE",
+       "label": "Out-of-Home Relative Care"
+      },
+      {
+       "value": "IN_HOME_RELATIVE",
+       "label": "In-Home Relative Care"
+      },
+      {
+       "value": "ENHANCED_SPECIAL_CARE",
+       "label": "Enhanced Rate for Special Care"
+      }
+     ]
+    }
+   ]
+  },
+  "KY": {
+   "code": "KY",
+   "name": "Kentucky",
+   "program": "Child Care Assistance Program",
+   "main": "ky_ccap",
+   "copay": "ky_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "ky_ccap_eligible",
+   "county": "JEFFERSON_COUNTY_KY",
+   "copay_entity": "spm_unit",
+   "copay_label": "Kentucky CCAP family copayment",
+   "main_label": "Kentucky CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ky_ccap",
+    "ky_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ky_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ky_ccap_provider_type",
+     "label": "Kentucky CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_TYPE_I",
+     "options": [
+      {
+       "value": "LICENSED_TYPE_I",
+       "label": "Licensed Type I"
+      },
+      {
+       "value": "LICENSED_TYPE_II",
+       "label": "Licensed Type II"
+      },
+      {
+       "value": "CERTIFIED",
+       "label": "Certified"
+      },
+      {
+       "value": "REGISTERED",
+       "label": "Registered"
+      }
+     ]
+    }
+   ]
+  },
+  "LA": {
+   "code": "LA",
+   "name": "Louisiana",
+   "program": "Child Care Assistance Program",
+   "main": "la_ccap",
+   "copay": "la_ccap_daily_copay",
+   "copay_factor": "days",
+   "eligible": "la_ccap_eligible",
+   "county": "EAST_BATON_ROUGE_PARISH_LA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Louisiana CCAP daily co-payment",
+   "main_label": "Louisiana Child Care Assistance Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "la_ccap",
+    "la_ccap_daily_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "la_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "la_ccap_provider_type",
+     "label": "Louisiana CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "TYPE_III_EARLY_LEARNING_CENTER",
+     "options": [
+      {
+       "value": "TYPE_III_EARLY_LEARNING_CENTER",
+       "label": "Type III early learning center"
+      },
+      {
+       "value": "SCHOOL_CHILD_CARE_CENTER",
+       "label": "School child care center"
+      },
+      {
+       "value": "FAMILY_CHILD_CARE",
+       "label": "Family child care provider"
+      },
+      {
+       "value": "IN_HOME",
+       "label": "In-home provider"
+      },
+      {
+       "value": "MILITARY_CHILD_CARE_CENTER",
+       "label": "Military child care center"
+      }
+     ]
+    }
+   ]
+  },
+  "MA": {
+   "code": "MA",
+   "name": "Massachusetts",
+   "program": "Child Care Financial Assistance",
+   "main": "ma_ccfa",
+   "copay": "ma_ccfa_total_copay",
+   "copay_factor": 1,
+   "eligible": "ma_ccfa_eligible",
+   "county": "MIDDLESEX_COUNTY_MA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Massachusetts Child Care Financial Assistance (CCFA) parent total copay",
+   "main_label": "Massachusetts Child Care Financial Assistance (CCFA) benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ma_ccfa",
+    "ma_ccfa_total_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ma_ccfa_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ma_ccfa_care_provider_type",
+     "label": "Massachusetts Child Care Financial Assistance (CCFA) care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER_BASED_CARE_SCHOOL_AGE",
+     "options": [
+      {
+       "value": "CENTER_BASED_CARE_EARLY_EDUCATION",
+       "label": "Center-Based Care Early Education"
+      },
+      {
+       "value": "CENTER_BASED_CARE_SCHOOL_AGE",
+       "label": "Center-Based Care School Age"
+      },
+      {
+       "value": "HEAD_START_PARTNER_AND_KINDERGARTEN",
+       "label": "Head Start Partner and Kindergarten"
+      },
+      {
+       "value": "INFORMAL_CHILD_CARE",
+       "label": "Informal Child Care"
+      },
+      {
+       "value": "FAMILY_CHILD_CARE",
+       "label": "Family Child Care"
+      }
+     ]
+    },
+    {
+     "name": "ma_ccfa_enrolled",
+     "label": "Whether the family is currently enrolled in Massachusetts Child Care Financial Assistance (CCFA)",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ma_ccfa_is_in_relatives_home_care",
+     "label": "Whether the person is receiving relative or relative's home care",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ma_ccfa_schedule_type",
+     "label": "Massachusetts Child Care Financial Assistance (CCFA) schedule type",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_DAY",
+     "options": [
+      {
+       "value": "FULL_DAY",
+       "label": "Full Day"
+      },
+      {
+       "value": "BEFORE_ONLY",
+       "label": "Before Only"
+      },
+      {
+       "value": "AFTER_ONLY",
+       "label": "After Only"
+      },
+      {
+       "value": "BEFORE_AND_AFTER",
+       "label": "Before and After"
+      }
+     ]
+    }
+   ]
+  },
+  "MD": {
+   "code": "MD",
+   "name": "Maryland",
+   "program": "Child Care Scholarship",
+   "main": "md_ccs",
+   "copay": "md_ccs_weekly_copay",
+   "copay_factor": 4.333333333333333,
+   "eligible": "md_ccs_eligible",
+   "county": "MONTGOMERY_COUNTY_MD",
+   "copay_entity": "spm_unit",
+   "copay_label": "Maryland Child Care Scholarship (CCS) weekly copayment",
+   "main_label": "Maryland Child Care Scholarship (CCS) benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "md_ccs",
+    "md_ccs_weekly_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "md_ccs_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "md_ccs_enrolled",
+     "label": "Whether the family is currently enrolled in Maryland Child Care Scholarship (CCS)",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "md_ccs_provider_type",
+     "label": "Maryland CCS child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Child Care Center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed Family Child Care Home"
+      },
+      {
+       "value": "INFORMAL",
+       "label": "Informal/License-Exempt"
+      },
+      {
+       "value": "NONE",
+       "label": "None"
+      }
+     ]
+    }
+   ]
+  },
+  "ME": {
+   "code": "ME",
+   "name": "Maine",
+   "program": "Child Care Affordability Program",
+   "main": "me_ccap",
+   "copay": "me_ccap_parent_fee",
+   "copay_factor": 1,
+   "eligible": "me_ccap_eligible",
+   "county": "CUMBERLAND_COUNTY_ME",
+   "copay_entity": "spm_unit",
+   "copay_label": "Maine CCAP monthly parent fee",
+   "main_label": "Maine Child Care Affordability Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "me_ccap",
+    "me_ccap_parent_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "me_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "me_ccap_provider_type",
+     "label": "Maine CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Child Care Center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed Family Child Care"
+      },
+      {
+       "value": "LICENSE_EXEMPT",
+       "label": "License-Exempt Child Care"
+      }
+     ]
+    }
+   ]
+  },
+  "MI": {
+   "code": "MI",
+   "name": "Michigan",
+   "program": "Child Development and Care",
+   "main": "mi_ccap",
+   "copay": "mi_ccap_family_contribution",
+   "copay_factor": 2.1666666666666665,
+   "eligible": "mi_ccap_eligible",
+   "county": "WAYNE_COUNTY_MI",
+   "copay_entity": "spm_unit",
+   "copay_label": "Michigan CDC family contribution per two-week pay period",
+   "main_label": "Michigan CDC benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "mi_ccap",
+    "mi_ccap_family_contribution",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "mi_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "mi_ccap_enrolled",
+     "label": "Currently enrolled in Michigan CDC",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "mi_ccap_exempt_level",
+     "label": "Michigan CDC license-exempt provider quality level",
+     "entity": "person",
+     "type": "enum",
+     "default": "LEVEL_1",
+     "options": [
+      {
+       "value": "LEVEL_1",
+       "label": "Level 1"
+      },
+      {
+       "value": "LEVEL_2",
+       "label": "Level 2"
+      }
+     ]
+    },
+    {
+     "name": "mi_ccap_provider_type",
+     "label": "Michigan CDC child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "FAMILY_HOME",
+       "label": "Group and family child care home"
+      },
+      {
+       "value": "LICENSE_EXEMPT",
+       "label": "License-exempt related and unrelated"
+      }
+     ]
+    },
+    {
+     "name": "mi_ccap_star_rating",
+     "label": "Michigan CDC licensed provider star quality level",
+     "entity": "person",
+     "type": "enum",
+     "default": "STAR_1",
+     "options": [
+      {
+       "value": "STAR_1",
+       "label": "1 Star"
+      },
+      {
+       "value": "STAR_2",
+       "label": "2 Stars"
+      },
+      {
+       "value": "STAR_3",
+       "label": "3 Stars"
+      },
+      {
+       "value": "STAR_4",
+       "label": "4 Stars"
+      },
+      {
+       "value": "STAR_5",
+       "label": "5 Stars"
+      }
+     ]
+    }
+   ]
+  },
+  "MN": {
+   "code": "MN",
+   "name": "Minnesota",
+   "program": "Child Care Assistance Program",
+   "main": "mn_ccap",
+   "copay": "mn_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "mn_ccap_eligible",
+   "county": "HENNEPIN_COUNTY_MN",
+   "copay_entity": "spm_unit",
+   "copay_label": "Minnesota CCAP family copayment",
+   "main_label": "Minnesota CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "mn_ccap",
+    "mn_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "mn_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "mn_ccap_enrolled",
+     "label": "Currently enrolled in Minnesota CCAP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "mn_ccap_provider_type",
+     "label": "Minnesota CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CHILD_CARE_CENTER",
+     "options": [
+      {
+       "value": "FAMILY_CHILD_CARE",
+       "label": "Family child care"
+      },
+      {
+       "value": "CHILD_CARE_CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "LICENSE_EXEMPT",
+       "label": "License-exempt program"
+      },
+      {
+       "value": "LEGAL_NON_LICENSED",
+       "label": "Legal non-licensed provider"
+      }
+     ]
+    },
+    {
+     "name": "mn_ccap_quality_rating",
+     "label": "Minnesota CCAP provider quality rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "STAR_4",
+       "label": "Four-star Parent Aware"
+      },
+      {
+       "value": "ACCREDITED_OR_3STAR",
+       "label": "Accredited or three-star Parent Aware"
+      },
+      {
+       "value": "NONE",
+       "label": "No quality differential"
+      }
+     ]
+    }
+   ]
+  },
+  "MO": {
+   "code": "MO",
+   "name": "Missouri",
+   "program": "Child Care Subsidy",
+   "main": "mo_ccs",
+   "copay": "mo_ccs_copay",
+   "copay_factor": 1,
+   "eligible": "mo_ccs_eligible",
+   "county": "ST_LOUIS_COUNTY_MO",
+   "copay_entity": "spm_unit",
+   "copay_label": "Missouri Child Care Subsidy monthly sliding fee",
+   "main_label": "Missouri Child Care Subsidy benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "mo_ccs",
+    "mo_ccs_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "mo_ccs_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "mo_ccs_enrolled",
+     "label": "Currently enrolled in Missouri Child Care Subsidy",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "mo_ccs_provider_type",
+     "label": "Missouri Child Care Subsidy provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "REGISTERED_CENTER",
+       "label": "Registered child care center"
+      },
+      {
+       "value": "SIX_OR_FEWER",
+       "label": "License-exempt provider caring for six or fewer children"
+      },
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed child care center"
+      },
+      {
+       "value": "LICENSED_FAMILY_HOME",
+       "label": "Licensed family child care home"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Licensed group child care home"
+      }
+     ]
+    }
+   ]
+  },
+  "MS": {
+   "code": "MS",
+   "name": "Mississippi",
+   "program": "Child Care Payment Program",
+   "main": "ms_ccpp",
+   "copay": "ms_ccpp_copay",
+   "copay_factor": 1,
+   "eligible": "ms_ccpp_eligible",
+   "county": "HINDS_COUNTY_MS",
+   "copay_entity": "spm_unit",
+   "copay_label": "Mississippi CCPP monthly family co-payment",
+   "main_label": "Mississippi CCPP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ms_ccpp",
+    "ms_ccpp_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ms_ccpp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ms_ccpp_provider_type",
+     "label": "Mississippi CCPP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Licensed child care center"
+      },
+      {
+       "value": "FAMILY_HOME",
+       "label": "Registered family child care home"
+      }
+     ]
+    }
+   ]
+  },
+  "MT": {
+   "code": "MT",
+   "name": "Montana",
+   "program": "Best Beginnings Child Care Scholarship",
+   "main": "mt_ccap",
+   "copay": "mt_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "mt_ccap_eligible",
+   "county": "YELLOWSTONE_COUNTY_MT",
+   "copay_entity": "spm_unit",
+   "copay_label": "Montana Best Beginnings Child Care Scholarship monthly copayment",
+   "main_label": "Montana Best Beginnings Child Care Scholarship benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "mt_ccap",
+    "mt_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "mt_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "mt_ccap_care_time",
+     "label": "Montana Best Beginnings Child Care Scholarship care time",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_TIME",
+     "options": [
+      {
+       "value": "FULL_TIME",
+       "label": "Full-Time"
+      },
+      {
+       "value": "HALF_TIME",
+       "label": "Half-Time"
+      }
+     ]
+    },
+    {
+     "name": "mt_ccap_enrolled",
+     "label": "Enrolled in the Montana Best Beginnings Child Care Scholarship",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "mt_ccap_provider_type",
+     "label": "Montana Best Beginnings Child Care Scholarship provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Group Home"
+      },
+      {
+       "value": "FAMILY_HOME",
+       "label": "Family Home"
+      },
+      {
+       "value": "FFN",
+       "label": "Family, Friend & Neighbor"
+      },
+      {
+       "value": "RELATIVE_EXEMPT",
+       "label": "Relative Care Exempt"
+      },
+      {
+       "value": "SCHOOL_AGE_PROVIDER",
+       "label": "School Age Provider"
+      }
+     ]
+    }
+   ]
+  },
+  "NC": {
+   "code": "NC",
+   "name": "North Carolina",
+   "program": "Subsidized Child Care Assistance",
+   "main": "nc_scca",
+   "copay": "nc_scca_parent_fee",
+   "copay_factor": 1,
+   "eligible": "nc_scca_entry_eligible",
+   "county": "MECKLENBURG_COUNTY_NC",
+   "copay_entity": "spm_unit",
+   "copay_label": "North Carolina Subsidized Child Care Assistance Program parent fee",
+   "main_label": "North Carolina Subsidized Child Care Assistance Program",
+   "outputs": [
+    "child_care_subsidies",
+    "nc_scca",
+    "nc_scca_parent_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nc_scca_entry_eligible"
+   ],
+   "inputs": []
+  },
+  "ND": {
+   "code": "ND",
+   "name": "North Dakota",
+   "program": "Child Care Assistance Program",
+   "main": "nd_ccap",
+   "copay": "nd_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "nd_ccap_eligible",
+   "county": "CASS_COUNTY_ND",
+   "copay_entity": "spm_unit",
+   "copay_label": "North Dakota CCAP family co-payment",
+   "main_label": "North Dakota CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "nd_ccap",
+    "nd_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nd_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "nd_ccap_provider_qris_step",
+     "label": "North Dakota CCAP provider QRIS step rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "UNRATED",
+     "options": [
+      {
+       "value": "STEP_1",
+       "label": "Step 1"
+      },
+      {
+       "value": "STEP_2",
+       "label": "Step 2"
+      },
+      {
+       "value": "STEP_3",
+       "label": "Step 3"
+      },
+      {
+       "value": "STEP_4",
+       "label": "Step 4"
+      },
+      {
+       "value": "UNRATED",
+       "label": "Unrated"
+      }
+     ]
+    },
+    {
+     "name": "nd_ccap_provider_type",
+     "label": "North Dakota CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed family or group"
+      },
+      {
+       "value": "SELF_DECLARED_TRIBAL",
+       "label": "Self-declared or tribal"
+      },
+      {
+       "value": "APPROVED_RELATIVE",
+       "label": "Approved relative"
+      }
+     ]
+    }
+   ]
+  },
+  "NE": {
+   "code": "NE",
+   "name": "Nebraska",
+   "program": "Child Care Subsidy",
+   "main": "ne_child_care_subsidy",
+   "copay": "ne_child_care_subsidy_family_fee",
+   "copay_factor": 1,
+   "eligible": "ne_child_care_subsidy_eligible",
+   "county": "DOUGLAS_COUNTY_NE",
+   "copay_entity": "spm_unit",
+   "copay_label": "Nebraska Child Care Subsidy monthly family fee",
+   "main_label": "Nebraska Child Care Subsidy",
+   "outputs": [
+    "child_care_subsidies",
+    "ne_child_care_subsidy",
+    "ne_child_care_subsidy_family_fee",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ne_child_care_subsidy_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ne_child_care_subsidy_at_redetermination",
+     "label": "Nebraska Child Care Subsidy redetermination status",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ne_child_care_subsidy_enrolled",
+     "label": "Currently enrolled in the Nebraska Child Care Subsidy program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ne_child_care_subsidy_provider_type",
+     "label": "Nebraska Child Care Subsidy provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "HOME_I_II",
+       "label": "Licensed family child care home I or II"
+      },
+      {
+       "value": "CENTER",
+       "label": "Licensed child care center"
+      },
+      {
+       "value": "LICENSE_EXEMPT_FAMILY_HOME",
+       "label": "License-exempt family child care home"
+      },
+      {
+       "value": "LICENSE_EXEMPT_IN_HOME",
+       "label": "License-exempt in-home provider"
+      },
+      {
+       "value": "NONE",
+       "label": "No provider reported"
+      }
+     ]
+    },
+    {
+     "name": "ne_child_care_subsidy_quality_tier",
+     "label": "Nebraska Child Care Subsidy provider quality tier",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "BASE",
+       "label": "Base licensed rate"
+      },
+      {
+       "value": "ACCREDITED_STEP_3",
+       "label": "Accredited or Step 3"
+      },
+      {
+       "value": "STEP_4",
+       "label": "Step 4"
+      },
+      {
+       "value": "STEP_5",
+       "label": "Step 5"
+      },
+      {
+       "value": "NONE",
+       "label": "No quality tier reported"
+      }
+     ]
+    }
+   ]
+  },
+  "NH": {
+   "code": "NH",
+   "name": "New Hampshire",
+   "program": "Child Care Scholarship Program",
+   "main": "nh_ccap",
+   "copay": "nh_ccap_cost_share",
+   "copay_factor": 4.333333333333333,
+   "eligible": "nh_ccap_eligible",
+   "county": "HILLSBOROUGH_COUNTY_NH",
+   "copay_entity": "spm_unit",
+   "copay_label": "New Hampshire Child Care Scholarship Program weekly family cost share",
+   "main_label": "New Hampshire Child Care Scholarship Program benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "nh_ccap",
+    "nh_ccap_cost_share",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nh_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "nh_ccap_provider_type",
+     "label": "New Hampshire Child Care Scholarship Program provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed child care center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed family child care home"
+      },
+      {
+       "value": "LICENSE_EXEMPT_IN_HOME",
+       "label": "License-exempt in-home provider"
+      },
+      {
+       "value": "LICENSE_EXEMPT_CENTER",
+       "label": "License-exempt child care center"
+      }
+     ]
+    }
+   ]
+  },
+  "NJ": {
+   "code": "NJ",
+   "name": "New Jersey",
+   "program": "Child Care Assistance Program",
+   "main": "nj_ccap",
+   "copay": "nj_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "nj_ccap_eligible",
+   "county": "BERGEN_COUNTY_NJ",
+   "copay_entity": "spm_unit",
+   "copay_label": "New Jersey CCAP family co-payment",
+   "main_label": "New Jersey CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "nj_ccap",
+    "nj_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nj_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "nj_ccap_enrolled",
+     "label": "Whether the family is currently enrolled in New Jersey CCAP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "nj_ccap_grow_nj_kids_rating",
+     "label": "New Jersey CCAP Grow NJ Kids quality rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "NONE",
+       "label": "No Rating"
+      },
+      {
+       "value": "STAR_3",
+       "label": "3-Star"
+      },
+      {
+       "value": "STAR_4",
+       "label": "4-Star"
+      },
+      {
+       "value": "STAR_5",
+       "label": "5-Star"
+      }
+     ]
+    },
+    {
+     "name": "nj_ccap_provider_type",
+     "label": "New Jersey CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Center"
+      },
+      {
+       "value": "REGISTERED_FAMILY",
+       "label": "Registered Family"
+      },
+      {
+       "value": "APPROVED_HOME",
+       "label": "Approved Home"
+      },
+      {
+       "value": "ACA_SUMMER_CAMP",
+       "label": "ACA Summer Camp"
+      }
+     ]
+    }
+   ]
+  },
+  "NM": {
+   "code": "NM",
+   "name": "New Mexico",
+   "program": "Child Care Assistance Program",
+   "main": "nm_ccap",
+   "copay": "nm_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "nm_ccap_eligible",
+   "county": "BERNALILLO_COUNTY_NM",
+   "copay_entity": "spm_unit",
+   "copay_label": "New Mexico CCAP family copayment",
+   "main_label": "New Mexico CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "nm_ccap",
+    "nm_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nm_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "nm_ccap_focus_level",
+     "label": "New Mexico CCAP provider FOCUS quality level",
+     "entity": "person",
+     "type": "enum",
+     "default": "TWO_STAR",
+     "options": [
+      {
+       "value": "TWO_STAR",
+       "label": "2-Star"
+      },
+      {
+       "value": "TWO_PLUS_STAR",
+       "label": "2+Star FOCUS"
+      },
+      {
+       "value": "THREE_STAR",
+       "label": "3-Star FOCUS"
+      },
+      {
+       "value": "FOUR_STAR",
+       "label": "4-Star FOCUS"
+      },
+      {
+       "value": "FIVE_STAR",
+       "label": "5-Star FOCUS"
+      }
+     ]
+    },
+    {
+     "name": "nm_ccap_provider_type",
+     "label": "New Mexico CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Licensed Center"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Licensed Group Home"
+      },
+      {
+       "value": "FAMILY_HOME",
+       "label": "Licensed Family Home"
+      },
+      {
+       "value": "REGISTERED_HOME",
+       "label": "Registered Home / In-Home"
+      }
+     ]
+    }
+   ]
+  },
+  "NV": {
+   "code": "NV",
+   "name": "Nevada",
+   "program": "Child Care and Development Program",
+   "main": "nv_ccdp",
+   "copay": "nv_ccdp_copay",
+   "copay_factor": 1,
+   "eligible": "nv_ccdp_eligible",
+   "county": "CLARK_COUNTY_NV",
+   "copay_entity": "spm_unit",
+   "copay_label": "Nevada CCDP monthly family co-payment",
+   "main_label": "Nevada CCDP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "nv_ccdp",
+    "nv_ccdp_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "nv_ccdp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "nv_ccdp_enrolled",
+     "label": "Whether the family is currently enrolled in Nevada CCDP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "nv_ccdp_provider_star_rating",
+     "label": "Nevada CCDP child care provider Silver State Stars rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "STAR_1",
+     "options": [
+      {
+       "value": "STAR_1",
+       "label": "1 Star"
+      },
+      {
+       "value": "STAR_2",
+       "label": "2 Stars"
+      },
+      {
+       "value": "STAR_3",
+       "label": "3 Stars"
+      },
+      {
+       "value": "STAR_4",
+       "label": "4 Stars"
+      },
+      {
+       "value": "STAR_5",
+       "label": "5 Stars"
+      }
+     ]
+    },
+    {
+     "name": "nv_ccdp_provider_type",
+     "label": "Nevada CCDP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "FCC",
+       "label": "Family Child Care"
+      }
+     ]
+    }
+   ]
+  },
+  "NY": {
+   "code": "NY",
+   "name": "New York",
+   "program": "Child Care Assistance Program",
+   "main": "ny_ccap",
+   "copay": "ny_ccap_family_share",
+   "copay_factor": 1,
+   "eligible": null,
+   "county": "KINGS_COUNTY_NY",
+   "copay_entity": "spm_unit",
+   "copay_label": "New York CCAP monthly family share",
+   "main_label": "New York Child Care Assistance Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "ny_ccap",
+    "ny_ccap_family_share",
+    "spm_unit_fpg",
+    "hhs_smi"
+   ],
+   "inputs": [
+    {
+     "name": "childcare_provider_type_group",
+     "label": "Childcare provider type group",
+     "entity": "person",
+     "type": "enum",
+     "default": "DCC_SACC",
+     "options": [
+      {
+       "value": "DCC_SACC",
+       "label": "Licenced/registered/permitted day care center; registered school-age child care"
+      },
+      {
+       "value": "FDC_GFDC",
+       "label": "Registered family day care homes; licensed group family day care"
+      },
+      {
+       "value": "LE_GC",
+       "label": "Legally exempt group child care programs"
+      },
+      {
+       "value": "LE_STD",
+       "label": "Informal child care standard rate"
+      },
+      {
+       "value": "LE_ENH",
+       "label": "Informal child care enhanced rate"
+      }
+     ]
+    }
+   ]
+  },
+  "OH": {
+   "code": "OH",
+   "name": "Ohio",
+   "program": "Publicly Funded Child Care",
+   "main": "oh_ccap",
+   "copay": "oh_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "oh_ccap_eligible",
+   "county": "FRANKLIN_COUNTY_OH",
+   "copay_entity": "spm_unit",
+   "copay_label": "Ohio CCAP family copayment",
+   "main_label": "Ohio CCAP monthly subsidy",
+   "outputs": [
+    "child_care_subsidies",
+    "oh_ccap",
+    "oh_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "oh_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "oh_ccap_enrolled",
+     "label": "Whether the family is already enrolled in Ohio CCAP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "oh_ccap_has_special_accommodations",
+     "label": "Whether the Ohio CCAP child has approved special accommodations",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "oh_ccap_is_accredited",
+     "label": "Whether the child's Ohio CCAP provider is accredited",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "oh_ccap_non_traditional_hours",
+     "label": "Whether the child receives Ohio CCAP care during non-traditional hours",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "oh_ccap_provider_type",
+     "label": "Ohio CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Center"
+      },
+      {
+       "value": "HOME",
+       "label": "Home"
+      }
+     ]
+    },
+    {
+     "name": "oh_ccap_quality_tier",
+     "label": "Ohio CCAP provider Step Up To Quality tier",
+     "entity": "person",
+     "type": "enum",
+     "default": "NONE",
+     "options": [
+      {
+       "value": "GOLD",
+       "label": "Gold (5 stars)"
+      },
+      {
+       "value": "SILVER",
+       "label": "Silver (4 stars)"
+      },
+      {
+       "value": "BRONZE",
+       "label": "Bronze (3 stars)"
+      },
+      {
+       "value": "NONE",
+       "label": "Not rated"
+      }
+     ]
+    }
+   ]
+  },
+  "OK": {
+   "code": "OK",
+   "name": "Oklahoma",
+   "program": "Child Care Subsidy Program",
+   "main": "ok_ccs",
+   "copay": "ok_ccs_copay",
+   "copay_factor": 1,
+   "eligible": "ok_ccs_eligible",
+   "county": "OKLAHOMA_COUNTY_OK",
+   "copay_entity": "spm_unit",
+   "copay_label": "Oklahoma Child Care Subsidy family share copayment",
+   "main_label": "Oklahoma Child Care Subsidy benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ok_ccs",
+    "ok_ccs_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ok_ccs_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ok_ccs_provider_setting",
+     "label": "Oklahoma Child Care Subsidy provider setting",
+     "entity": "person",
+     "type": "enum",
+     "default": "CHILD_CARE_CENTER",
+     "options": [
+      {
+       "value": "CHILD_CARE_CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "CHILD_CARE_HOME",
+       "label": "Child care home"
+      },
+      {
+       "value": "IN_HOME",
+       "label": "In-home care"
+      }
+     ]
+    },
+    {
+     "name": "ok_ccs_star_level",
+     "label": "Oklahoma Child Care Subsidy provider star level",
+     "entity": "person",
+     "type": "enum",
+     "default": "STAR_1",
+     "options": [
+      {
+       "value": "STAR_1",
+       "label": "One star"
+      },
+      {
+       "value": "STAR_2",
+       "label": "Two star"
+      },
+      {
+       "value": "STAR_3",
+       "label": "Three star"
+      },
+      {
+       "value": "STAR_4",
+       "label": "Four star"
+      },
+      {
+       "value": "STAR_5",
+       "label": "Five star"
+      }
+     ]
+    }
+   ]
+  },
+  "OR": {
+   "code": "OR",
+   "name": "Oregon",
+   "program": "Employment Related Day Care",
+   "main": "or_erdc",
+   "copay": "or_erdc_copay",
+   "copay_factor": 1,
+   "eligible": "or_erdc_eligible",
+   "county": "MULTNOMAH_COUNTY_OR",
+   "copay_entity": "spm_unit",
+   "copay_label": "Oregon ERDC monthly copay",
+   "main_label": "Oregon Employment Related Day Care benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "or_erdc",
+    "or_erdc_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "or_erdc_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "or_erdc_provider_area",
+     "label": "Oregon ERDC provider rate area",
+     "entity": "person",
+     "type": "enum",
+     "default": "AREA_C",
+     "options": [
+      {
+       "value": "AREA_A",
+       "label": "Area A"
+      },
+      {
+       "value": "AREA_B",
+       "label": "Area B"
+      },
+      {
+       "value": "AREA_C",
+       "label": "Area C"
+      }
+     ]
+    },
+    {
+     "name": "or_erdc_provider_type",
+     "label": "Oregon ERDC provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CERTIFIED_CENTER",
+     "options": [
+      {
+       "value": "STANDARD_FAMILY",
+       "label": "Standard Family (FAM)"
+      },
+      {
+       "value": "STANDARD_CENTER",
+       "label": "Standard Center (NQC)"
+      },
+      {
+       "value": "ENHANCED_FAMILY",
+       "label": "Enhanced Family (QFM)"
+      },
+      {
+       "value": "ENHANCED_CENTER",
+       "label": "Enhanced Center (QEC)"
+      },
+      {
+       "value": "REGISTERED_FAMILY",
+       "label": "Registered Family (RFM)"
+      },
+      {
+       "value": "CERTIFIED_FAMILY",
+       "label": "Certified Family (CFM)"
+      },
+      {
+       "value": "CERTIFIED_CENTER",
+       "label": "Certified Center (CNT)"
+      }
+     ]
+    }
+   ]
+  },
+  "PA": {
+   "code": "PA",
+   "name": "Pennsylvania",
+   "program": "Child Care Works",
+   "main": "pa_ccw",
+   "copay": "pa_ccw_copay",
+   "copay_factor": 1,
+   "eligible": "pa_ccw_eligible",
+   "county": "PHILADELPHIA_COUNTY_PA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Pennsylvania CCW family copayment",
+   "main_label": "Pennsylvania Child Care Works benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "pa_ccw",
+    "pa_ccw_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "pa_ccw_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "pa_ccw_enrolled",
+     "label": "Whether the family is currently enrolled in Pennsylvania CCW",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "pa_ccw_has_stepparent",
+     "label": "Whether the family includes a stepparent for Pennsylvania CCW",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "pa_ccw_provider_type",
+     "label": "Pennsylvania CCW child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Center"
+      },
+      {
+       "value": "GROUP",
+       "label": "Group"
+      },
+      {
+       "value": "FAMILY",
+       "label": "Family"
+      },
+      {
+       "value": "R_N",
+       "label": "Relative/Neighbor"
+      }
+     ]
+    }
+   ]
+  },
+  "RI": {
+   "code": "RI",
+   "name": "Rhode Island",
+   "program": "Child Care Assistance Program",
+   "main": "ri_ccap",
+   "copay": "ri_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "ri_ccap_eligible",
+   "county": "PROVIDENCE_COUNTY_RI",
+   "copay_entity": "spm_unit",
+   "copay_label": "Rhode Island CCAP family co-payment",
+   "main_label": "Rhode Island CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ri_ccap",
+    "ri_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ri_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ri_ccap_enrolled",
+     "label": "Whether the family is currently enrolled in Rhode Island CCAP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "ri_ccap_provider_type",
+     "label": "Rhode Island CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed Family"
+      },
+      {
+       "value": "LICENSE_EXEMPT",
+       "label": "License Exempt"
+      }
+     ]
+    },
+    {
+     "name": "ri_ccap_star_rating",
+     "label": "Rhode Island CCAP provider star rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "STAR_1",
+     "options": [
+      {
+       "value": "STAR_1",
+       "label": "1 Star"
+      },
+      {
+       "value": "STAR_2",
+       "label": "2 Stars"
+      },
+      {
+       "value": "STAR_3",
+       "label": "3 Stars"
+      },
+      {
+       "value": "STAR_4",
+       "label": "4 Stars"
+      },
+      {
+       "value": "STAR_5",
+       "label": "5 Stars"
+      }
+     ]
+    },
+    {
+     "name": "ri_ccap_step_rating",
+     "label": "Rhode Island CCAP license-exempt provider step rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "STEP_1",
+     "options": [
+      {
+       "value": "STEP_1",
+       "label": "Step 1"
+      },
+      {
+       "value": "STEP_2",
+       "label": "Step 2"
+      },
+      {
+       "value": "STEP_3",
+       "label": "Step 3"
+      },
+      {
+       "value": "STEP_4",
+       "label": "Step 4"
+      }
+     ]
+    }
+   ]
+  },
+  "SC": {
+   "code": "SC",
+   "name": "South Carolina",
+   "program": "Child Care Scholarship Program",
+   "main": "sc_ccap",
+   "copay": "sc_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "sc_ccap_eligible",
+   "county": "GREENVILLE_COUNTY_SC",
+   "copay_entity": "spm_unit",
+   "copay_label": "South Carolina CCAP monthly family copay",
+   "main_label": "South Carolina CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "sc_ccap",
+    "sc_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "sc_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "sc_ccap_provider_type",
+     "label": "South Carolina CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "EXEMPT_CENTER",
+       "label": "Exempt/Waivered Center"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Group Child Care Home"
+      },
+      {
+       "value": "LICENSED_FAMILY_HOME",
+       "label": "Licensed Family Child Care Home"
+      },
+      {
+       "value": "REGISTERED_FAMILY_HOME",
+       "label": "Registered Family Child Care Home"
+      },
+      {
+       "value": "FFN",
+       "label": "Family, Friend, and Neighbor"
+      }
+     ]
+    },
+    {
+     "name": "sc_ccap_quality_level",
+     "label": "South Carolina CCAP provider quality level",
+     "entity": "person",
+     "type": "enum",
+     "default": "C",
+     "options": [
+      {
+       "value": "A_PLUS",
+       "label": "Level A+ (NAC)"
+      },
+      {
+       "value": "A",
+       "label": "Level A (ERS)"
+      },
+      {
+       "value": "B_PLUS",
+       "label": "Level B+ (EPC)"
+      },
+      {
+       "value": "B",
+       "label": "Level B (ECR)"
+      },
+      {
+       "value": "C",
+       "label": "Level C (LRC)"
+      }
+     ]
+    },
+    {
+     "name": "sc_ccap_registered_quality_level",
+     "label": "South Carolina CCAP registered family home quality level",
+     "entity": "person",
+     "type": "enum",
+     "default": "C",
+     "options": [
+      {
+       "value": "B_PLUS",
+       "label": "Level B+ (EPC)"
+      },
+      {
+       "value": "B",
+       "label": "Level B (ECR)"
+      },
+      {
+       "value": "C",
+       "label": "Level C (LRC)"
+      }
+     ]
+    }
+   ]
+  },
+  "SD": {
+   "code": "SD",
+   "name": "South Dakota",
+   "program": "Child Care Assistance",
+   "main": "sd_cca",
+   "copay": "sd_cca_copay",
+   "copay_factor": 1,
+   "eligible": "sd_cca_eligible",
+   "county": "MINNEHAHA_COUNTY_SD",
+   "copay_entity": "spm_unit",
+   "copay_label": "South Dakota CCA family co-payment",
+   "main_label": "South Dakota Child Care Assistance benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "sd_cca",
+    "sd_cca_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "sd_cca_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "sd_cca_provider_type",
+     "label": "South Dakota CCA child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "FAMILY_DAY_CARE",
+       "label": "Family day care"
+      },
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed center or school age program"
+      },
+      {
+       "value": "INFORMAL",
+       "label": "Informal, in-home, or relative"
+      }
+     ]
+    }
+   ]
+  },
+  "TN": {
+   "code": "TN",
+   "name": "Tennessee",
+   "program": "Child Care Certificate Program (Smart Steps)",
+   "main": "tn_ccap",
+   "copay": "tn_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "tn_ccap_eligible",
+   "county": "SHELBY_COUNTY_TN",
+   "copay_entity": "spm_unit",
+   "copay_label": "Tennessee CCAP parent copay",
+   "main_label": "Tennessee CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "tn_ccap",
+    "tn_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "tn_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "tn_ccap_enrolled",
+     "label": "Whether the family is already enrolled in Tennessee CCAP",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "tn_ccap_protective_services_waiver",
+     "label": "Tennessee CCAP protective services eligibility waiver",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "tn_ccap_provider_type",
+     "label": "Tennessee CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CHILD_CARE_CENTER",
+     "options": [
+      {
+       "value": "CHILD_CARE_CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "GROUP_HOME",
+       "label": "Group home"
+      },
+      {
+       "value": "FAMILY_HOME",
+       "label": "Family home"
+      },
+      {
+       "value": "AUTHORIZED",
+       "label": "Authorized"
+      }
+     ]
+    },
+    {
+     "name": "tn_ccap_qris_tier",
+     "label": "Tennessee CCAP provider QRIS Scorecard tier",
+     "entity": "person",
+     "type": "enum",
+     "default": "STATE_RATE",
+     "options": [
+      {
+       "value": "STATE_RATE",
+       "label": "State rate (no QRIS bonus)"
+      },
+      {
+       "value": "QRIS_80_89",
+       "label": "QRIS Scorecard 80-89"
+      },
+      {
+       "value": "QRIS_90_100",
+       "label": "QRIS Scorecard 90-100"
+      }
+     ]
+    }
+   ]
+  },
+  "TX": {
+   "code": "TX",
+   "name": "Texas",
+   "program": "Child Care Services",
+   "main": "tx_ccs",
+   "copay": "tx_ccs_copay",
+   "copay_factor": 1,
+   "eligible": "tx_ccs_eligible",
+   "county": "HARRIS_COUNTY_TX",
+   "copay_entity": "spm_unit",
+   "copay_label": "Texas Child Care Services (CCS) copayment",
+   "main_label": "Texas Child Care Services (CC) program benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "tx_ccs",
+    "tx_ccs_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "tx_ccs_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "tx_ccs_care_schedule",
+     "label": "Texas Child Care Services (CCS) care schedule",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_TIME",
+     "options": [
+      {
+       "value": "FULL_TIME",
+       "label": "Full Time"
+      },
+      {
+       "value": "PART_TIME",
+       "label": "Part Time"
+      },
+      {
+       "value": "BLENDED",
+       "label": "Blended"
+      }
+     ]
+    },
+    {
+     "name": "tx_ccs_provider_rating",
+     "label": "Texas Child Care Services (CCS) provider rating",
+     "entity": "person",
+     "type": "enum",
+     "default": "REG",
+     "options": [
+      {
+       "value": "REG",
+       "label": "Regular"
+      },
+      {
+       "value": "TRS2",
+       "label": "Texas Rising Star 2"
+      },
+      {
+       "value": "TRS3",
+       "label": "Texas Rising Star 3"
+      },
+      {
+       "value": "TRS4",
+       "label": "Texas Rising Star 4"
+      },
+      {
+       "value": "TSR",
+       "label": "Texas School Ready"
+      },
+      {
+       "value": "NONE",
+       "label": "None"
+      }
+     ]
+    },
+    {
+     "name": "tx_ccs_provider_type",
+     "label": "Texas Child Care Services (CCS) provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LCCC",
+     "options": [
+      {
+       "value": "LCCC",
+       "label": "Licensed Child Care Center"
+      },
+      {
+       "value": "LCCH",
+       "label": "Licensed Child Care Home"
+      },
+      {
+       "value": "RCCH",
+       "label": "Registered Child Care Home"
+      },
+      {
+       "value": "RELATIVE",
+       "label": "Relative Care"
+      }
+     ]
+    }
+   ]
+  },
+  "UT": {
+   "code": "UT",
+   "name": "Utah",
+   "program": "Child Care Assistance",
+   "main": "ut_ccap",
+   "copay": "ut_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "ut_ccap_eligible",
+   "county": "SALT_LAKE_COUNTY_UT",
+   "copay_entity": "spm_unit",
+   "copay_label": "Utah CCAP family co-payment",
+   "main_label": "Utah CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "ut_ccap",
+    "ut_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "ut_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "ut_ccap_provider_type",
+     "label": "Utah CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSE_EXEMPT_HOME",
+       "label": "License-exempt home (family, friend, and neighbor)"
+      },
+      {
+       "value": "LICENSED_COMMERCIAL_PRESCHOOL",
+       "label": "Licensed commercial preschool"
+      },
+      {
+       "value": "LICENSE_EXEMPT_CENTER",
+       "label": "License-exempt center or residential certificate"
+      },
+      {
+       "value": "LICENSED_FAMILY_HOME",
+       "label": "Licensed family home"
+      },
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed center"
+      }
+     ]
+    }
+   ]
+  },
+  "VA": {
+   "code": "VA",
+   "name": "Virginia",
+   "program": "Child Care Subsidy Program",
+   "main": "va_ccsp",
+   "copay": "va_ccsp_copay",
+   "copay_factor": 1,
+   "eligible": "va_ccsp_eligible",
+   "county": "FAIRFAX_COUNTY_VA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Virginia Child Care Subsidy Program family copayment",
+   "main_label": "Virginia Child Care Subsidy Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "va_ccsp",
+    "va_ccsp_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "va_ccsp_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "va_ccsp_enrolled",
+     "label": "Whether the family is currently enrolled in Virginia Child Care Subsidy Program",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "va_ccsp_is_full_day",
+     "label": "Virginia CCSP full day care",
+     "entity": "person",
+     "type": "bool",
+     "default": true
+    },
+    {
+     "name": "va_ccsp_provider_type",
+     "label": "Virginia CCSP provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Center"
+      },
+      {
+       "value": "FAMILY_DAY_HOME",
+       "label": "Family Day Home"
+      }
+     ]
+    }
+   ]
+  },
+  "VT": {
+   "code": "VT",
+   "name": "Vermont",
+   "program": "Child Care Financial Assistance Program",
+   "main": "vt_ccfap",
+   "copay": "vt_ccfap_family_share",
+   "copay_factor": 1,
+   "eligible": "vt_ccfap_eligible",
+   "county": "CHITTENDEN_COUNTY_VT",
+   "copay_entity": "spm_unit",
+   "copay_label": "Vermont CCFAP monthly family share (copayment)",
+   "main_label": "Vermont Child Care Financial Assistance Program benefit",
+   "outputs": [
+    "child_care_subsidies",
+    "vt_ccfap",
+    "vt_ccfap_family_share",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "vt_ccfap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "vt_ccfap_provider_type",
+     "label": "Vermont CCFAP provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_CENTER",
+     "options": [
+      {
+       "value": "LICENSED_CENTER",
+       "label": "Licensed Center"
+      },
+      {
+       "value": "REGISTERED_HOME",
+       "label": "Registered Family Child Care Home"
+      }
+     ]
+    }
+   ]
+  },
+  "WA": {
+   "code": "WA",
+   "name": "Washington",
+   "program": "Working Connections Child Care",
+   "main": "wa_wccc",
+   "copay": "wa_wccc_copay",
+   "copay_factor": 1,
+   "eligible": "wa_wccc_eligible",
+   "county": "KING_COUNTY_WA",
+   "copay_entity": "spm_unit",
+   "copay_label": "Washington WCCC monthly copayment",
+   "main_label": "Washington Working Connections Child Care subsidy",
+   "outputs": [
+    "child_care_subsidies",
+    "wa_wccc",
+    "wa_wccc_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "wa_wccc_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "wa_wccc_day_type",
+     "label": "Washington WCCC daily billing unit type",
+     "entity": "person",
+     "type": "enum",
+     "default": "FULL_DAY",
+     "options": [
+      {
+       "value": "HALF_DAY",
+       "label": "Half Day"
+      },
+      {
+       "value": "PARTIAL_DAY",
+       "label": "Partial Day"
+      },
+      {
+       "value": "FULL_DAY",
+       "label": "Full Day"
+      }
+     ]
+    },
+    {
+     "name": "wa_wccc_provider_type",
+     "label": "Washington WCCC child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "FAMILY_HOME",
+       "label": "Licensed Family Home"
+      },
+      {
+       "value": "IN_HOME_RELATIVE",
+       "label": "License-Exempt In-Home/Relative"
+      },
+      {
+       "value": "CENTER",
+       "label": "Licensed Center"
+      }
+     ]
+    }
+   ]
+  },
+  "WI": {
+   "code": "WI",
+   "name": "Wisconsin",
+   "program": "Wisconsin Shares",
+   "main": "wi_shares",
+   "copay": "wi_shares_copay",
+   "copay_factor": 1,
+   "eligible": "wi_shares_eligible",
+   "county": "MILWAUKEE_COUNTY_WI",
+   "copay_entity": "spm_unit",
+   "copay_label": "Wisconsin Shares assistance group copayment",
+   "main_label": "Wisconsin Shares child care subsidy",
+   "outputs": [
+    "child_care_subsidies",
+    "wi_shares",
+    "wi_shares_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "wi_shares_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "wi_shares_provider_type",
+     "label": "Wisconsin Shares child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "LICENSED_GROUP",
+     "options": [
+      {
+       "value": "LICENSED_GROUP",
+       "label": "Licensed group"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed family"
+      },
+      {
+       "value": "CERTIFIED",
+       "label": "Certified"
+      }
+     ]
+    }
+   ]
+  },
+  "WV": {
+   "code": "WV",
+   "name": "West Virginia",
+   "program": "Child Care Assistance Program",
+   "main": "wv_ccap",
+   "copay": "wv_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "wv_ccap_eligible",
+   "county": "KANAWHA_COUNTY_WV",
+   "copay_entity": "spm_unit",
+   "copay_label": "West Virginia CCAP family co-payment",
+   "main_label": "West Virginia CCAP benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "wv_ccap",
+    "wv_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "wv_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "wv_ccap_non_traditional_hours",
+     "label": "Whether child receives care during non-traditional hours for West Virginia CCAP",
+     "entity": "person",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "wv_ccap_provider_type",
+     "label": "West Virginia CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "FAMILY_HOME",
+       "label": "Family Child Care Home"
+      },
+      {
+       "value": "FAMILY_FACILITY",
+       "label": "Family Child Care Facility"
+      },
+      {
+       "value": "CENTER",
+       "label": "Child Care Center"
+      },
+      {
+       "value": "OUT_OF_SCHOOL_TIME",
+       "label": "Out of School Time"
+      },
+      {
+       "value": "INFORMAL_RELATIVE",
+       "label": "Informal/Relative Care"
+      }
+     ]
+    },
+    {
+     "name": "wv_ccap_quality_tier",
+     "label": "West Virginia CCAP provider quality tier",
+     "entity": "person",
+     "type": "enum",
+     "default": "TIER_I",
+     "options": [
+      {
+       "value": "TIER_I",
+       "label": "Tier I"
+      },
+      {
+       "value": "TIER_II",
+       "label": "Tier II"
+      },
+      {
+       "value": "TIER_III",
+       "label": "Tier III"
+      }
+     ]
+    }
+   ]
+  },
+  "WY": {
+   "code": "WY",
+   "name": "Wyoming",
+   "program": "Child Care, Purchase of Service",
+   "main": "wy_ccap",
+   "copay": "wy_ccap_copay",
+   "copay_factor": 1,
+   "eligible": "wy_ccap_eligible",
+   "county": "LARAMIE_COUNTY_WY",
+   "copay_entity": "spm_unit",
+   "copay_label": "Wyoming CCAP monthly family copayment",
+   "main_label": "Wyoming Child Care, Purchase of Service benefit amount",
+   "outputs": [
+    "child_care_subsidies",
+    "wy_ccap",
+    "wy_ccap_copay",
+    "spm_unit_fpg",
+    "hhs_smi",
+    "wy_ccap_eligible"
+   ],
+   "inputs": [
+    {
+     "name": "wy_ccap_enrolled",
+     "label": "Enrolled in Wyoming Child Care, Purchase of Service",
+     "entity": "spm_unit",
+     "type": "bool",
+     "default": false
+    },
+    {
+     "name": "wy_ccap_provider_type",
+     "label": "Wyoming CCAP child care provider type",
+     "entity": "person",
+     "type": "enum",
+     "default": "CENTER",
+     "options": [
+      {
+       "value": "CENTER",
+       "label": "Child care center"
+      },
+      {
+       "value": "LICENSED_FAMILY",
+       "label": "Licensed family setting"
+      },
+      {
+       "value": "LEGALLY_EXEMPT",
+       "label": "Legally exempt provider"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

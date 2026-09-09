@@ -1,0 +1,582 @@
+{
+ "policyengine_us_version": "1.824.7",
+ "year": 2026,
+ "income_steps": [
+  0,
+  1000,
+  2000,
+  3000,
+  4000,
+  5000,
+  6000,
+  7000,
+  8000,
+  9000,
+  10000,
+  11000,
+  12000,
+  13000,
+  14000,
+  15000,
+  16000,
+  17000,
+  18000,
+  19000,
+  20000,
+  21000,
+  22000,
+  23000,
+  24000,
+  25000,
+  26000,
+  27000,
+  28000,
+  29000,
+  30000,
+  31000,
+  32000,
+  33000,
+  34000,
+  35000,
+  36000,
+  37000,
+  38000,
+  39000,
+  40000,
+  41000,
+  42000,
+  43000,
+  44000,
+  45000,
+  46000,
+  47000,
+  48000,
+  49000,
+  50000,
+  51000,
+  52000,
+  53000,
+  54000,
+  55000,
+  56000,
+  57000,
+  58000,
+  59000,
+  60000,
+  61000,
+  62000,
+  63000,
+  64000,
+  65000,
+  66000,
+  67000,
+  68000,
+  69000,
+  70000,
+  71000,
+  72000,
+  73000,
+  74000,
+  75000,
+  76000,
+  77000,
+  78000,
+  79000,
+  80000,
+  81000,
+  82000,
+  83000,
+  84000,
+  85000,
+  86000,
+  87000,
+  88000,
+  89000,
+  90000,
+  91000,
+  92000,
+  93000,
+  94000,
+  95000,
+  96000,
+  97000,
+  98000,
+  99000,
+  100000,
+  101000,
+  102000,
+  103000,
+  104000,
+  105000,
+  106000,
+  107000,
+  108000,
+  109000,
+  110000,
+  111000,
+  112000,
+  113000,
+  114000,
+  115000,
+  116000,
+  117000,
+  118000,
+  119000,
+  120000,
+  121000,
+  122000,
+  123000,
+  124000,
+  125000,
+  126000,
+  127000,
+  128000,
+  129000,
+  130000,
+  131000,
+  132000,
+  133000,
+  134000,
+  135000,
+  136000,
+  137000,
+  138000,
+  139000,
+  140000,
+  141000,
+  142000,
+  143000,
+  144000,
+  145000,
+  146000,
+  147000,
+  148000,
+  149000,
+  150000,
+  151000,
+  152000,
+  153000,
+  154000,
+  155000,
+  156000,
+  157000,
+  158000,
+  159000,
+  160000,
+  161000,
+  162000,
+  163000,
+  164000,
+  165000,
+  166000,
+  167000,
+  168000,
+  169000,
+  170000,
+  171000,
+  172000,
+  173000,
+  174000,
+  175000,
+  176000,
+  177000,
+  178000,
+  179000,
+  180000,
+  181000,
+  182000,
+  183000,
+  184000,
+  185000,
+  186000,
+  187000,
+  188000,
+  189000,
+  190000,
+  191000,
+  192000,
+  193000,
+  194000,
+  195000,
+  196000,
+  197000,
+  198000,
+  199000,
+  200000
+ ],
+ "charge_levels": [
+  1000,
+  1500,
+  2000,
+  2500,
+  3000
+ ],
+ "default_charge_index": 1,
+ "adults_range": [
+  1,
+  2
+ ],
+ "child_structures": {
+  "infant": {
+   "ages": [
+    1
+   ],
+   "hours_per_day": [
+    8
+   ]
+  },
+  "preschool": {
+   "ages": [
+    3
+   ],
+   "hours_per_day": [
+    8
+   ]
+  },
+  "school": {
+   "ages": [
+    7
+   ],
+   "hours_per_day": [
+    3
+   ]
+  },
+  "two": {
+   "ages": [
+    3,
+    7
+   ],
+   "hours_per_day": [
+    8,
+    3
+   ]
+  },
+  "three": {
+   "ages": [
+    1,
+    3,
+    7
+   ],
+   "hours_per_day": [
+    8,
+    8,
+    3
+   ]
+  }
+ },
+ "assumptions": {
+  "monthly_charge_per_child": 1500,
+  "days_per_week": 5,
+  "attending_days_per_month": 22,
+  "weekly_hours_worked": 40,
+  "provider": "state default provider type (a licensed center) at the base quality tier"
+ },
+ "states": [
+  {
+   "code": "AK",
+   "name": "Alaska",
+   "program": "Child Care Assistance Program (PASS)",
+   "county": "ANCHORAGE_MUNICIPALITY_AK"
+  },
+  {
+   "code": "AL",
+   "name": "Alabama",
+   "program": "Child Care Subsidy Program",
+   "county": "JEFFERSON_COUNTY_AL"
+  },
+  {
+   "code": "AR",
+   "name": "Arkansas",
+   "program": "School Readiness Assistance",
+   "county": "PULASKI_COUNTY_AR"
+  },
+  {
+   "code": "AZ",
+   "name": "Arizona",
+   "program": "Child Care Assistance Program",
+   "county": "MARICOPA_COUNTY_AZ"
+  },
+  {
+   "code": "CA",
+   "name": "California",
+   "program": "CalWORKs child care and CAPP",
+   "county": "LOS_ANGELES_COUNTY_CA"
+  },
+  {
+   "code": "CO",
+   "name": "Colorado",
+   "program": "Colorado Child Care Assistance Program",
+   "county": "DENVER_COUNTY_CO"
+  },
+  {
+   "code": "CT",
+   "name": "Connecticut",
+   "program": "Care 4 Kids",
+   "county": "FAIRFIELD_COUNTY_CT"
+  },
+  {
+   "code": "DC",
+   "name": "District of Columbia",
+   "program": "Child Care Subsidy Program",
+   "county": "DISTRICT_OF_COLUMBIA_DC"
+  },
+  {
+   "code": "DE",
+   "name": "Delaware",
+   "program": "Purchase of Care",
+   "county": "NEW_CASTLE_COUNTY_DE"
+  },
+  {
+   "code": "FL",
+   "name": "Florida",
+   "program": "School Readiness Program",
+   "county": "MIAMI_DADE_COUNTY_FL"
+  },
+  {
+   "code": "GA",
+   "name": "Georgia",
+   "program": "Childcare and Parent Services (CAPS)",
+   "county": "FULTON_COUNTY_GA"
+  },
+  {
+   "code": "HI",
+   "name": "Hawaii",
+   "program": "Child Care Subsidy",
+   "county": "HONOLULU_COUNTY_HI"
+  },
+  {
+   "code": "IA",
+   "name": "Iowa",
+   "program": "Child Care Assistance",
+   "county": "POLK_COUNTY_IA"
+  },
+  {
+   "code": "ID",
+   "name": "Idaho",
+   "program": "Idaho Child Care Program",
+   "county": "ADA_COUNTY_ID"
+  },
+  {
+   "code": "IL",
+   "name": "Illinois",
+   "program": "Child Care Assistance Program",
+   "county": "COOK_COUNTY_IL"
+  },
+  {
+   "code": "IN",
+   "name": "Indiana",
+   "program": "CCDF Voucher Program",
+   "county": "MARION_COUNTY_IN"
+  },
+  {
+   "code": "KS",
+   "name": "Kansas",
+   "program": "Child Care Assistance Program",
+   "county": "JOHNSON_COUNTY_KS"
+  },
+  {
+   "code": "KY",
+   "name": "Kentucky",
+   "program": "Child Care Assistance Program",
+   "county": "JEFFERSON_COUNTY_KY"
+  },
+  {
+   "code": "LA",
+   "name": "Louisiana",
+   "program": "Child Care Assistance Program",
+   "county": "EAST_BATON_ROUGE_PARISH_LA"
+  },
+  {
+   "code": "MA",
+   "name": "Massachusetts",
+   "program": "Child Care Financial Assistance",
+   "county": "MIDDLESEX_COUNTY_MA"
+  },
+  {
+   "code": "MD",
+   "name": "Maryland",
+   "program": "Child Care Scholarship",
+   "county": "MONTGOMERY_COUNTY_MD"
+  },
+  {
+   "code": "ME",
+   "name": "Maine",
+   "program": "Child Care Affordability Program",
+   "county": "CUMBERLAND_COUNTY_ME"
+  },
+  {
+   "code": "MI",
+   "name": "Michigan",
+   "program": "Child Development and Care",
+   "county": "WAYNE_COUNTY_MI"
+  },
+  {
+   "code": "MN",
+   "name": "Minnesota",
+   "program": "Child Care Assistance Program",
+   "county": "HENNEPIN_COUNTY_MN"
+  },
+  {
+   "code": "MO",
+   "name": "Missouri",
+   "program": "Child Care Subsidy",
+   "county": "ST_LOUIS_COUNTY_MO"
+  },
+  {
+   "code": "MS",
+   "name": "Mississippi",
+   "program": "Child Care Payment Program",
+   "county": "HINDS_COUNTY_MS"
+  },
+  {
+   "code": "MT",
+   "name": "Montana",
+   "program": "Best Beginnings Child Care Scholarship",
+   "county": "YELLOWSTONE_COUNTY_MT"
+  },
+  {
+   "code": "NC",
+   "name": "North Carolina",
+   "program": "Subsidized Child Care Assistance",
+   "county": "MECKLENBURG_COUNTY_NC"
+  },
+  {
+   "code": "ND",
+   "name": "North Dakota",
+   "program": "Child Care Assistance Program",
+   "county": "CASS_COUNTY_ND"
+  },
+  {
+   "code": "NE",
+   "name": "Nebraska",
+   "program": "Child Care Subsidy",
+   "county": "DOUGLAS_COUNTY_NE"
+  },
+  {
+   "code": "NH",
+   "name": "New Hampshire",
+   "program": "Child Care Scholarship Program",
+   "county": "HILLSBOROUGH_COUNTY_NH"
+  },
+  {
+   "code": "NJ",
+   "name": "New Jersey",
+   "program": "Child Care Assistance Program",
+   "county": "BERGEN_COUNTY_NJ"
+  },
+  {
+   "code": "NM",
+   "name": "New Mexico",
+   "program": "Child Care Assistance Program",
+   "county": "BERNALILLO_COUNTY_NM"
+  },
+  {
+   "code": "NV",
+   "name": "Nevada",
+   "program": "Child Care and Development Program",
+   "county": "CLARK_COUNTY_NV"
+  },
+  {
+   "code": "NY",
+   "name": "New York",
+   "program": "Child Care Assistance Program",
+   "county": "KINGS_COUNTY_NY"
+  },
+  {
+   "code": "OH",
+   "name": "Ohio",
+   "program": "Publicly Funded Child Care",
+   "county": "FRANKLIN_COUNTY_OH"
+  },
+  {
+   "code": "OK",
+   "name": "Oklahoma",
+   "program": "Child Care Subsidy Program",
+   "county": "OKLAHOMA_COUNTY_OK"
+  },
+  {
+   "code": "OR",
+   "name": "Oregon",
+   "program": "Employment Related Day Care",
+   "county": "MULTNOMAH_COUNTY_OR"
+  },
+  {
+   "code": "PA",
+   "name": "Pennsylvania",
+   "program": "Child Care Works",
+   "county": "PHILADELPHIA_COUNTY_PA"
+  },
+  {
+   "code": "RI",
+   "name": "Rhode Island",
+   "program": "Child Care Assistance Program",
+   "county": "PROVIDENCE_COUNTY_RI"
+  },
+  {
+   "code": "SC",
+   "name": "South Carolina",
+   "program": "Child Care Scholarship Program",
+   "county": "GREENVILLE_COUNTY_SC"
+  },
+  {
+   "code": "SD",
+   "name": "South Dakota",
+   "program": "Child Care Assistance",
+   "county": "MINNEHAHA_COUNTY_SD"
+  },
+  {
+   "code": "TN",
+   "name": "Tennessee",
+   "program": "Child Care Certificate Program (Smart Steps)",
+   "county": "SHELBY_COUNTY_TN"
+  },
+  {
+   "code": "TX",
+   "name": "Texas",
+   "program": "Child Care Services",
+   "county": "HARRIS_COUNTY_TX"
+  },
+  {
+   "code": "UT",
+   "name": "Utah",
+   "program": "Child Care Assistance",
+   "county": "SALT_LAKE_COUNTY_UT"
+  },
+  {
+   "code": "VA",
+   "name": "Virginia",
+   "program": "Child Care Subsidy Program",
+   "county": "FAIRFAX_COUNTY_VA"
+  },
+  {
+   "code": "VT",
+   "name": "Vermont",
+   "program": "Child Care Financial Assistance Program",
+   "county": "CHITTENDEN_COUNTY_VT"
+  },
+  {
+   "code": "WA",
+   "name": "Washington",
+   "program": "Working Connections Child Care",
+   "county": "KING_COUNTY_WA"
+  },
+  {
+   "code": "WI",
+   "name": "Wisconsin",
+   "program": "Wisconsin Shares",
+   "county": "MILWAUKEE_COUNTY_WI"
+  },
+  {
+   "code": "WV",
+   "name": "West Virginia",
+   "program": "Child Care Assistance Program",
+   "county": "KANAWHA_COUNTY_WV"
+  },
+  {
+   "code": "WY",
+   "name": "Wyoming",
+   "program": "Child Care, Purchase of Service",
+   "county": "LARAMIE_COUNTY_WY"
+  }
+ ]
+}

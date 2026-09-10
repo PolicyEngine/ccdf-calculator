@@ -131,3 +131,12 @@ subset is shown as secondary with sample sizes.
   the population page once a machine with enough memory is available.
 - Transcribe ACF's FY 2024 Table 1 into `scripts/acf_served.py` when it is
   published.
+- **Decide: twelve-month average vs "rules as of month X".** The grid
+  averages the policy year, so an Indiana family at $30,000 shows "$366 a
+  month, eligible" although the rules in force since 2026-04-05 pay nothing.
+  A month-snapshot grid would need: a `reference_month` in `state_config.py`
+  and `metadata.json`, monthly (not annual/12) reads in `precompute.py`,
+  month-period keys in `src/lib/situation.ts` and `api.ts` (the live API
+  accepts `{"2026-12": null}`), copay factors unchanged, and a rewrite of the
+  averaging note in `Methodology.tsx`. Only Indiana is affected in 2026.
+  Decision pending (Ziming, 2026-09-09).

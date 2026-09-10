@@ -1,5 +1,8 @@
 # Child care subsidy calculator
 
+[![CI](https://github.com/PolicyEngine/ccdf-calculator/actions/workflows/ci.yaml/badge.svg)](https://github.com/PolicyEngine/ccdf-calculator/actions/workflows/ci.yaml)
+[![Data freshness](https://github.com/PolicyEngine/ccdf-calculator/actions/workflows/data-freshness.yaml/badge.svg)](https://github.com/PolicyEngine/ccdf-calculator/actions/workflows/data-freshness.yaml)
+
 Interactive dashboard of the child care subsidy programs that all 50 states
 and DC run with Child Care and Development Fund (CCDF) money, as encoded in
 [PolicyEngine US](https://github.com/PolicyEngine/policyengine-us).
@@ -67,6 +70,25 @@ state's default provider type (a licensed center) and base quality tier, in
 the state's most populous county, with the provider charging $1,000 to
 $3,000 per child per month. The calculator's live mode uses the exact inputs
 entered instead.
+
+## Tests
+
+```bash
+bun run lint        # eslint
+bun run typecheck   # tsc --noEmit
+bun run test        # vitest: grid lookup, interpolation, situation builder, API client
+bun run test:py     # pytest: state contract, generated data vs docs/DATA_CONTRACT.md
+```
+
+The Python suite needs only `pytest` (`pip install -r scripts/requirements-dev.txt`);
+it does not import policyengine-us. `src/lib/__fixtures__/situations.json`
+pins the household description shared by `scripts/calculator.py` and
+`src/lib/situation.ts`; regenerate it with
+`python scripts/tests/situation_fixtures.py --write` after changing either.
+
+CI runs all four on every pull request, plus `scripts/check_data_freshness.py`,
+which warns when the committed grid lags the latest policyengine-us release.
+A weekly scheduled run fails once the grid is more than five releases behind.
 
 ## License
 

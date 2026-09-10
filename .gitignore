@@ -43,3 +43,8 @@ Thumbs.db
 
 # Downloaded microsim datasets
 /data/
+
+# Local tooling
+.claude/
+coverage/
+.pytest_cache/

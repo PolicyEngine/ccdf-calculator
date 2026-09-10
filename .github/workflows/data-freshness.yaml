@@ -1,0 +1,20 @@
+name: Data freshness
+
+on:
+  schedule:
+    # Mondays at 14:00 UTC.
+    - cron: '0 14 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Compare the grid with the latest policyengine-us
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Fails once the grid is more than five minor releases behind, which
+      # surfaces as a failed scheduled run on the Actions tab.
+      - run: python scripts/check_data_freshness.py --fail-if-stale --max-behind 5

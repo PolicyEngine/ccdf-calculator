@@ -23,7 +23,7 @@ frontend reads them with `fetch(`${NEXT_PUBLIC_BASE_PATH}/data/...`)`.
   "assumptions": {
     "monthly_charge_per_child": 1500, "days_per_week": 5,
     "attending_days_per_month": 22, "weekly_hours_worked": 40,
-    "provider": "state default provider type (a licensed center) at the base quality tier"
+    "provider": "the state's default provider type, a licensed center, at the base quality tier"
   },
   "states": [{"code": "AK", "name": "Alaska", "program": "Child Care Assistance Program (PASS)", "county": "ANCHORAGE_MUNICIPALITY_AK"}, ...]
 }
@@ -48,9 +48,61 @@ frontend reads them with `fetch(`${NEXT_PUBLIC_BASE_PATH}/data/...`)`.
 ```
 
 Interpretation: `subsidy` is what the state pays the provider each month for
-the household's children; `copay` is what the family pays the provider;
-the family's remaining out-of-pocket cost is `charge * children - subsidy`
-(which equals the copay whenever the charge is under every cap).
+the household's children, averaged over the twelve months of the year (so a
+mid-year rule change is blended); `copay` is the family's share under the
+program, converted to a monthly figure; `eligible` is true when the state
+would pay in at least one month of the year, read month by month from the
+state's eligibility variable (or `subsidy > 0` when it has none).
+
+The model computes a would-be `copay` for ineligible households too. The
+frontend shows a copay only where `eligible` is true, and computes what the
+family pays the provider as
+
+    out_of_pocket = min(charge * children, max(copay, charge * children - subsidy))
+
+which is the copay plus any charge above the state's maximum rate in the
+usual case, the copay alone where a state pays its rate regardless of the
+charge (Vermont, whose subsidy can exceed the charge), and the full charge
+for an ineligible household (`src/lib/dataLookup.ts::outOfPocketCost`).
+
+## `compare/{structure}_{chargeIndex}.json` (from `build_compare.py`)
+
+The same grid re-sliced for the Compare page, which shows every state for one
+structure at one charge level. Fifty files of about 170 KB, one per cell,
+instead of the 9 MB of per-state files.
+
+```jsonc
+{
+  "structure": "1_two", "charge_index": 1, "charge_level": 1500,
+  "policyengine_us_version": "1.824.8",
+  "income_steps": [0, 1000, ..., 200000],
+  "states": {"AK": {"subsidy": [...201], "copay": [...201], "eligible": [...201]}, ...}
+}
+```
+
+Run after `precompute.py`; `scripts/tests/test_compare_files.py` fails when
+the files drift from the state grid.
+
+## `acf_served.json` (from `acf_served.py`)
+
+Children and families each state actually funded, transcribed from ACF's
+CCDF data tables (Table 1, average monthly adjusted number served), so the
+Population impact page can set the model's eligible population against a
+caseload. Hand-maintained: acf.gov blocks automated fetches.
+
+```jsonc
+{
+  "source": {"title": "...", "href": "https://acf.gov/occ/data/fy-2023-preliminary-data-table-1",
+             "publisher": "...", "fiscal_year": 2023, "publication_date": "2026-01-21",
+             "data_as_of": "2024-11-23", "notes": ["..."]},
+  "states": {"IL": {"families": 34600, "children": 59200}, ...},   // 50 states + DC, rounded to 100
+  "states_total": {"families": 969300, "children": 1606000},
+  "published_national_total": {"families": 994000, "children": 1623000}  // includes territories
+}
+```
+
+`scripts/tests/test_acf_served.py` checks the rows plus the territories sum
+to the published national total, which catches transcription slips.
 
 ## `state_inputs.json` (from `build_state_inputs.py`)
 

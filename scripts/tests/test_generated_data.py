@@ -17,16 +17,15 @@ import state_config as cfg
 CODES = sorted(cfg.STATES)
 SEMVER = re.compile(r"^\d+\.\d+\.\d+$")
 
-# Model behaviours that violate the generic invariants below. Each entry is a
-# known, reviewed exception; a new state appearing in a failure means the
-# model or the pipeline changed and needs a look, not a longer allowlist.
+# Reviewed exceptions to the generic invariants below. A new state appearing
+# in a failure means the model or the pipeline changed and needs a look, not a
+# longer allowlist.
 #
-# Vermont pays its full rate even when the provider charges less, so the
-# subsidy can exceed charge x children in the grid (policyengine-us 1.824.7).
+# Vermont pays providers its state rate regardless of what they charge (CCFAP
+# rule since 2023-12-17, per the vt_ccfap formula and "CCFAP Understanding
+# Payments"), so its subsidy can exceed charge x children in the grid. The
+# frontend's out-of-pocket rule (never below the copay) handles this.
 KNOWN_PAYS_ABOVE_CHARGE = {"VT"}
-# Indiana pays a subsidy at some incomes where `in_ccdf_eligible` is False
-# (policyengine-us 1.824.7): the payment and the flag use different limits.
-KNOWN_ELIGIBILITY_GAP = {"IN"}
 
 
 def structure_keys(metadata):
@@ -120,8 +119,9 @@ def test_subsidy_never_exceeds_the_total_charge(code, metadata, state_files):
 
 @pytest.mark.parametrize("code", CODES)
 def test_positive_subsidy_implies_eligible_flag(code, metadata, state_files):
-    if code in KNOWN_ELIGIBILITY_GAP:
-        pytest.skip("reviewed exception; see KNOWN_ELIGIBILITY_GAP")
+    """Both are averages over the year, so a positive payment in any month
+    must come with the flag set (precompute reads eligibility month by month;
+    Indiana's April 2026 income-limit change is the case that exercises it)."""
     data = state_files[code]
     for key, grid in data["structures"].items():
         for ci in range(len(metadata["charge_levels"])):
@@ -134,18 +134,11 @@ def test_positive_subsidy_implies_eligible_flag(code, metadata, state_files):
 
 
 def test_known_exceptions_still_hold(metadata, state_files):
-    """When the model fixes these, drop them from the allowlist."""
+    """When the model changes this, drop Vermont from the allowlist."""
     vt = state_files["VT"]["structures"]["1_infant"]
     assert max(vt["subsidy"][0]) > metadata["charge_levels"][0], (
         "Vermont no longer pays above the charge; remove it from KNOWN_PAYS_ABOVE_CHARGE"
     )
-    indiana = state_files["IN"]["structures"]
-    assert any(
-        paid > 0 and not eligible
-        for grid in indiana.values()
-        for paid_row, elig_row in zip(grid["subsidy"], grid["eligible"])
-        for paid, eligible in zip(paid_row, elig_row)
-    ), "Indiana's flag now matches its payment; remove it from KNOWN_ELIGIBILITY_GAP"
 
 
 def test_two_adults_do_not_change_fpg_by_less_than_one_person(state_files):

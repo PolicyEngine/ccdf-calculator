@@ -95,7 +95,15 @@ def compute_structure(state, num_adults, child_ages, year=YEAR):
     subsidy = (np.asarray(sim.calculate(cfg["main"], year)) / 12).reshape(GRID_SHAPE)
     copay = monthly_copay(sim, state, n, year).reshape(GRID_SHAPE)
     if cfg["eligible"]:
-        eligible = np.asarray(sim.calculate(cfg["eligible"], year)).astype(bool).reshape(GRID_SHAPE)
+        # The subsidy is the average over the twelve months, so it is positive
+        # whenever the household qualified in any month. Read the flag the
+        # same way: eligible in at least one month of the year. Asking Core
+        # for a MONTH-defined boolean over the whole year does not do this
+        # (Indiana's April 2026 income-limit change surfaced the difference).
+        eligible = np.zeros(GRID_SHAPE, dtype=bool)
+        for month in range(1, 13):
+            monthly = sim.calculate(cfg["eligible"], f"{year}-{month:02d}")
+            eligible |= np.asarray(monthly).astype(bool).reshape(GRID_SHAPE)
     else:
         eligible = subsidy > 0
     fpg = float(np.asarray(sim.calculate("spm_unit_fpg", year))[0])
@@ -141,7 +149,7 @@ def metadata():
             "days_per_week": DAYS_PER_WEEK,
             "attending_days_per_month": ATTENDING_DAYS_PER_MONTH,
             "weekly_hours_worked": 40,
-            "provider": "state default provider type (a licensed center) at the base quality tier",
+            "provider": "the state's default provider type, a licensed center, at the base quality tier",
         },
         "states": [
             {

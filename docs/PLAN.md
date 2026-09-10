@@ -98,13 +98,36 @@ Restricting to families that report child care expenses in the CPS gives
 high-income and small states have 30 to 90 sampled families, so that
 subset is shown as secondary with sample sizes.
 
+## Decisions recorded later on 2026-09-09
+
+- Grid values are averages over the twelve months of the policy year, and
+  `eligible` means "would be paid in at least one month" (read month by
+  month in `precompute.py`). Indiana's initial income limit fell from 150%
+  to 135% of the poverty guideline on 2026-04-05, so its grid blends the
+  two regimes; the live API accepts month-period keys (`{"2026-12": null}`),
+  so a "rules as of month X" design is possible if the blend proves
+  confusing.
+- Vermont pays providers its state rate regardless of their charge (CCFAP
+  rule since 2023-12-17), so its subsidy can exceed the charge. Out of
+  pocket is therefore `min(charge, max(copay, charge - subsidy))`, and a
+  copay is shown only for eligible households.
+- The Population impact page sets the model's eligible population against
+  ACF's published caseload (FY 2023 Table 1, `scripts/acf_served.py`) so
+  the $151B upper bound is read next to the 1.6 million children actually
+  served.
+- The Compare page reads one `compare/{structure}_{charge}.json` per
+  selection (`build_compare.py`) instead of all 51 state files.
+- Tests: `bun run test` (vitest) and `bun run test:py` (pytest, no
+  policyengine-us needed); CI in `.github/workflows/`.
+
 ## Open items
 
-- Production household API lags the repo (1.764.6 vs 1.824.7 on
+- Production household API lags the repo (1.764.6 vs 1.824.8 on
   2026-09-09); the live mode gates on `/us/metadata` and keeps the grid
   estimate as the headline when the API model is older.
-- Verify per-state copay period conversion (weekly, daily) against labels.
 - Register the deployed app in policyengine-app-v2 (`appZoneRoutes.ts`,
   `apps.json`) after the Vercel project exists.
 - Consider the state-calibrated `populace_us_2024_acs_local` dataset for
   the population page once a machine with enough memory is available.
+- Transcribe ACF's FY 2024 Table 1 into `scripts/acf_served.py` when it is
+  published.

@@ -5,6 +5,8 @@
  */
 
 import type {
+  AcfServedFile,
+  CompareCellFile,
   ImpactFile,
   Metadata,
   PolicyIndex,
@@ -65,14 +67,26 @@ export function loadPolicyIndex(): Promise<PolicyIndex> {
 /** `impact.json` is optional; a missing or malformed file resolves to null. */
 export async function loadImpact(): Promise<ImpactFile | null> {
   try {
-    const res = await fetch(`${DATA_BASE}/impact.json`);
-    if (!res.ok) return null;
-    const text = await res.text();
-    const parsed = JSON.parse(text) as ImpactFile;
+    const parsed = await loadJson<ImpactFile>('impact');
     return parsed && typeof parsed === 'object' ? parsed : null;
   } catch {
     return null;
   }
+}
+
+/** ACF's published caseload; optional, so the page degrades to model-only. */
+export async function loadAcfServed(): Promise<AcfServedFile | null> {
+  try {
+    const parsed = await loadJson<AcfServedFile>('acf_served');
+    return parsed && typeof parsed === 'object' && parsed.states ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+/** One (structure, charge) cell across every state, from `build_compare.py`. */
+export function loadCompareCell(key: string, chargeIndex: number): Promise<CompareCellFile> {
+  return loadJson<CompareCellFile>(`compare/${key}_${chargeIndex}`);
 }
 
 /* ------------------------------------------------------------------ *
@@ -174,6 +188,17 @@ export interface Estimate {
   incomeShareOfSmi: number;
 }
 
+/**
+ * What the family pays the provider each month: the copay plus any charge
+ * above the state's maximum rate, i.e. `charge - subsidy`. Never less than
+ * the copay, because a state that pays its rate regardless of the charge
+ * (Vermont) can pay the provider more than the provider charges. Never more
+ * than the charge itself, which is what an ineligible family pays.
+ */
+export function outOfPocketCost(charge: number, subsidy: number, copay: number): number {
+  return Math.max(0, Math.min(charge, Math.max(copay, charge - subsidy)));
+}
+
 export function gridFor(state: StateData, key: string): StructureGrid | null {
   return state.structures[key] ?? null;
 }
@@ -191,10 +216,15 @@ export function estimate(
   const chargeIndex = nearestChargeIndex(meta, household.monthlyChargePerChild);
   const steps = meta.income_steps;
   const subsidy = interpolate(grid.subsidy[chargeIndex], steps, household.income);
-  const copay = interpolate(grid.copay[chargeIndex], steps, household.income);
-  const eligible = Boolean(grid.eligible[chargeIndex][nearestIndex(steps, household.income)]);
+  // Between two grid points the interpolated subsidy can be positive while the
+  // nearer point is past the cutoff; a positive payment always means eligible.
+  const eligible =
+    subsidy > 0 || Boolean(grid.eligible[chargeIndex][nearestIndex(steps, household.income)]);
+  // The model computes a would-be copay for ineligible families too; only an
+  // eligible family actually owes one.
+  const copay = eligible ? interpolate(grid.copay[chargeIndex], steps, household.income) : 0;
   const childCount = Math.max(household.childAges.length, 1);
-  const outOfPocket = Math.max(0, household.monthlyChargePerChild * childCount - subsidy);
+  const outOfPocket = outOfPocketCost(household.monthlyChargePerChild * childCount, subsidy, copay);
 
   return {
     key,
@@ -245,7 +275,7 @@ export function incomeSeries(
   return meta.income_steps.map((income, index) => ({
     income,
     subsidy: grid.subsidy[chargeIndex][index],
-    copay: grid.copay[chargeIndex][index],
+    copay: grid.eligible[chargeIndex][index] ? grid.copay[chargeIndex][index] : 0,
   }));
 }
 
@@ -281,7 +311,10 @@ export interface StateComparisonRow {
   cutoffBeyondAxis: boolean;
 }
 
-/** Load every state file and evaluate one reference cell across all 51. */
+/**
+ * Evaluate one reference cell across all 51 states. Reads the cell's own
+ * file from `build_compare.py` (about 170 KB) rather than every state file.
+ */
 export async function compareStates(
   meta: Metadata,
   policy: PolicyIndex,
@@ -290,34 +323,31 @@ export async function compareStates(
   income: number,
 ): Promise<StateComparisonRow[]> {
   const maxIncome = meta.income_steps[meta.income_steps.length - 1];
-  const rows = await Promise.all(
-    meta.states.map(async (summary): Promise<StateComparisonRow> => {
-      const threshold = policy.states[summary.code]?.thresholds?.[key] ?? null;
-      const base = {
-        code: summary.code,
-        name: summary.name,
-        program: summary.program,
-        cutoffIncome: threshold ? threshold.income : null,
-        cutoffShareOfFpg: threshold ? threshold.fpg_ratio : null,
-        cutoffShareOfSmi: threshold ? threshold.smi_ratio : null,
-        cutoffBeyondAxis: Boolean(threshold && threshold.income >= maxIncome),
-      };
-      try {
-        const state = await loadStateData(summary.code);
-        const grid = gridFor(state, key);
-        if (!grid) return { ...base, subsidy: null, copay: null, eligible: false };
-        return {
-          ...base,
-          subsidy: interpolate(grid.subsidy[chargeIndex], meta.income_steps, income),
-          copay: interpolate(grid.copay[chargeIndex], meta.income_steps, income),
-          eligible: Boolean(grid.eligible[chargeIndex][nearestIndex(meta.income_steps, income)]),
-        };
-      } catch {
-        return { ...base, subsidy: null, copay: null, eligible: false };
-      }
-    }),
-  );
-  return rows;
+  const cell = await loadCompareCell(key, chargeIndex);
+  const steps = cell.income_steps?.length ? cell.income_steps : meta.income_steps;
+  return meta.states.map((summary): StateComparisonRow => {
+    const threshold = policy.states[summary.code]?.thresholds?.[key] ?? null;
+    const base = {
+      code: summary.code,
+      name: summary.name,
+      program: summary.program,
+      cutoffIncome: threshold ? threshold.income : null,
+      cutoffShareOfFpg: threshold ? threshold.fpg_ratio : null,
+      cutoffShareOfSmi: threshold ? threshold.smi_ratio : null,
+      cutoffBeyondAxis: Boolean(threshold && threshold.income >= maxIncome),
+    };
+    const series = cell.states[summary.code];
+    if (!series) return { ...base, subsidy: null, copay: null, eligible: false };
+    const subsidy = interpolate(series.subsidy, steps, income);
+    const eligible = subsidy > 0 || Boolean(series.eligible[nearestIndex(steps, income)]);
+    return {
+      ...base,
+      subsidy,
+      // A would-be copay means nothing to a family the state would not pay for.
+      copay: eligible ? interpolate(series.copay, steps, income) : null,
+      eligible,
+    };
+  });
 }
 
 /* ------------------------------------------------------------------ *

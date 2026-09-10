@@ -46,5 +46,10 @@ def impact():
 
 
 @pytest.fixture(scope="session")
+def acf_served_file():
+    return load_data("acf_served.json")
+
+
+@pytest.fixture(scope="session")
 def state_files(metadata):
     return {state["code"]: load_data(f"{state['code']}.json") for state in metadata["states"]}

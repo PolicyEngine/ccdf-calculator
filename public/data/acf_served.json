@@ -1,0 +1,229 @@
+{
+ "source": {
+  "title": "FY 2023 Preliminary Data Table 1 - Average Monthly Adjusted Number of Families and Children Served",
+  "href": "https://acf.gov/occ/data/fy-2023-preliminary-data-table-1",
+  "publisher": "Office of Child Care, Administration for Children and Families",
+  "fiscal_year": 2023,
+  "publication_date": "2026-01-21",
+  "data_as_of": "2024-11-23",
+  "notes": [
+   "Adjusted counts: the number funded through CCDF only (federal discretionary, mandatory and matching funds, TANF transfers to CCDF, and state matching and maintenance-of-effort funds), i.e. the raw count times the state's pooling factor.",
+   "Average of the twelve monthly counts in the fiscal year; rounded to the nearest 100.",
+   "The national total published by ACF (994,000 families, 1,623,000 children) also includes Guam, the Northern Mariana Islands and Puerto Rico."
+  ]
+ },
+ "states": {
+  "AL": {
+   "families": 23400,
+   "children": 41100
+  },
+  "AK": {
+   "families": 1500,
+   "children": 2200
+  },
+  "AZ": {
+   "families": 18300,
+   "children": 27800
+  },
+  "AR": {
+   "families": 11100,
+   "children": 16600
+  },
+  "CA": {
+   "families": 143800,
+   "children": 232500
+  },
+  "CO": {
+   "families": 10600,
+   "children": 16800
+  },
+  "CT": {
+   "families": 13700,
+   "children": 19100
+  },
+  "DE": {
+   "families": 4300,
+   "children": 6800
+  },
+  "DC": {
+   "families": 800,
+   "children": 1100
+  },
+  "FL": {
+   "families": 76200,
+   "children": 112900
+  },
+  "GA": {
+   "families": 41900,
+   "children": 73400
+  },
+  "HI": {
+   "families": 2500,
+   "children": 3500
+  },
+  "ID": {
+   "families": 3600,
+   "children": 6400
+  },
+  "IL": {
+   "families": 34600,
+   "children": 59200
+  },
+  "IN": {
+   "families": 24700,
+   "children": 44000
+  },
+  "IA": {
+   "families": 6500,
+   "children": 11400
+  },
+  "KS": {
+   "families": 7300,
+   "children": 12400
+  },
+  "KY": {
+   "families": 14100,
+   "children": 24100
+  },
+  "LA": {
+   "families": 12300,
+   "children": 18300
+  },
+  "ME": {
+   "families": 3000,
+   "children": 4700
+  },
+  "MD": {
+   "families": 16700,
+   "children": 25800
+  },
+  "MA": {
+   "families": 14500,
+   "children": 20700
+  },
+  "MI": {
+   "families": 22200,
+   "children": 37800
+  },
+  "MN": {
+   "families": 10600,
+   "children": 20600
+  },
+  "MS": {
+   "families": 15000,
+   "children": 25900
+  },
+  "MO": {
+   "families": 15700,
+   "children": 22700
+  },
+  "MT": {
+   "families": 2200,
+   "children": 3200
+  },
+  "NE": {
+   "families": 4800,
+   "children": 8800
+  },
+  "NV": {
+   "families": 4100,
+   "children": 6800
+  },
+  "NH": {
+   "families": 1900,
+   "children": 2700
+  },
+  "NJ": {
+   "families": 24100,
+   "children": 37100
+  },
+  "NM": {
+   "families": 9800,
+   "children": 15500
+  },
+  "NY": {
+   "families": 53100,
+   "children": 90800
+  },
+  "NC": {
+   "families": 26200,
+   "children": 39400
+  },
+  "ND": {
+   "families": 2700,
+   "children": 4400
+  },
+  "OH": {
+   "families": 26100,
+   "children": 50500
+  },
+  "OK": {
+   "families": 18000,
+   "children": 29100
+  },
+  "OR": {
+   "families": 10100,
+   "children": 16500
+  },
+  "PA": {
+   "families": 50700,
+   "children": 85700
+  },
+  "RI": {
+   "families": 3300,
+   "children": 5400
+  },
+  "SC": {
+   "families": 15400,
+   "children": 22400
+  },
+  "SD": {
+   "families": 2000,
+   "children": 3000
+  },
+  "TN": {
+   "families": 15900,
+   "children": 22100
+  },
+  "TX": {
+   "families": 92100,
+   "children": 158700
+  },
+  "UT": {
+   "families": 7800,
+   "children": 14700
+  },
+  "VT": {
+   "families": 1600,
+   "children": 2200
+  },
+  "VA": {
+   "families": 21100,
+   "children": 33500
+  },
+  "WA": {
+   "families": 15100,
+   "children": 24500
+  },
+  "WV": {
+   "families": 6500,
+   "children": 10900
+  },
+  "WI": {
+   "families": 16200,
+   "children": 27800
+  },
+  "WY": {
+   "families": 1600,
+   "children": 2500
+  }
+ },
+ "states_total": {
+  "families": 981300,
+  "children": 1606000
+ },
+ "published_national_total": {
+  "families": 994000,
+  "children": 1623000
+ }
+}

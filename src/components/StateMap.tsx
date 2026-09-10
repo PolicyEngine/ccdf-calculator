@@ -1,13 +1,15 @@
 'use client';
 
-import { useState, memo, useMemo } from 'react';
+import { memo, useMemo, useState, type ReactNode } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 
-const geoUrl = 'https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json';
+// us-atlas states-10m, vendored from the npm package so the map does not
+// depend on a third-party CDN at runtime (see public/geo/).
+const GEO_URL = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/geo/states-10m.json`;
 
 // The TopoJSON carries FIPS ids; DC (11) is in the file but too small to click
 // reliably, so it also appears in the ranked bar chart and the table.
-const FIPS_TO_STATE = {
+const FIPS_TO_STATE: Record<string, string> = {
   '01': 'AL', '02': 'AK', '04': 'AZ', '05': 'AR', '06': 'CA',
   '08': 'CO', '09': 'CT', '10': 'DE', '11': 'DC', '12': 'FL',
   '13': 'GA', '15': 'HI', '16': 'ID', '17': 'IL', '18': 'IN',
@@ -26,14 +28,30 @@ const STEPS = 9;
 const RAMP = Array.from({ length: STEPS }, (_, i) => `var(--map-${i})`);
 const EMPTY = 'var(--map-empty)';
 
-/**
- * US choropleth over a per-state metric.
- *
- * @param values      state code -> number (null or missing renders as "no data")
- * @param names       state code -> display name
- * @param subtitles   state code -> secondary tooltip line (the program name)
- * @param formatValue value -> display string
- */
+interface GeoFeature {
+  id?: string | number;
+  rsmKey: string;
+}
+
+interface Props {
+  /** State code to number; null or missing renders as "no data". */
+  values: Record<string, number | null | undefined>;
+  /** State code to display name. */
+  names: Record<string, string>;
+  /** State code to secondary tooltip line, usually the program name. */
+  subtitles?: Record<string, string>;
+  selectedState: string;
+  onSelect?: (code: string) => void;
+  formatValue: (value: number) => string;
+  lowLabel?: string;
+  highLabel?: string;
+}
+
+function isNumber(value: unknown): value is number {
+  return typeof value === 'number' && Number.isFinite(value);
+}
+
+/** US choropleth over a per-state metric. */
 function StateMap({
   values,
   names,
@@ -43,37 +61,31 @@ function StateMap({
   formatValue,
   lowLabel = 'Lower',
   highLabel = 'Higher',
-}) {
-  const [hoveredState, setHoveredState] = useState(null);
+}: Props) {
+  const [hoveredState, setHoveredState] = useState<string | null>(null);
 
   const { min, max } = useMemo(() => {
-    const numbers = Object.values(values || {}).filter(
-      (v) => typeof v === 'number' && Number.isFinite(v),
-    );
+    const numbers = Object.values(values ?? {}).filter(isNumber);
     if (numbers.length === 0) return { min: 0, max: 0 };
     return { min: Math.min(...numbers), max: Math.max(...numbers) };
   }, [values]);
 
-  const colorFor = (code) => {
+  const colorFor = (code: string): string => {
     const value = values?.[code];
-    if (typeof value !== 'number' || !Number.isFinite(value)) return EMPTY;
+    if (!isNumber(value)) return EMPTY;
     if (max === min) return RAMP[STEPS - 1];
     const ratio = (value - min) / (max - min);
     return RAMP[Math.min(Math.round(ratio * (STEPS - 1)), STEPS - 1)];
   };
 
-  const describe = (code) => {
+  const describe = (code: string | null): ReactNode => {
     if (!code) return null;
     const value = values?.[code];
     return (
       <>
         <strong>{names?.[code] || code}</strong>
         {subtitles?.[code] ? <span className="map-state-sub">{subtitles[code]}</span> : null}
-        <span className="benefit-amount">
-          {typeof value === 'number' && Number.isFinite(value)
-            ? formatValue(value)
-            : 'No data'}
-        </span>
+        <span className="benefit-amount">{isNumber(value) ? formatValue(value) : 'No data'}</span>
       </>
     );
   };
@@ -92,10 +104,10 @@ function StateMap({
           height={500}
           style={{ width: '100%', height: 'auto' }}
         >
-          <Geographies geography={geoUrl}>
+          <Geographies geography={GEO_URL}>
             {({ geographies }) =>
-              geographies.map((geo) => {
-                const code = FIPS_TO_STATE[geo.id];
+              (geographies as GeoFeature[]).map((geo) => {
+                const code = FIPS_TO_STATE[String(geo.id)];
                 if (!code) return null;
                 const isSelected = code === selectedState;
                 return (
@@ -112,7 +124,7 @@ function StateMap({
                     }}
                     onMouseEnter={() => setHoveredState(code)}
                     onMouseLeave={() => setHoveredState(null)}
-                    onClick={() => onSelect && onSelect(code)}
+                    onClick={() => onSelect?.(code)}
                   />
                 );
               })
@@ -129,9 +141,9 @@ function StateMap({
         >
           {describe(selectedState)}
         </div>
-        {hoveredState && hoveredState !== selectedState && (
+        {hoveredState && hoveredState !== selectedState ? (
           <div className="map-state-card hovered">{describe(hoveredState)}</div>
-        )}
+        ) : null}
       </div>
 
       <div className="heatmap-legend">

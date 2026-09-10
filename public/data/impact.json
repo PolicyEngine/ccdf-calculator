@@ -2,7 +2,7 @@
  "year": 2026,
  "dataset": "../data/populace_us_2024_year_2026.h5",
  "policyengine_version": null,
- "policyengine_us_version": "1.824.7",
+ "policyengine_us_version": "1.824.8",
  "bundle": null,
  "assumed_charge_per_child_month": 1500,
  "min_sample_units": 30,

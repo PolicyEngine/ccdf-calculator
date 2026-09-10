@@ -1,5 +1,5 @@
 {
- "policyengine_us_version": "1.824.7",
+ "policyengine_us_version": "1.824.8",
  "year": 2026,
  "income_steps": [
   0,
@@ -269,7 +269,7 @@
   "days_per_week": 5,
   "attending_days_per_month": 22,
   "weekly_hours_worked": 40,
-  "provider": "state default provider type (a licensed center) at the base quality tier"
+  "provider": "the state's default provider type, a licensed center, at the base quality tier"
  },
  "states": [
   {

@@ -49,6 +49,21 @@ export default function CalculatorResults({
   const shareOfFpg = fpg > 0 ? form.income / fpg : 0;
   const shareOfSmi = smi > 0 ? form.income / smi : 0;
   const eligible = shown.eligible;
+  const totalCharge = form.monthlyChargePerChild * form.children.length;
+
+  // One sentence on why out of pocket differs from the copay.
+  let costNote: string | null = null;
+  if (!eligible) {
+    costNote = `Not eligible under the modeled rules, so the family pays the provider's full ${fmtCurrency(totalCharge)} charge.`;
+  } else if (shown.outOfPocket > shown.copay + 0.5) {
+    const aboveRate = fmtCurrency(shown.outOfPocket - shown.copay);
+    costNote =
+      shown.copay > 0.5
+        ? `The provider charges more than the state's maximum rate. The family pays its ${fmtCurrency(shown.copay)} copay plus the ${aboveRate} above the rate.`
+        : `The provider charges more than the state's maximum rate. The family owes no copay and pays the ${aboveRate} above the rate.`;
+  } else if (shown.subsidy > totalCharge + 0.5) {
+    costNote = `${config.name} pays the provider its state rate, which is more than this provider charges; the family pays only its copay.`;
+  }
 
   const staleVersion = apiOlderThanGrid && apiVersion;
   const zeroUnderOlderModel =
@@ -101,7 +116,7 @@ export default function CalculatorResults({
         <div className="result-banner-stats">
           <div className="stat-item">
             <span className="stat-label">Family copay</span>
-            <span className="stat-value">{fmtCurrency(shown.copay)}/mo</span>
+            <span className="stat-value">{eligible ? `${fmtCurrency(shown.copay)}/mo` : '—'}</span>
           </div>
           <div className="stat-item">
             <span className="stat-label">Out of pocket</span>
@@ -116,6 +131,7 @@ export default function CalculatorResults({
             <span className="stat-value">{fmtPercent(shareOfSmi, 0)}</span>
           </div>
         </div>
+        {costNote ? <p className="result-note">{costNote}</p> : null}
       </div>
 
       <div className="mode-row">
@@ -135,8 +151,9 @@ export default function CalculatorResults({
           <span className="mode-value">{live ? `${fmtCurrency(live.subsidy)}/mo` : '—'}</span>
           {liveFresh && live ? (
             <span className="mode-note">
-              {live.eligible ? 'Eligible' : 'Not eligible'} in the live model, copay{' '}
-              {fmtCurrency(live.copay)}/mo.
+              {live.eligible
+                ? `Eligible in the live model, copay ${fmtCurrency(live.copay)}/mo.`
+                : 'Not eligible in the live model.'}
             </span>
           ) : null}
           {exactNotes.map((note) => (

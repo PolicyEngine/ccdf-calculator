@@ -8,12 +8,13 @@ import {
   interpolate,
   loadPolicyIndex,
   nearestChargeIndex,
+  outOfPocketCost,
   referenceGaps,
   structureComparison,
   structureKey,
 } from './dataLookup';
 import { INCOME_STEPS, jsonResponse, makeMetadata, makeStateData } from './__fixtures__/data';
-import type { PolicyIndex } from './types';
+import type { CompareCellFile, PolicyIndex } from './types';
 
 describe('reference-structure matching', () => {
   it('maps ages onto the five child structures', () => {
@@ -138,15 +139,30 @@ describe('estimate', () => {
     expect(result!.incomeShareOfSmi).toBeCloseTo(0.27);
   });
 
-  it('reads eligibility from the nearest income step and turns false past the cutoff', () => {
+  it('turns ineligible past the cutoff, with no copay and the full charge to pay', () => {
     const result = estimate(meta, state, {
       adults: 1,
       childAges: [3],
-      income: 9600, // nearest step is 10000, where the subsidy is zero
+      income: 10000, // the grid pays nothing here
       monthlyChargePerChild: 1500,
     });
     expect(result!.eligible).toBe(false);
-    expect(result!.subsidy).toBeCloseTo(80); // interpolated between 200 and 0
+    expect(result!.subsidy).toBe(0);
+    expect(result!.copay).toBe(0);
+    expect(result!.outOfPocket).toBe(1500);
+  });
+
+  it('stays eligible while the interpolated subsidy is positive near the cutoff', () => {
+    const result = estimate(meta, state, {
+      adults: 1,
+      childAges: [3],
+      income: 9600, // nearest step is 10000 (ineligible) but 9000 still pays 200
+      monthlyChargePerChild: 1500,
+    });
+    expect(result!.subsidy).toBeCloseTo(80);
+    expect(result!.eligible).toBe(true);
+    expect(result!.copay).toBeCloseTo(96);
+    expect(result!.outOfPocket).toBeCloseTo(1420);
   });
 
   it('returns null when the state file lacks the structure', () => {
@@ -154,6 +170,29 @@ describe('estimate', () => {
     expect(
       estimate(meta, partial, { adults: 1, childAges: [3, 7], income: 0, monthlyChargePerChild: 1500 }),
     ).toBeNull();
+  });
+});
+
+describe('outOfPocketCost', () => {
+  it('is the copay plus the charge above the state rate in the usual case', () => {
+    // Rate 1200, copay 100: subsidy 1100 on a 1500 charge leaves 400.
+    expect(outOfPocketCost(1500, 1100, 100)).toBe(400);
+    // Charge under the rate: the family pays only the copay.
+    expect(outOfPocketCost(1000, 900, 100)).toBe(100);
+  });
+
+  it('never drops below the copay when a state pays above the charge (Vermont)', () => {
+    expect(outOfPocketCost(1000, 2145, 0)).toBe(0);
+    expect(outOfPocketCost(1000, 2100, 45)).toBe(45);
+  });
+
+  it('is the full charge for a family the state pays nothing for', () => {
+    expect(outOfPocketCost(3000, 0, 0)).toBe(3000);
+    expect(outOfPocketCost(3000, 0, 500)).toBe(3000);
+  });
+
+  it('is never negative', () => {
+    expect(outOfPocketCost(0, 0, 0)).toBe(0);
   });
 });
 
@@ -165,7 +204,13 @@ describe('chart series', () => {
     const series = incomeSeries(meta, state, '1_two', 1);
     expect(series).toHaveLength(INCOME_STEPS.length);
     expect(series[0]).toEqual({ income: 0, subsidy: 2000, copay: 0 });
-    expect(series[10]).toEqual({ income: 10000, subsidy: 0, copay: 100 });
+    expect(series[9]).toEqual({ income: 9000, subsidy: 200, copay: 90 });
+  });
+
+  it('zeroes the copay where the household is not eligible', () => {
+    // The model computes a would-be copay past the cutoff; the family owes none.
+    const series = incomeSeries(meta, state, '1_two', 1);
+    expect(series[10]).toEqual({ income: 10000, subsidy: 0, copay: 0 });
   });
 
   it('is empty for an unknown structure', () => {
@@ -250,15 +295,22 @@ describe('compareStates', () => {
     vi.unstubAllGlobals();
   });
 
-  it('evaluates one grid cell per state and reads cutoffs from the policy index', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async (input: RequestInfo | URL) => {
-        const url = String(input);
-        if (url.endsWith('/data/AA.json')) return jsonResponse(makeStateData('AA'));
-        return new Response('not found', { status: 404 });
-      }),
-    );
+  it('reads one compare-cell file and evaluates every state from it', async () => {
+    const grid = makeStateData('AA').structures['1_two'];
+    const cell: CompareCellFile = {
+      structure: '1_two',
+      charge_index: 1,
+      charge_level: 1500,
+      policyengine_us_version: '1.824.7',
+      income_steps: INCOME_STEPS,
+      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1] } },
+    };
+    const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
+      const url = String(input);
+      if (url.endsWith('/data/compare/1_two_1.json')) return jsonResponse(cell);
+      return new Response('not found', { status: 404 });
+    });
+    vi.stubGlobal('fetch', fetchMock);
     const meta = makeMetadata();
     const policy: PolicyIndex = {
       year: 2026,
@@ -310,6 +362,28 @@ describe('compareStates', () => {
     expect(bb.eligible).toBe(false);
     expect(bb.cutoffIncome).toBeNull();
     expect(bb.cutoffBeyondAxis).toBe(false);
+
+    // One request for the cell, none for the per-state files.
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('hides the would-be copay for a state that does not pay at that income', async () => {
+    const grid = makeStateData('AA').structures['1_two'];
+    const cell: CompareCellFile = {
+      structure: '1_two',
+      charge_index: 1,
+      charge_level: 1500,
+      policyengine_us_version: '1.824.7',
+      income_steps: INCOME_STEPS,
+      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1] } },
+    };
+    vi.stubGlobal('fetch', vi.fn(async () => jsonResponse(cell)));
+    const policy: PolicyIndex = { year: 2026, states: {} };
+    const rows = await compareStates(makeMetadata(), policy, '1_two', 1, 10000);
+    const row = rows.find((item) => item.code === 'AA')!;
+    expect(row.subsidy).toBe(0);
+    expect(row.eligible).toBe(false);
+    expect(row.copay).toBeNull();
   });
 });
 

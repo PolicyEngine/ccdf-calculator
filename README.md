@@ -20,8 +20,9 @@ and DC run with Child Care and Development Fund (CCDF) money, as encoded in
   income cutoff (in dollars, % of the federal poverty guideline and % of
   state median income) for a reference household, plus every program
   parameter as encoded with its source reference.
-- **Population impact**: eligible children, families and subsidy dollars by
-  state from the Microcosm microsimulation (secondary; generated separately).
+- **Population impact**: children and families who would qualify in each
+  state from the Microcosm microsimulation, set against the children each
+  state actually served in ACF's latest CCDF data tables.
 
 See [docs/PLAN.md](docs/PLAN.md) for the design and
 [docs/DATA_CONTRACT.md](docs/DATA_CONTRACT.md) for the generated data shapes.
@@ -34,8 +35,11 @@ scripts/                Python data pipeline (needs policyengine-us)
   calculator.py         create_situation(): the household description
   build_state_inputs.py -> public/data/state_inputs.json (provider inputs per state)
   precompute.py         -> public/data/{ST}.json + metadata.json (reference grid)
+  build_compare.py      -> public/data/compare/*.json (grid re-sliced per compare cell)
   policy_index.py       -> public/data/policy_index.json (parameters + cutoffs)
   microsim.py           -> public/data/impact.json (population estimates)
+  acf_served.py         -> public/data/acf_served.json (ACF caseload, hand-transcribed)
+  check_data_freshness.py  compares metadata.json with the latest policyengine-us
 src/                    Next.js 16 app (App Router, React 19, Recharts, react-simple-maps, @policyengine/ui-kit)
 public/data/            generated JSON, committed
 ```
@@ -46,9 +50,11 @@ public/data/            generated JSON, committed
 cd scripts
 pip install -r requirements.txt   # or use a policyengine-us dev environment
 python build_state_inputs.py
-python precompute.py              # ~1 minute for all states
+python precompute.py              # ~2 minutes for all states
+python build_compare.py           # after precompute
 python policy_index.py            # after precompute
-python microsim.py                # optional, needs `policyengine[us]` and tens of GB RAM
+python microsim.py --dataset-path ../data/populace_us_2024_year_2026.h5   # ~5 minutes, <4 GB RAM
+python acf_served.py              # only after editing the transcribed ACF table
 ```
 
 ## Run locally

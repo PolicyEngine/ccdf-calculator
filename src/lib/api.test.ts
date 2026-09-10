@@ -148,6 +148,7 @@ describe('calculateLive', () => {
     });
     expect(result.subsidy).toBe(0);
     expect(result.eligible).toBe(false);
+    expect(result.copay).toBe(0);
     expect(result.outOfPocket).toBe(3000);
     // Variables absent from the response read as zero, not NaN.
     expect(result.fpg).toBe(0);
@@ -168,6 +169,9 @@ describe('calculateLive', () => {
     });
     expect(result.subsidy).toBe(100);
     expect(result.eligible).toBe(false);
+    // No copay is owed by a family the flag says the state will not pay for.
+    expect(result.copay).toBe(0);
+    expect(result.outOfPocket).toBe(3000 - 100);
   });
 
   it('refuses to call the API when the model lacks a required variable', async () => {

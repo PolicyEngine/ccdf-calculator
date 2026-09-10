@@ -86,6 +86,46 @@ export interface StateInputsFile {
   states: Record<string, StateInputConfig>;
 }
 
+/** One state's income series for one (structure, charge) cell of the grid. */
+export interface CompareSeries {
+  subsidy: number[];
+  copay: number[];
+  eligible: boolean[];
+}
+
+/** `compare/{structure}_{chargeIndex}.json` from `scripts/build_compare.py`. */
+export interface CompareCellFile {
+  structure: string;
+  charge_index: number;
+  charge_level: number;
+  policyengine_us_version: string;
+  income_steps: number[];
+  states: Record<string, CompareSeries>;
+}
+
+export interface AcfServedSource {
+  title: string;
+  href: string;
+  publisher: string;
+  fiscal_year: number;
+  publication_date: string;
+  data_as_of: string;
+  notes: string[];
+}
+
+export interface AcfServedCount {
+  families: number;
+  children: number;
+}
+
+/** `acf_served.json` from `scripts/acf_served.py`: children actually funded. */
+export interface AcfServedFile {
+  source: AcfServedSource;
+  states: Record<string, AcfServedCount>;
+  states_total: AcfServedCount;
+  published_national_total: AcfServedCount;
+}
+
 export interface PolicyReference {
   title: string;
   href: string;

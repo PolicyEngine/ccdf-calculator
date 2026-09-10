@@ -7,6 +7,7 @@
  * variables that exist, so the UI can gate the "calculate exactly" button.
  */
 
+import { outOfPocketCost } from './dataLookup';
 import { buildSituation, type HouseholdSpec } from './situation';
 import type { StateInputConfig } from './types';
 
@@ -201,16 +202,17 @@ export async function calculateLive({
   const subsidy = readTotal(result, config.main, year_) / 12;
   const factor =
     config.copay_factor === 'days' ? household.attendingDaysPerMonth : config.copay_factor;
-  const copay = (readTotal(result, config.copay, year_) / 12) * factor;
   const childCareSubsidies = readTotal(result, 'child_care_subsidies', year_) / 12;
   const eligibleRaw = config.eligible ? readFirst(result, config.eligible, year_) : null;
   const eligible = config.eligible ? Boolean(eligibleRaw) : subsidy > 0;
+  // The model computes a would-be copay for ineligible families too.
+  const copay = eligible ? (readTotal(result, config.copay, year_) / 12) * factor : 0;
   const charge = household.monthlyChargePerChild * household.childAges.length;
 
   return {
     subsidy,
     copay,
-    outOfPocket: Math.max(0, charge - subsidy),
+    outOfPocket: outOfPocketCost(charge, subsidy, copay),
     eligible,
     fpg: readTotal(result, 'spm_unit_fpg', year_),
     smi: readTotal(result, 'hhs_smi', year_),

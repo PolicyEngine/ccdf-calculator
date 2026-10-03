@@ -112,7 +112,7 @@ export default function Calculator() {
   );
 
   const estimate = useMemo(() => {
-    if (!metadata || !stateData) return null;
+    if (!metadata || !stateData || stateData.state !== form.state) return null;
     return estimateFromGrid(metadata, stateData, {
       adults: form.adults,
       childAges: form.children.map((child) => child.age),
@@ -157,12 +157,12 @@ export default function Calculator() {
   }, [metadata, stateData, estimate, form]);
 
   const structureData = useMemo(() => {
-    if (!metadata || !stateData) return [];
+    if (!metadata || !stateData || stateData.state !== form.state) return [];
     return Object.entries(metadata.child_structures).map(([childKey, structure]) => ({
       childKey, label: CHILD_STRUCTURE_LABELS[childKey] ?? childKey,
       subsidy: estimateFromGrid(metadata, stateData, { adults: form.adults, childAges: structure.ages, income: form.income, monthlyChargePerChild: form.monthlyChargePerChild })?.subsidy ?? 0,
     }));
-  }, [metadata, stateData, form.adults, form.monthlyChargePerChild, form.income]);
+  }, [metadata, stateData, form.state, form.adults, form.monthlyChargePerChild, form.income]);
 
   /**
    * The deployed API often lags the version the grid was built with. When it

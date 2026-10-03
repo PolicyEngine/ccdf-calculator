@@ -279,8 +279,9 @@ body {
 
 /* Result Banner - compact horizontal layout */
 .result-banner {
-  background: var(--color-navy);
-  color: white;
+  background: #F0FAF8;
+  color: var(--color-text);
+  border: 1px solid #CDE7E2;
   border-radius: var(--radius-lg);
   padding: 1.5rem 2rem;
   margin-bottom: 1.5rem;
@@ -301,7 +302,7 @@ body {
   font-weight: 600;
 
   letter-spacing: 0.1em;
-  opacity: 0.6;
+  color: var(--color-text-muted);
   margin-bottom: 0.25rem;
 }
 
@@ -310,21 +311,22 @@ body {
   font-size: 2.5rem;
   font-weight: 700;
   line-height: 1;
-  color: var(--color-teal-light);
+  color: var(--color-teal-dark);
 }
 
 .result-banner .amount-annual {
   font-size: 0.9rem;
-  opacity: 0.6;
+  color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
 
 .result-banner.not-eligible {
-  background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+  background: var(--color-cream);
+  border-color: var(--color-border);
 }
 
 .result-banner.not-eligible .amount {
-  color: white;
+  color: var(--color-text);
 }
 
 .result-banner-details {
@@ -332,7 +334,7 @@ body {
   flex-direction: column;
   gap: 0.5rem;
   padding-right: 2rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: 1px solid var(--color-border);
 }
 
 .result-meta {
@@ -340,7 +342,7 @@ body {
   flex-direction: column;
   gap: 0.125rem;
   font-size: 0.8rem;
-  opacity: 0.7;
+  color: var(--color-text-muted);
 }
 
 .result-banner-stats {
@@ -351,7 +353,7 @@ body {
   display: flex;
   flex-direction: column;
   padding: 0 1.5rem;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--color-border);
 }
 
 .stat-item:last-child {
@@ -364,13 +366,13 @@ body {
   font-weight: 600;
 
   letter-spacing: 0.08em;
-  opacity: 0.5;
+  color: var(--color-text-muted);
 }
 
 .stat-value {
   font-size: 1.05rem;
   font-weight: 700;
-  color: white;
+  color: var(--color-text);
 }
 
 .eligibility-status {
@@ -387,8 +389,8 @@ body {
 }
 
 .eligibility-status.eligible {
-  background: var(--color-teal);
-  color: white;
+  background: #D8F0E9;
+  color: var(--color-teal-dark);
 }
 
 .eligibility-status.eligible::before {
@@ -397,8 +399,8 @@ body {
 }
 
 .eligibility-status.not-eligible {
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--color-cream-dark);
+  color: var(--color-navy-light);
 }
 
 /* Charts Grid: Two charts side by side */

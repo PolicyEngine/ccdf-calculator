@@ -1,4 +1,4 @@
-import { fmtCurrency } from '@/lib/format';
+import { fmtCurrency, fmtMonth } from '@/lib/format';
 import type { Metadata } from '@/lib/types';
 
 export default function Methodology({ metadata }: { metadata: Metadata }) {
@@ -10,7 +10,7 @@ export default function Methodology({ metadata }: { metadata: Metadata }) {
       <p>
         This tool reports the child care subsidy each state pays under its own program funded
         by the federal Child Care and Development Fund, as encoded in policyengine-us{' '}
-        {metadata.policyengine_us_version} for {metadata.year}. All 50 states and the District of
+        {metadata.policyengine_us_version} for {fmtMonth(metadata.reference_month)}. All 50 states and the District of
         Columbia are covered.
       </p>
 
@@ -20,7 +20,7 @@ export default function Methodology({ metadata }: { metadata: Metadata }) {
         households: one or two working adults with one of five sets of children, at every
         income from $0 to{' '}
         {fmtCurrency(metadata.income_steps[metadata.income_steps.length - 1])} and at five
-        provider charges. Your household is matched to the closest one, so the estimate
+        provider charges. Income and charges are interpolated between grid points, which can smooth benefit caps and eligibility boundaries. Your family is matched to a reference structure, so the estimate
         updates as you type but ignores details the grid does not vary. The{' '}
         <strong>exact calculation</strong> posts your household exactly as entered to the live
         PolicyEngine API, which runs its own deployed version of policyengine-us; that version
@@ -69,12 +69,10 @@ export default function Methodology({ metadata }: { metadata: Metadata }) {
         </li>
         <li>
           <strong>Out of pocket</strong> is what the family pays the provider: the copay plus
-          any charge above the state&rsquo;s maximum rate.
+          the remaining tuition gap. Whether that gap can be billed depends on state rules and the care agreement; confirm costs with the provider.
         </li>
         <li>
-          Figures are averages over the twelve months of {metadata.year}. Where a state changed
-          its rules during the year, the estimate blends the old and new rules; the Compare page
-          lists each parameter with its effective dates.
+          Figures use the rules modeled for {fmtMonth(metadata.reference_month)}. They are not annual averages or a forecast of twelve months of payments. Income and poverty guidelines remain annual amounts.
         </li>
       </ul>
 
@@ -82,7 +80,7 @@ export default function Methodology({ metadata }: { metadata: Metadata }) {
       <p>
         States run waiting lists and fund a limited number of children, so being eligible in the
         model does not guarantee a subsidy. The Population impact page sets the number of
-        children who would qualify against the number each state actually served. For a full
+        children in families with a modeled subsidy against the number each state actually served. For a full
         household simulation covering taxes and other benefits, use{' '}
         <a href="https://policyengine.org/us">PolicyEngine US</a>; the rules themselves live in{' '}
         <a href="https://github.com/PolicyEngine/policyengine-us">policyengine-us</a>.

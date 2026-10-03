@@ -21,6 +21,7 @@ export const CHILD_STRUCTURES: Metadata['child_structures'] = {
 export function makeMetadata(): Metadata {
   return {
     policyengine_us_version: '1.824.7',
+    reference_month: '2026-10',
     year: 2026,
     income_steps: [...INCOME_STEPS],
     charge_levels: [...CHARGE_LEVELS],

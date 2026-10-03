@@ -1369,3 +1369,10 @@ body {
   line-height: 1.5;
   opacity: 0.85;
 }
+
+.calculator-layout { display: grid; gap: 1.5rem; align-items: start; }
+.result-banner .assumption-note { grid-column: 1 / -1; margin: 0.75rem 0; background: #fff; color: #1f2937; }
+@media (min-width: 1100px) {
+  .calculator-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .calculator-layout > .results-panel { position: sticky; top: 1rem; }
+}

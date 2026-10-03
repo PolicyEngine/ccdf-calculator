@@ -7,7 +7,9 @@ frontend reads them with `fetch(`${NEXT_PUBLIC_BASE_PATH}/data/...`)`.
 
 ```jsonc
 {
-  "policyengine_us_version": "1.824.7",
+  "policyengine_us_version": "2.23.5",
+  "reference_month": "2026-10",
+  "model_revision": "c916aae265d0ece149a55bebd1a430e467698bf6",
   "year": 2026,
   "income_steps": [0, 1000, ..., 200000],        // 201 annual earned-income points
   "charge_levels": [1000, 1500, 2000, 2500, 3000], // provider charge, $/child/month
@@ -47,12 +49,16 @@ frontend reads them with `fetch(`${NEXT_PUBLIC_BASE_PATH}/data/...`)`.
 }
 ```
 
-Interpretation: `subsidy` is what the state pays the provider each month for
-the household's children, averaged over the twelve months of the year (so a
-mid-year rule change is blended); `copay` is the family's share under the
-program, converted to a monthly figure; `eligible` is true when the state
-would pay in at least one month of the year, read month by month from the
-state's eligibility variable (or `subsidy > 0` when it has none).
+Interpretation: `subsidy`, `copay`, and `eligible` refer to `reference_month`
+(also recorded on each state file). Read subsidy and eligibility directly for
+that month; read the copay for that same month and apply only its daily/weekly
+unit factor. Never divide a month request by twelve. Annual income and FPG/SMI
+remain annual. `eligible` falls back to `subsidy > 0` only without a state flag.
+
+The calculator interpolates income and provider charge independently. Outside
+the charge grid, subsidy and all displayed reference costs use the clamped
+charge and reference child count, with a warning beside the result. Interpolation
+can smooth benefit kinks and eligibility boundaries; it is an estimate.
 
 The model computes a would-be `copay` for ineligible households too. The
 frontend shows a copay only where `eligible` is true, and computes what the
@@ -163,25 +169,23 @@ labelled "Currently receiving this subsidy".
       "spm_unit_pre_subsidy_childcare_expenses": {"2026": charge * 12 * children},
       "meets_ccdf_activity_test": {"2026": true},
       "<spm-level state input>": {"2026": false},
-      "il_ccap": {"2026": null}, "il_ccap_copay": {"2026": null}, ...   // every `outputs` entry set to null
+      "il_ccap": {"2026-10": null}, "il_ccap_copay": {"2026-10": null}, ...   // every `outputs` entry set to null
   }},
   "households": {"household": {"members": [all], "state_code": {"2026": "IL"},
                  "county": {"2026": "COOK_COUNTY_IL"}}}
 }
 ```
 
-Response: `{"status": "ok", "result": {"spm_units": {"spm_unit": {"il_ccap": {"2026": 17784.0}, ...}}}}`.
-Values for `2026` are **annual** sums, so monthly subsidy = value / 12 and
-monthly copay = value / 12 * copay_factor (or * attending days when
-`copay_factor == "days"`). Person-level copays come back under
-`result.people.child_N` and must be summed.
+Response: `{"status": "ok", "result": {"spm_units": {"spm_unit": {"il_ccap": {"2026-10": 1482.0}, ...}}}}`.
+Subsidy, copay, aggregate child-care subsidy and eligibility are requested for
+the reference month. FPG and SMI remain requested for the year. Person-level
+copays come back under `result.people.child_N` and are summed before the unit
+factor is applied. Integer copays such as North Carolina's are not annualized.
 
-Two person-level overrides are baked into `create_situation` and must be
-mirrored: Maryland `md_ccs_provider_type = "LICENSED_CENTER"` (model default
-`NONE` pays nothing), and Massachusetts `ma_ccfa_care_provider_type` is
-`CENTER_BASED_CARE_EARLY_EDUCATION` for children under 5 and
-`CENTER_BASED_CARE_SCHOOL_AGE` otherwise. A user-chosen value for the same
-input wins.
+Provider overrides explicitly select Maryland's `LICENSED_CENTER` and
+Massachusetts' unified `CENTER_BASED_CARE`, as used in upstream 2.23.5. User
+values override these defaults. An older live model is blocked to avoid
+sending enum values it cannot accept. Court-supervision inputs are not exposed.
 
 ## `policy_index.json` (from `policy_index.py`)
 
@@ -196,7 +200,7 @@ input wins.
       "parameters": [
         {"path": "...", "label": "...", "description": "...", "unit": "/1" | "currency-USD" | "year" | null,
          "period": "year" | "month" | null,
-         "values": {"2026-01-01": 0.85, "2026-07-01": 0.85},
+         "values": {"2026-10-01": 0.85},
          "references": [{"title": "...", "href": "https://..."}]},
         {"path": "...", "label": "...", "scale": [{"threshold": 0, "amount": 10}, ...], "references": [...]},
         {"path": "gov.states.tx.twc.ccs.payment", "label": "...", "group": true, "count": 24193,
@@ -220,7 +224,9 @@ annual income at which the model still pays a positive subsidy.
 ```jsonc
 {
   "year": 2026, "dataset": "...populace_us_2024_year_2026.h5",
-  "policyengine_version": null, "policyengine_us_version": "1.824.7",
+  "policyengine_version": null, "policyengine_us_version": "2.23.5",
+  "reference_month": "2026-10",
+  "model_revision": "c916aae265d0ece149a55bebd1a430e467698bf6",
   "assumed_charge_per_child_month": 1500, "min_sample_units": 30,
   "assumptions": ["..."],
   "national": {"eligible_children": 0, "eligible_families": 0, "potential_annual_subsidy": 0,
@@ -248,3 +254,20 @@ The page must render a clear "not yet computed" state when the file is
 missing or has no `states`. Headline map/ranking use `eligible_share` and
 `eligible_children`; the paid-care subset is a secondary view that greys or
 flags states where `small_sample` is true.
+
+## Snapshot and population vintages
+
+Comparison cells record `reference_month` and carry each structure's annual
+`fpg` and `smi`. Cutoffs are derived from the selected charge cell, not the
+policy index's default-charge threshold. An exhausted income axis is a lower
+bound in all table columns and is excluded from finite cutoff maps/rankings.
+
+`impact.json` retains its own model version and year; these need not match the
+household grid. A visible warning identifies an older population run. Its
+`eligible_children` legacy key counts under-13 children in families with a
+positive subsidy, not individually eligible children. UI labels use “children
+in qualifying families.” The served ratio compares different years and is not
+a measured current take-up rate. Annual population results still include model
+coverage gaps (including South Dakota before August 2026) and need a separate
+validated regeneration/sensitivity analysis. No national totals were changed
+in the October household refresh.

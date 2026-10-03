@@ -57,7 +57,7 @@ export function cleanLabel(label: string, stateName?: string): string {
     text = text.slice(stateName.length).trim();
   }
   // Drop up to two leading program acronyms, e.g. "CCAP", "CDC", "C4K".
-  for (let i = 0; i < 2; i += 1) {
+  for (let i = 0; i < 2; i = i + 1) {
     const stripped = text.replace(/^\(?[A-Z][A-Z0-9]{1,6}\)?\s+/, '');
     if (stripped === text) break;
     text = stripped;
@@ -98,4 +98,13 @@ export function formatCountyName(county: string): string {
 
   if (stateCode === 'DC') return name;
   return `${name}, ${stateCode}`;
+}
+
+export function fmtMonth(month: string): string {
+  return new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(`${month}-01T00:00:00Z`));
+}
+
+export function fmtCutoff(value: number | null, beyondAxis: boolean, percentage = false): string {
+  if (value === null) return '—';
+  return `${beyondAxis ? 'Above ' : ''}${percentage ? fmtPercent(value, 0) : fmtCurrency(value)}`;
 }

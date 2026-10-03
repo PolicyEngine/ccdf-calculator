@@ -8,12 +8,12 @@ Every state child care subsidy program in policyengine-us exposes:
             (then eligibility is reported as subsidy > 0)
   county    the most populous county, used for the reference households in
             states whose rates or regions depend on county
-  overrides inputs that must differ from the model default for a sensible
-            reference household (e.g. Maryland's provider type defaults to
-            NONE, which pays nothing)
+  overrides explicit provider choices shared with the frontend
 """
 
 YEAR = 2026
+REFERENCE_MONTH = "2026-10"
+MODEL_REVISION = "c916aae265d0ece149a55bebd1a430e467698bf6"
 
 STATE_NAMES = {
     "AK": "Alaska", "AL": "Alabama", "AR": "Arkansas", "AZ": "Arizona",
@@ -163,15 +163,12 @@ STATES = {
     for code, (main, copay, factor, eligible, county) in _S.items()
 }
 
-# Person-level inputs whose model default is not a sensible reference
-# household. Keys are state codes; values map variable -> value (or a callable
-# taking the child's age).
+# Explicit provider inputs shared by the Python and TypeScript builders.
+# Values may be constants or callables taking the child's age.
 PERSON_OVERRIDES = {
     "MD": {"md_ccs_provider_type": "LICENSED_CENTER"},
     "MA": {
-        "ma_ccfa_care_provider_type": lambda age: (
-            "CENTER_BASED_CARE_EARLY_EDUCATION" if age < 5 else "CENTER_BASED_CARE_SCHOOL_AGE"
-        )
+        "ma_ccfa_care_provider_type": "CENTER_BASED_CARE"
     },
 }
 

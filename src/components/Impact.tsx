@@ -48,13 +48,13 @@ type HeadlineRow = ImpactStateRow & {
 };
 
 const HEADLINE_COLUMNS: Column<HeadlineMetricId>[] = [
-  { id: 'eligible_share', label: 'Share of children under 13 who would qualify', format: (v) => fmtPercent(v, 1) },
-  { id: 'eligible_children', label: 'Children who would qualify', format: fmtCount },
+  { id: 'eligible_share', label: 'Share of under-13s in qualifying families', format: (v) => fmtPercent(v, 1) },
+  { id: 'eligible_children', label: 'Children in qualifying families', format: fmtCount },
   { id: 'served_children', label: 'Children served (ACF)', format: fmtCount },
-  { id: 'served_per_100', label: 'Served per 100 who would qualify', format: (v) => v.toFixed(1) },
+  { id: 'served_per_100', label: 'Observed served / modeled children (%)', format: (v) => v.toFixed(1) },
   { id: 'eligible_families', label: 'Families who would qualify', format: fmtCount },
   { id: 'children_under_13', label: 'Children under 13', format: fmtCount },
-  { id: 'potential_annual_subsidy', label: 'Potential subsidy, upper bound', format: fmtCurrencyCompact },
+  { id: 'potential_annual_subsidy', label: 'Potential subsidy scenario', format: fmtCurrencyCompact },
 ];
 
 /** Metrics offered as the map and ranking colour, in that order. */
@@ -68,9 +68,9 @@ const MAP_METRIC_IDS: HeadlineMetricId[] = [
 
 const PAID_CARE_COLUMNS: Column<PaidCareMetricId>[] = [
   { id: 'children_in_paid_care', label: 'Children in paid care', format: fmtCount },
-  { id: 'eligible_children', label: 'Children who would qualify', format: fmtCount },
+  { id: 'eligible_children', label: 'Children in qualifying families', format: fmtCount },
   { id: 'eligible_families', label: 'Families who would qualify', format: fmtCount },
-  { id: 'annual_subsidy', label: 'Potential subsidy, upper bound', format: fmtCurrencyCompact },
+  { id: 'annual_subsidy', label: 'Potential subsidy scenario', format: fmtCurrencyCompact },
   { id: 'sample_units', label: 'Sampled families', format: fmtCount },
 ];
 
@@ -78,8 +78,8 @@ const PLANNED_ASSUMPTIONS = [
   'Every child under 13 is assumed to be in full-time care (8 hours a day under 5, 3 hours a day at 5 to 12, 5 days a week, 22 days a month) at the assumed charge per child.',
   'Parents meet the activity test when every adult in the family reports at least 20 usual weekly hours of work.',
   'Provider type and quality tier are the model defaults: a licensed center at the base tier.',
-  'The potential annual subsidy is what the model would pay if every eligible child used care at that charge: an upper bound, not spending.',
-  'Counts are the children and families the model would pay a positive subsidy, not actual caseloads.',
+  'The potential annual subsidy is a hypothetical scenario under the stated care assumptions, not spending or a validated upper bound.',
+  'Child counts include under-13 children in families with a positive modeled subsidy, including siblings who may not individually qualify.',
 ];
 
 const DEFAULT_MIN_SAMPLE = 30;
@@ -125,7 +125,7 @@ function NotComputed({ metadata }: { metadata: Metadata | null }) {
       <h3>What will appear here</h3>
       <ul>
         <li>
-          National totals for children and families who would qualify and the potential annual
+          National totals for qualifying families and the children living in them and the potential annual
           subsidy, alongside the children each state actually served.
         </li>
         <li>A map and a ranked bar chart of the eligible share of children under 13 by state.</li>
@@ -286,7 +286,7 @@ export default function Impact() {
     <div className="app">
       <header className="app-header">
         <h1>Population impact</h1>
-        <p>How many children would qualify in each state, and how many are served</p>
+        <p>Children in families with modeled subsidies, compared with children served</p>
       </header>
 
       <TabNav />
@@ -300,7 +300,11 @@ export default function Impact() {
           {!loading && hasData && impact ? (
             <>
               <section className="results-panel">
-                <h2>Who would qualify, and who is served</h2>
+                <h2>Children in qualifying families and children served</h2>
+                {metadata && impact.policyengine_us_version !== metadata.policyengine_us_version ? (
+                  <p className="assumption-note">These population estimates use the older model {impact.policyengine_us_version}. They have not been refreshed with the {metadata.policyengine_us_version} household estimates and include annual coverage limitations, such as South Dakota’s unmodeled January–July 2026 payments. Treat them as an illustrative historical scenario.</p>
+                ) : null}
+                <p className="field-note">The count includes children in families receiving a modeled subsidy, including siblings who may not individually qualify. {source ? `The ratio compares FY${source.fiscal_year} observed children served with modeled ${impact.year} children in qualifying families; it is not a current take-up rate.` : ''}</p>
                 <p className="chart-subtitle">
                   The model counts children under 13 whose family would receive a subsidy if
                   they used full-time care at {chargeLabel} per child a month.
@@ -312,9 +316,9 @@ export default function Impact() {
                 </p>
                 <div className="stat-tiles">
                   <div className="stat-tile">
-                    <span className="stat-label">Children who would qualify</span>
+                    <span className="stat-label">Children in qualifying families</span>
                     <span className="stat-tile-value">
-                      {fmtCount(national?.eligible_children ?? 0)}
+                      {new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(national?.eligible_children ?? 0)}
                     </span>
                     <span className="stat-tile-note">
                       Model, {impact.year}; {nationalShare === null ? '' : `${fmtPercent(nationalShare, 1)} of `}
@@ -339,7 +343,7 @@ export default function Impact() {
                   )}
                   {hasServed ? (
                     <div className="stat-tile">
-                      <span className="stat-label">Served per 100 who would qualify</span>
+                      <span className="stat-label">Observed served / modeled children (%)</span>
                       <span className="stat-tile-value">
                         {nationalPer100 === null ? '—' : nationalPer100.toFixed(1)}
                       </span>
@@ -361,7 +365,7 @@ export default function Impact() {
                       {fmtCurrencyCompact(national?.potential_annual_subsidy ?? 0)}
                     </span>
                     <span className="stat-tile-note">
-                      Upper bound if every qualifying child used care; not spending
+                      Hypothetical annual scenario; not spending
                     </span>
                   </div>
                 </div>
@@ -381,8 +385,7 @@ export default function Impact() {
                       {' '}
                       Children served: <a href={source.href}>{source.title}</a>, {source.publisher}
                       , published {longDate(source.publication_date)}. Average monthly adjusted
-                      count of children funded through CCDF, rounded to the nearest 100; the
-                      latest fiscal year published.
+                      count of children funded through CCDF, rounded to the nearest 100; the fiscal year used in this comparison.
                     </>
                   ) : null}
                 </p>
@@ -495,7 +498,7 @@ export default function Impact() {
                       </span>
                     </div>
                     <div className="stat-tile">
-                      <span className="stat-label">Children who would qualify</span>
+                      <span className="stat-label">Children in qualifying families</span>
                       <span className="stat-tile-value">
                         {fmtCount(nationalPaidCare.eligible_children)}
                       </span>

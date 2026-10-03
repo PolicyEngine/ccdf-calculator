@@ -3,7 +3,7 @@
 import type { LiveResult } from '@/lib/api';
 import type { Estimate } from '@/lib/dataLookup';
 import { CHILD_STRUCTURE_LABELS } from '@/lib/dataLookup';
-import { fmtCurrency, fmtPercent } from '@/lib/format';
+import { fmtCurrency, fmtPercent, fmtMonth } from '@/lib/format';
 import type { CalculatorForm } from '@/lib/household';
 import type { Metadata, StateInputConfig } from '@/lib/types';
 
@@ -49,7 +49,7 @@ export default function CalculatorResults({
   const shareOfFpg = fpg > 0 ? form.income / fpg : 0;
   const shareOfSmi = smi > 0 ? form.income / smi : 0;
   const eligible = shown.eligible;
-  const totalCharge = form.monthlyChargePerChild * form.children.length;
+  const totalCharge = showLive ? form.monthlyChargePerChild * form.children.length : estimate.chargeLevel * metadata.child_structures[estimate.childKey].ages.length;
 
   // One sentence on why out of pocket differs from the copay.
   let costNote: string | null = null;
@@ -57,10 +57,7 @@ export default function CalculatorResults({
     costNote = `Not eligible under the modeled rules, so the family pays the provider's full ${fmtCurrency(totalCharge)} charge.`;
   } else if (shown.outOfPocket > shown.copay + 0.5) {
     const aboveRate = fmtCurrency(shown.outOfPocket - shown.copay);
-    costNote =
-      shown.copay > 0.5
-        ? `The provider charges more than the state's maximum rate. The family pays its ${fmtCurrency(shown.copay)} copay plus the ${aboveRate} above the rate.`
-        : `The provider charges more than the state's maximum rate. The family owes no copay and pays the ${aboveRate} above the rate.`;
+    costNote = `The reference charge exceeds the subsidy plus copay by ${aboveRate}. Whether a provider may bill this difference depends on state rules and the care agreement.`;
   } else if (shown.subsidy > totalCharge + 0.5) {
     costNote = `${config.name} pays the provider its state rate, which is more than this provider charges; the family pays only its copay.`;
   }
@@ -96,12 +93,12 @@ export default function CalculatorResults({
         <div className="result-banner-main">
           <h3>Monthly subsidy the state pays</h3>
           <div className="amount">{fmtCurrency(shown.subsidy)}</div>
-          <div className="amount-annual">{fmtCurrency(shown.subsidy * 12)} a year</div>
+          <div className="amount-annual">Rules for {fmtMonth(metadata.reference_month)}</div>
         </div>
 
         <div className="result-banner-details">
           <span className={`eligibility-status ${eligible ? 'eligible' : 'not-eligible'}`}>
-            {eligible ? 'Eligible' : 'Not eligible'}
+            {showLive ? (eligible ? 'Eligible in model' : 'Not eligible in model') : (eligible ? 'Reference household qualifies' : 'Reference household does not qualify')}
           </span>
           <div className="result-meta">
             <span>{config.program}</span>
@@ -113,6 +110,19 @@ export default function CalculatorResults({
           </div>
         </div>
 
+        {!showLive && gaps.length > 0 ? (
+          <div className="assumption-note">
+            <strong>This estimate uses different household details:</strong>
+            <ul>
+              {gaps.map((gap) => (
+                <li key={gap}>{gap}</li>
+              ))}
+            </ul>
+            <p>
+              An exact calculation uses your entered details when a compatible live model is available. Until then, this amount describes the reference household.
+            </p>
+          </div>
+        ) : null}
         <div className="result-banner-stats">
           <div className="stat-item">
             <span className="stat-label">Family copay</span>
@@ -174,20 +184,7 @@ export default function CalculatorResults({
 
       {liveError ? <div className="error">{liveError}</div> : null}
 
-      {gaps.length > 0 ? (
-        <div className="assumption-note">
-          <strong>The estimate reads your household onto a reference household.</strong>
-          <ul>
-            {gaps.map((gap) => (
-              <li key={gap}>{gap}</li>
-            ))}
-          </ul>
-          <p>
-            Run the exact calculation to use your household as entered, including provider
-            details.
-          </p>
-        </div>
-      ) : null}
+
     </section>
   );
 }

@@ -101,17 +101,17 @@ describe('buildSituation: state overrides', () => {
     expect(situation.people.child_1.md_ccs_provider_type).toEqual({ [Y]: 'INFORMAL' });
   });
 
-  it("splits Massachusetts' provider type by the child's age", () => {
+  it("uses Massachusetts' unified center type at every age", () => {
     const situation = buildSituation(
       MA_CONFIG,
       household({ state: 'MA', childAges: [2, 9] }),
       2026,
     );
     expect(situation.people.child_1.ma_ccfa_care_provider_type).toEqual({
-      [Y]: 'CENTER_BASED_CARE_EARLY_EDUCATION',
+      [Y]: 'CENTER_BASED_CARE',
     });
     expect(situation.people.child_2.ma_ccfa_care_provider_type).toEqual({
-      [Y]: 'CENTER_BASED_CARE_SCHOOL_AGE',
+      [Y]: 'CENTER_BASED_CARE',
     });
   });
 

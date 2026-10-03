@@ -129,7 +129,7 @@ function readTotal(
     Object.values(group).forEach((entity) => {
       const values = entity?.[variable];
       if (values && values[year] !== undefined && values[year] !== null) {
-        total += Number(values[year]);
+        total = total + Number(values[year]);
         found = true;
       }
     });
@@ -158,18 +158,20 @@ export interface CalculateOptions {
   config: StateInputConfig;
   household: HouseholdSpec;
   year: number;
+  referenceMonth: string;
   metadata: ApiMetadata;
   signal?: AbortSignal;
 }
 
 /**
- * Post the household to the API and convert the annual result to the monthly
+ * Post the household to the API and read the reference-month result as the monthly
  * figures the UI shows, per docs/DATA_CONTRACT.md.
  */
 export async function calculateLive({
   config,
   household,
   year,
+  referenceMonth,
   metadata,
   signal,
 }: CalculateOptions): Promise<LiveResult> {
@@ -179,7 +181,7 @@ export async function calculateLive({
       `The live API runs policyengine-us ${metadata.version}, which does not include ${missing.join(', ')}.`,
     );
   }
-  const situation = buildSituation(config, household, year, metadata.variables);
+  const situation = buildSituation(config, household, year, metadata.variables, referenceMonth);
   const response = await fetch(`${API_BASE}/calculate`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -199,14 +201,14 @@ export async function calculateLive({
 
   const year_ = String(year);
   const result = body.result;
-  const subsidy = readTotal(result, config.main, year_) / 12;
+  const subsidy = readTotal(result, config.main, referenceMonth);
   const factor =
     config.copay_factor === 'days' ? household.attendingDaysPerMonth : config.copay_factor;
-  const childCareSubsidies = readTotal(result, 'child_care_subsidies', year_) / 12;
-  const eligibleRaw = config.eligible ? readFirst(result, config.eligible, year_) : null;
+  const childCareSubsidies = readTotal(result, 'child_care_subsidies', referenceMonth);
+  const eligibleRaw = config.eligible ? readFirst(result, config.eligible, referenceMonth) : null;
   const eligible = config.eligible ? Boolean(eligibleRaw) : subsidy > 0;
   // The model computes a would-be copay for ineligible families too.
-  const copay = eligible ? (readTotal(result, config.copay, year_) / 12) * factor : 0;
+  const copay = eligible ? readTotal(result, config.copay, referenceMonth) * factor : 0;
   const charge = household.monthlyChargePerChild * household.childAges.length;
 
   return {

@@ -65,9 +65,7 @@ def test_states_without_an_eligibility_flag_are_the_documented_ones():
 def test_person_overrides_target_known_states():
     assert set(cfg.PERSON_OVERRIDES) <= set(cfg.STATES)
     assert cfg.PERSON_OVERRIDES["MD"]["md_ccs_provider_type"] == "LICENSED_CENTER"
-    split = cfg.PERSON_OVERRIDES["MA"]["ma_ccfa_care_provider_type"]
-    assert split(4) == "CENTER_BASED_CARE_EARLY_EDUCATION"
-    assert split(5) == "CENTER_BASED_CARE_SCHOOL_AGE"
+    assert cfg.PERSON_OVERRIDES["MA"]["ma_ccfa_care_provider_type"] == "CENTER_BASED_CARE"
 
 
 def test_reference_grid_settings():

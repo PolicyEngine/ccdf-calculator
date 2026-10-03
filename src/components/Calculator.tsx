@@ -13,13 +13,11 @@ import { calculateLive, fetchApiMetadata, missingVariables, type LiveResult } fr
 import {
   CHILD_STRUCTURE_LABELS,
   estimate as estimateFromGrid,
-  incomeSeries,
   loadMetadata,
   loadStateData,
   loadStateInputs,
   nearestChargeIndex,
   referenceGaps,
-  structureComparison,
 } from '@/lib/dataLookup';
 import { fmtCurrency } from '@/lib/format';
 import {
@@ -152,13 +150,19 @@ export default function Calculator() {
 
   const chartData = useMemo(() => {
     if (!metadata || !stateData || !estimate) return [];
-    return incomeSeries(metadata, stateData, estimate.key, chargeIndex);
-  }, [metadata, stateData, estimate, chargeIndex]);
+    return metadata.income_steps.map((income) => {
+      const point = estimateFromGrid(metadata, stateData, { adults: form.adults, childAges: form.children.map((child) => child.age), income, monthlyChargePerChild: form.monthlyChargePerChild })!;
+      return { income, subsidy: point.subsidy, copay: point.copay };
+    });
+  }, [metadata, stateData, estimate, form]);
 
   const structureData = useMemo(() => {
     if (!metadata || !stateData) return [];
-    return structureComparison(metadata, stateData, form.adults, chargeIndex, form.income);
-  }, [metadata, stateData, form.adults, chargeIndex, form.income]);
+    return Object.entries(metadata.child_structures).map(([childKey, structure]) => ({
+      childKey, label: CHILD_STRUCTURE_LABELS[childKey] ?? childKey,
+      subsidy: estimateFromGrid(metadata, stateData, { adults: form.adults, childAges: structure.ages, income: form.income, monthlyChargePerChild: form.monthlyChargePerChild })?.subsidy ?? 0,
+    }));
+  }, [metadata, stateData, form.adults, form.monthlyChargePerChild, form.income]);
 
   /**
    * The deployed API often lags the version the grid was built with. When it
@@ -173,6 +177,9 @@ export default function Calculator() {
   const apiBlockedReason = useMemo(() => {
     if (!config || !metadata) return null;
     if (!apiVariables || !apiVersion) return null;
+    if (isOlderThan(apiVersion, metadata.policyengine_us_version)) {
+      return `Exact calculations are unavailable until the live model catches up with ${metadata.policyengine_us_version}. The reference estimate remains available.`;
+    }
     const missing = missingVariables(config, { version: apiVersion, variables: apiVariables });
     if (missing.length === 0) return null;
     return `The live API runs policyengine-us ${apiVersion}, which does not yet include this state's program; the estimate uses version ${metadata.policyengine_us_version}.`;
@@ -191,6 +198,7 @@ export default function Calculator() {
         config,
         metadata: { version: apiVersion, variables: apiVariables },
         year: metadata.year,
+        referenceMonth: metadata.reference_month,
         signal: controller.signal,
         household: {
           state: form.state,
@@ -244,6 +252,7 @@ export default function Calculator() {
 
       <main>
         <div className="stack">
+          <div className="calculator-layout">
           <CalculatorInputs
             metadata={metadata}
             config={config}
@@ -270,6 +279,8 @@ export default function Calculator() {
           ) : (
             <div className="loading">Loading state data…</div>
           )}
+
+          </div>
 
           {estimate ? (
             <section className="results-panel">

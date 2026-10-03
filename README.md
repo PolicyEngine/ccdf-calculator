@@ -24,6 +24,11 @@ and DC run with Child Care and Development Fund (CCDF) money, as encoded in
   state from the Microcosm microsimulation, set against the children each
   state actually served in ACF's latest CCDF data tables.
 
+Household estimates use **October 2026** and upstream policyengine-us **2.23.5**
+(commit pinned in `scripts/requirements.txt`). Monthly figures use that month,
+not an annual average. The population page retains its older annual run and
+labels its vintage separately.
+
 See [docs/PLAN.md](docs/PLAN.md) for the design and
 [docs/DATA_CONTRACT.md](docs/DATA_CONTRACT.md) for the generated data shapes.
 
@@ -74,8 +79,9 @@ earned income on the first adult) with one of five child configurations
 and school-age children 3 hours/day, 5 days/week, 22 days/month, at the
 state's default provider type (a licensed center) and base quality tier, in
 the state's most populous county, with the provider charging $1,000 to
-$3,000 per child per month. The calculator's live mode uses the exact inputs
-entered instead.
+$3,000 per child per month. Charges are interpolated between grid levels; out-of-range charges and
+other mismatched inputs are flagged beside the result. Live mode uses the
+entered inputs when the API model is at least as recent as the grid.
 
 ## Tests
 
@@ -86,7 +92,7 @@ bun run test        # vitest: grid lookup, interpolation, situation builder, API
 bun run test:py     # pytest: state contract, generated data vs docs/DATA_CONTRACT.md
 ```
 
-The Python suite needs only `pytest` (`pip install -r scripts/requirements-dev.txt`);
+The data-only Python suite needs only `pytest` (`pip install -r scripts/requirements-dev.txt`);
 it does not import policyengine-us. `src/lib/__fixtures__/situations.json`
 pins the household description shared by `scripts/calculator.py` and
 `src/lib/situation.ts`; regenerate it with
@@ -99,3 +105,8 @@ A weekly scheduled run fails once the grid is more than five releases behind.
 ## License
 
 MIT. See [LICENSE](LICENSE).
+
+With the pinned model installed, the Python suite also runs direct NC, SD and
+IN period regressions (`scripts/tests/test_precompute.py`). Those tests skip
+in the lightweight data-only CI environment. Population sensitivity work and
+upstream policy-rule corrections remain separate from this refresh.

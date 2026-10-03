@@ -42,7 +42,7 @@ function household(overrides: Partial<HouseholdSpec> = {}): HouseholdSpec {
 
 function okResult(spmUnit: Record<string, number | boolean>, people: Record<string, Record<string, number>> = {}) {
   const wrap = (values: Record<string, number | boolean>) =>
-    Object.fromEntries(Object.entries(values).map(([k, v]) => [k, { '2026': v }]));
+    Object.fromEntries(Object.entries(values).map(([k, v]) => [k, { [(['spm_unit_fpg', 'hhs_smi'].includes(k) ? '2026' : '2026-10')]: v }]));
   return {
     status: 'ok',
     result: {
@@ -70,16 +70,16 @@ describe('calculateLive', () => {
     vi.unstubAllGlobals();
   });
 
-  it('posts the household and converts annual results to monthly figures', async () => {
+  it('posts the household and reads monthly outputs and converts weekly copays', async () => {
     const fetchMock = vi.fn(async () =>
       jsonResponse(
         okResult({
-          md_ccs: 24000,
-          md_ccs_weekly_copay: 1200,
+          md_ccs: 2000,
+          md_ccs_weekly_copay: 100,
           md_ccs_eligible: true,
           spm_unit_fpg: 27000,
           hhs_smi: 100000,
-          child_care_subsidies: 24000,
+          child_care_subsidies: 2000,
         }),
       ),
     );
@@ -88,13 +88,13 @@ describe('calculateLive', () => {
     const result = await calculateLive({
       config: MD_CONFIG,
       household: household(),
-      year: 2026,
+      year: 2026, referenceMonth: '2026-10',
       metadata: METADATA,
     });
 
     expect(result.subsidy).toBe(2000);
-    // Weekly copay: annual sum / 12 gives a weekly amount, times 52/12 weeks.
-    expect(result.copay).toBeCloseTo((1200 / 12) * (52 / 12));
+    // Weekly copay for the reference month, times 52/12 weeks.
+    expect(result.copay).toBeCloseTo(100 * (52 / 12));
     expect(result.eligible).toBe(true);
     expect(result.outOfPocket).toBe(1500 * 2 - 2000);
     expect(result.fpg).toBe(27000);
@@ -108,7 +108,7 @@ describe('calculateLive', () => {
     expect(init.method).toBe('POST');
     const body = JSON.parse(init.body as string);
     expect(body.household.households.household.state_code).toEqual({ '2026': 'MD' });
-    expect(body.household.spm_units.spm_unit.md_ccs).toEqual({ '2026': null });
+    expect(body.household.spm_units.spm_unit.md_ccs).toEqual({ '2026-10': null });
   });
 
   it('sums a person-level daily copay over children and scales by attending days', async () => {
@@ -117,8 +117,8 @@ describe('calculateLive', () => {
       vi.fn(async () =>
         jsonResponse(
           okResult(
-            { ar_sra: 12000, is_ar_sra_eligible: true, spm_unit_fpg: 20000, hhs_smi: 80000 },
-            { child_1: { ar_sra_daily_copay: 120 }, child_2: { ar_sra_daily_copay: 240 } },
+            { ar_sra: 1000, is_ar_sra_eligible: true, spm_unit_fpg: 20000, hhs_smi: 80000 },
+            { child_1: { ar_sra_daily_copay: 10 }, child_2: { ar_sra_daily_copay: 20 } },
           ),
         ),
       ),
@@ -126,11 +126,11 @@ describe('calculateLive', () => {
     const result = await calculateLive({
       config: AR_CONFIG,
       household: household({ state: 'AR', childAges: [1, 3], attendingDaysPerMonth: 18 }),
-      year: 2026,
+      year: 2026, referenceMonth: '2026-10',
       metadata: METADATA,
     });
     expect(result.subsidy).toBe(1000);
-    expect(result.copay).toBeCloseTo(((120 + 240) / 12) * 18);
+    expect(result.copay).toBeCloseTo((10 + 20) * 18);
   });
 
   it('infers eligibility from a positive subsidy when the state has no flag', async () => {
@@ -143,7 +143,7 @@ describe('calculateLive', () => {
     const result = await calculateLive({
       config: CA_CONFIG,
       household: household({ state: 'CA' }),
-      year: 2026,
+      year: 2026, referenceMonth: '2026-10',
       metadata: METADATA,
     });
     expect(result.subsidy).toBe(0);
@@ -158,13 +158,13 @@ describe('calculateLive', () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () =>
-        jsonResponse(okResult({ md_ccs: 1200, md_ccs_weekly_copay: 0, md_ccs_eligible: false })),
+        jsonResponse(okResult({ md_ccs: 100, md_ccs_weekly_copay: 0, md_ccs_eligible: false })),
       ),
     );
     const result = await calculateLive({
       config: MD_CONFIG,
       household: household(),
-      year: 2026,
+      year: 2026, referenceMonth: '2026-10',
       metadata: METADATA,
     });
     expect(result.subsidy).toBe(100);
@@ -174,6 +174,14 @@ describe('calculateLive', () => {
     expect(result.outOfPocket).toBe(3000 - 100);
   });
 
+  it('does not divide an integer monthly North Carolina fee by twelve', async () => {
+    const config = { ...MD_CONFIG, code: 'NC', main: 'nc_scca', copay: 'nc_scca_parent_fee', eligible: null, copay_factor: 1, outputs: ['nc_scca', 'nc_scca_parent_fee'] };
+    vi.stubGlobal('fetch', vi.fn(async () => jsonResponse(okResult({ nc_scca: 1421, nc_scca_parent_fee: 250 }))));
+    const result = await calculateLive({ config, household: household({state: 'NC'}), year: 2026, referenceMonth: '2026-10', metadata: { version: '2.23.5', variables: new Set(config.outputs) } });
+    expect(result.copay).toBe(250);
+    expect(result.subsidy).toBe(1421);
+  });
+
   it('refuses to call the API when the model lacks a required variable', async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
@@ -181,7 +189,7 @@ describe('calculateLive', () => {
       calculateLive({
         config: MD_CONFIG,
         household: household(),
-        year: 2026,
+        year: 2026, referenceMonth: '2026-10',
         metadata: { version: '1.764.6', variables: new Set(['md_ccs']) },
       }),
     ).rejects.toThrow('1.764.6, which does not include md_ccs_weekly_copay, md_ccs_eligible');
@@ -194,7 +202,7 @@ describe('calculateLive', () => {
       vi.fn(async () => jsonResponse({ status: 'error', message: 'Simulation failed' }, 500)),
     );
     await expect(
-      calculateLive({ config: MD_CONFIG, household: household(), year: 2026, metadata: METADATA }),
+      calculateLive({ config: MD_CONFIG, household: household(), year: 2026, referenceMonth: '2026-10', metadata: METADATA }),
     ).rejects.toThrow('Simulation failed');
   });
 
@@ -204,7 +212,7 @@ describe('calculateLive', () => {
       vi.fn(async () => new Response('<html>Bad gateway</html>', { status: 502 })),
     );
     await expect(
-      calculateLive({ config: MD_CONFIG, household: household(), year: 2026, metadata: METADATA }),
+      calculateLive({ config: MD_CONFIG, household: household(), year: 2026, referenceMonth: '2026-10', metadata: METADATA }),
     ).rejects.toThrow('The PolicyEngine API returned 502.');
   });
 });

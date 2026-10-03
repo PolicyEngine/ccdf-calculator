@@ -99,8 +99,8 @@ describe('estimate', () => {
     expect(result!.key).toBe('1_two');
     expect(result!.childKey).toBe('two');
     expect(result!.chargeIndex).toBe(1);
-    expect(result!.chargeLevel).toBe(1500);
-    expect(result!.subsidy).toBe(1000);
+    expect(result!.chargeLevel).toBe(1600);
+    expect(result!.subsidy).toBe(1100);
     expect(result!.copay).toBe(50);
     expect(result!.eligible).toBe(true);
   });
@@ -112,7 +112,7 @@ describe('estimate', () => {
       income: 5000,
       monthlyChargePerChild: 1600,
     });
-    expect(result!.outOfPocket).toBe(1600 * 2 - 1000);
+    expect(result!.outOfPocket).toBe(1600 * 2 - 1100);
   });
 
   it('never reports negative out of pocket', () => {
@@ -274,7 +274,6 @@ describe('referenceGaps', () => {
       'Care hours are read as 8 and 3 per day.',
       'Care is read as 5 days per week.',
       'Attendance is read as 22 days per month.',
-      'The provider charge is rounded to the nearest grid level, $1,500 per child per month.',
       'The grid assumes the parents meet the work or activity test.',
     ]);
   });
@@ -303,7 +302,7 @@ describe('compareStates', () => {
       charge_level: 1500,
       policyengine_us_version: '1.824.7',
       income_steps: INCOME_STEPS,
-      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1] } },
+      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1], fpg: grid.fpg, smi: grid.smi } },
     };
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input);
@@ -351,10 +350,10 @@ describe('compareStates', () => {
     expect(aa.subsidy).toBe(1000);
     expect(aa.copay).toBe(50);
     expect(aa.eligible).toBe(true);
-    expect(aa.cutoffIncome).toBe(10000);
-    expect(aa.cutoffShareOfFpg).toBe(0.37);
-    // The cutoff sits on the top of the income axis, so it is "at least".
-    expect(aa.cutoffBeyondAxis).toBe(true);
+    expect(aa.cutoffIncome).toBe(9000);
+    expect(aa.cutoffShareOfFpg).toBeCloseTo(9000 / 27000);
+    // The selected cell stops paying at 9000, regardless of the default policy threshold.
+    expect(aa.cutoffBeyondAxis).toBe(false);
 
     const bb = rows.find((row) => row.code === 'BB')!;
     expect(bb.subsidy).toBeNull();
@@ -375,7 +374,7 @@ describe('compareStates', () => {
       charge_level: 1500,
       policyengine_us_version: '1.824.7',
       income_steps: INCOME_STEPS,
-      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1] } },
+      states: { AA: { subsidy: grid.subsidy[1], copay: grid.copay[1], eligible: grid.eligible[1], fpg: grid.fpg, smi: grid.smi } },
     };
     vi.stubGlobal('fetch', vi.fn(async () => jsonResponse(cell)));
     const policy: PolicyIndex = { year: 2026, states: {} };
@@ -405,5 +404,19 @@ describe('loadPolicyIndex', () => {
     const scale = index.states.AA.parameters[0].scale!;
     expect(scale[0].threshold).toBe(-Infinity);
     expect(scale[1].threshold).toBe(Infinity);
+  });
+});
+
+describe('provider charge boundaries', () => {
+  it('keeps all costs on the clamped reference charge outside the grid', () => {
+    const meta = makeMetadata();
+    const result = estimate(meta, makeStateData(), { adults: 1, childAges: [3, 7], income: 5000, monthlyChargePerChild: 4000 })!;
+    expect(result.chargeLevel).toBe(2000);
+    expect(result.outOfPocket).toBe(4000 - result.subsidy);
+    expect(referenceGaps(meta, { adults: 1, childAges: [3, 7], hoursPerDay: [8, 3], daysPerWeek: 5, attendingDaysPerMonth: 22, monthlyChargePerChild: 4000, inActivity: true }, 2).join(' ')).toContain('outside the grid');
+  });
+  it('uses the reference child count for reference costs when extra children are entered', () => {
+    const result = estimate(makeMetadata(), makeStateData(), { adults: 1, childAges: [1, 3, 7, 9], income: 5000, monthlyChargePerChild: 1500 })!;
+    expect(result.outOfPocket).toBe(4500 - result.subsidy);
   });
 });

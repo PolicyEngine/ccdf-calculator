@@ -215,23 +215,32 @@ export function estimate(
 
   const chargeIndex = nearestChargeIndex(meta, household.monthlyChargePerChild);
   const steps = meta.income_steps;
-  const subsidy = interpolate(grid.subsidy[chargeIndex], steps, household.income);
-  // Between two grid points the interpolated subsidy can be positive while the
-  // nearer point is past the cutoff; a positive payment always means eligible.
-  const eligible =
-    subsidy > 0 || Boolean(grid.eligible[chargeIndex][nearestIndex(steps, household.income)]);
-  // The model computes a would-be copay for ineligible families too; only an
-  // eligible family actually owes one.
-  const copay = eligible ? interpolate(grid.copay[chargeIndex], steps, household.income) : 0;
-  const childCount = Math.max(household.childAges.length, 1);
-  const outOfPocket = outOfPocketCost(household.monthlyChargePerChild * childCount, subsidy, copay);
+  const chargeLevel = Math.min(
+    Math.max(household.monthlyChargePerChild, meta.charge_levels[0]),
+    meta.charge_levels.at(-1)!,
+  );
+  const subsidy = interpolate(
+    grid.subsidy.map((row) => interpolate(row, steps, household.income)),
+    meta.charge_levels,
+    chargeLevel,
+  );
+  const eligible = subsidy > 0 || Boolean(grid.eligible[chargeIndex][nearestIndex(steps, household.income)]);
+  const copay = eligible
+    ? interpolate(
+        grid.copay.map((row) => interpolate(row, steps, household.income)),
+        meta.charge_levels,
+        chargeLevel,
+      )
+    : 0;
+  const childCount = meta.child_structures[childKey].ages.length;
+  const outOfPocket = outOfPocketCost(chargeLevel * childCount, subsidy, copay);
 
   return {
     key,
     childKey,
     adults: Math.min(Math.max(household.adults, 1), 2),
     chargeIndex,
-    chargeLevel: meta.charge_levels[chargeIndex],
+    chargeLevel,
     subsidy,
     copay,
     outOfPocket,
@@ -317,7 +326,7 @@ export interface StateComparisonRow {
  */
 export async function compareStates(
   meta: Metadata,
-  policy: PolicyIndex,
+  _policy: PolicyIndex,
   key: string,
   chargeIndex: number,
   income: number,
@@ -326,17 +335,18 @@ export async function compareStates(
   const cell = await loadCompareCell(key, chargeIndex);
   const steps = cell.income_steps?.length ? cell.income_steps : meta.income_steps;
   return meta.states.map((summary): StateComparisonRow => {
-    const threshold = policy.states[summary.code]?.thresholds?.[key] ?? null;
+    const series = cell.states[summary.code];
+    const lastPositive = series?.subsidy.findLastIndex((value) => value > 0) ?? -1;
+    const cutoff = lastPositive >= 0 ? steps[lastPositive] : null;
     const base = {
       code: summary.code,
       name: summary.name,
       program: summary.program,
-      cutoffIncome: threshold ? threshold.income : null,
-      cutoffShareOfFpg: threshold ? threshold.fpg_ratio : null,
-      cutoffShareOfSmi: threshold ? threshold.smi_ratio : null,
-      cutoffBeyondAxis: Boolean(threshold && threshold.income >= maxIncome),
+      cutoffIncome: cutoff,
+      cutoffShareOfFpg: cutoff !== null && series.fpg > 0 ? cutoff / series.fpg : null,
+      cutoffShareOfSmi: cutoff !== null && series.smi > 0 ? cutoff / series.smi : null,
+      cutoffBeyondAxis: cutoff !== null && cutoff >= maxIncome,
     };
-    const series = cell.states[summary.code];
     if (!series) return { ...base, subsidy: null, copay: null, eligible: false };
     const subsidy = interpolate(series.subsidy, steps, income);
     const eligible = subsidy > 0 || Boolean(series.eligible[nearestIndex(steps, income)]);
@@ -403,9 +413,9 @@ export function referenceGaps(
     );
   }
   const chargeLevel = meta.charge_levels[chargeIndex];
-  if (household.monthlyChargePerChild !== chargeLevel) {
+  if (household.monthlyChargePerChild < meta.charge_levels[0] || household.monthlyChargePerChild > meta.charge_levels.at(-1)!) {
     gaps.push(
-      `The provider charge is rounded to the nearest grid level, $${chargeLevel.toLocaleString('en-US')} per child per month.`,
+      `The provider charge is outside the grid; all reference costs use $${chargeLevel.toLocaleString('en-US')} per child per month.`,
     );
   }
   if (!household.inActivity) {

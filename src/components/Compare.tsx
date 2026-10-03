@@ -16,7 +16,7 @@ import {
   structureKey,
   type StateComparisonRow,
 } from '@/lib/dataLookup';
-import { fmtCurrency, fmtPercent } from '@/lib/format';
+import { fmtCurrency, fmtPercent, fmtMonth } from '@/lib/format';
 import type { Metadata, PolicyIndex } from '@/lib/types';
 
 type MetricId = 'subsidy' | 'copay' | 'cutoff' | 'cutoff_fpg' | 'cutoff_smi';
@@ -50,7 +50,7 @@ const METRICS: MetricDefinition[] = [
   {
     id: 'cutoff',
     label: 'Income cutoff',
-    get: (row) => row.cutoffIncome,
+    get: (row) => row.cutoffBeyondAxis ? null : row.cutoffIncome,
     format: fmtCurrency,
     lowLabel: 'Lower cutoff',
     highLabel: 'Higher cutoff',
@@ -58,7 +58,7 @@ const METRICS: MetricDefinition[] = [
   {
     id: 'cutoff_fpg',
     label: 'Cutoff as a share of the poverty line',
-    get: (row) => row.cutoffShareOfFpg,
+    get: (row) => row.cutoffBeyondAxis ? null : row.cutoffShareOfFpg,
     format: (value) => fmtPercent(value, 0),
     lowLabel: 'Lower cutoff',
     highLabel: 'Higher cutoff',
@@ -66,7 +66,7 @@ const METRICS: MetricDefinition[] = [
   {
     id: 'cutoff_smi',
     label: 'Cutoff as a share of state median income',
-    get: (row) => row.cutoffShareOfSmi,
+    get: (row) => row.cutoffBeyondAxis ? null : row.cutoffShareOfSmi,
     format: (value) => fmtPercent(value, 0),
     lowLabel: 'Lower cutoff',
     highLabel: 'Higher cutoff',
@@ -205,6 +205,7 @@ export default function Compare() {
       </header>
 
       <TabNav />
+      <p className="field-note">Rules for {fmtMonth(metadata.reference_month)}. Cutoffs beyond the tested income range appear in the table as lower bounds and are excluded from cutoff maps and rankings.</p>
 
       <main>
         <div className="stack">

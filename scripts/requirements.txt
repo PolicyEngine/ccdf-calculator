@@ -1,3 +1,4 @@
-policyengine-us>=1.824.7
+policyengine-us @ git+https://github.com/PolicyEngine/policyengine-us.git@c916aae265d0ece149a55bebd1a430e467698bf6
+policyengine-core==3.32.16
 numpy
 pyyaml

@@ -10,9 +10,9 @@
   "Eligible population: every child under 13 is assumed to be in full-time care (8 h/day under 5, 3 h/day at 5-12, 5 days/week, 22 days/month) at $1,500 per child per month, or the family's reported expenses if higher.",
   "Parents meet the activity test when every adult in the family reports at least 20 usual weekly hours of work.",
   "Provider type and quality tier are the model defaults (a licensed center, base tier).",
-  "Potential annual subsidy is what the model would pay if every eligible child used care at the assumed charge: an upper bound, not spending.",
+  "Potential annual subsidy is a hypothetical scenario under the stated care assumptions, not spending or a validated upper bound.",
   "The paid-care subset restricts to families reporting child care expenses in the CPS; those families skew high-income and small states have few sampled units, so per-state values are noisy.",
-  "Counts are children and families the model would pay a positive subsidy, not actual caseloads, which are limited by funding, waitlists and take-up."
+  "Child counts include under-13 children in families with a positive modeled subsidy, including siblings who may not individually qualify. They are not actual caseloads."
  ],
  "national": {
   "eligible_children": 16853856.450301602,

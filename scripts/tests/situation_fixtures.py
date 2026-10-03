@@ -39,7 +39,7 @@ CASES = [
         "days_per_week": 4, "attending_days_per_month": 18,
     },
     {
-        "id": "ma_provider_type_split_by_age",
+        "id": "ma_unified_center_provider_type",
         "state": "MA", "num_adults": 1, "child_ages": [2, 9], "earned_income": 45000,
     },
     {

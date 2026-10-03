@@ -1,6 +1,8 @@
 {
- "policyengine_us_version": "1.824.8",
+ "policyengine_us_version": "2.23.5",
  "year": 2026,
+ "reference_month": "2026-10",
+ "model_revision": "c916aae265d0ece149a55bebd1a430e467698bf6",
  "income_steps": [
   0,
   1000,

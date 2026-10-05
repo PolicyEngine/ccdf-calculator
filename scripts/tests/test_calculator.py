@@ -62,13 +62,13 @@ def test_maryland_provider_type_override_and_user_value_wins():
     assert custom["people"]["child_1"]["md_ccs_provider_type"] == {YEAR: "INFORMAL"}
 
 
-def test_massachusetts_provider_type_splits_by_age():
+def test_massachusetts_provider_type_uses_current_center_enum():
     sit = create_situation("MA", 1, [2, 9])
     assert sit["people"]["child_1"]["ma_ccfa_care_provider_type"] == {
-        YEAR: "CENTER_BASED_CARE_EARLY_EDUCATION"
+        YEAR: "CENTER_BASED_CARE"
     }
     assert sit["people"]["child_2"]["ma_ccfa_care_provider_type"] == {
-        YEAR: "CENTER_BASED_CARE_SCHOOL_AGE"
+        YEAR: "CENTER_BASED_CARE"
     }
 
 

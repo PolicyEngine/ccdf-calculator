@@ -21,7 +21,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from policyengine_us import CountryTaxBenefitSystem, Simulation
 
 from calculator import create_situation, output_variables
-from state_config import STATES, YEAR, CHILD_STRUCTURES
+from state_config import REFERENCE_MONTH, STATES, YEAR, CHILD_STRUCTURES
 
 OUT = os.path.join(os.path.dirname(__file__), "..", "public", "data", "state_inputs.json")
 
@@ -48,7 +48,7 @@ def main():
     for state, cfg in sorted(STATES.items()):
         sim = Simulation(situation=create_situation(state, 1, CHILD_STRUCTURES["two"], 30_000))
         sim.trace = True
-        sim.calculate("child_care_subsidies", YEAR)
+        sim.calculate("child_care_subsidies", REFERENCE_MONTH)
         names = {k.split("<")[0] for k in sim.tracer.get_flat_trace()}
         prefix = program_prefix(state)
         inputs = []
@@ -105,7 +105,7 @@ def main():
 
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w") as f:
-        json.dump({"year": YEAR, "states": catalog}, f, indent=1, default=str)
+        json.dump({"year": YEAR, "reference_month": REFERENCE_MONTH, "states": catalog}, f, indent=1, default=str)
     print("wrote", OUT)
 
 

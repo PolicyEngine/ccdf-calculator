@@ -231,7 +231,7 @@
       }
     },
     {
-      "id": "ma_provider_type_split_by_age",
+      "id": "ma_unified_center_provider_type",
       "inputs": {
         "state": "MA",
         "num_adults": 1,
@@ -268,7 +268,7 @@
               "2026": 22
             },
             "ma_ccfa_care_provider_type": {
-              "2026": "CENTER_BASED_CARE_EARLY_EDUCATION"
+              "2026": "CENTER_BASED_CARE"
             }
           },
           "child_2": {
@@ -285,7 +285,7 @@
               "2026": 22
             },
             "ma_ccfa_care_provider_type": {
-              "2026": "CENTER_BASED_CARE_SCHOOL_AGE"
+              "2026": "CENTER_BASED_CARE"
             }
           }
         },

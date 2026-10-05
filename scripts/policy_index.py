@@ -4,8 +4,8 @@ Two sources:
 
 1. Parameters. A traced simulation per state records which parameter nodes
    the subsidy chain reads. Every scalar parameter under the state's program
-   root is listed with its label, value in force on 1 January and 1 July of
-   the model year, unit, and reference links, straight from the YAML metadata.
+   root is listed with its label, value in force at the start of
+   the reference month, unit, and reference links, straight from the YAML metadata.
    Bracket / breakdown parameters are summarized by name only.
 
 2. Effective thresholds from the precomputed grid. For each reference
@@ -30,11 +30,11 @@ from policyengine_us import CountryTaxBenefitSystem, Simulation
 from policyengine_core.parameters import Parameter, ParameterNode, ParameterScale
 
 from calculator import create_situation
-from state_config import CHILD_STRUCTURES, DEFAULT_CHARGE_INDEX, INCOME_STEP, STATES, YEAR
+from state_config import REFERENCE_MONTH, CHILD_STRUCTURES, DEFAULT_CHARGE_INDEX, INCOME_STEP, STATES, YEAR
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "public", "data")
 OUT = os.path.join(DATA, "policy_index.json")
-DATES = [f"{YEAR}-01-01", f"{YEAR}-07-01"]
+DATES = [f"{REFERENCE_MONTH}-01"]
 
 
 def common_prefix(paths):
@@ -43,7 +43,7 @@ def common_prefix(paths):
     for p in parts[1:]:
         n = 0
         while n < min(len(prefix), len(p)) and prefix[n] == p[n]:
-            n += 1
+            n = n + 1
         prefix = prefix[:n]
     return ".".join(prefix)
 
@@ -227,7 +227,7 @@ def main():
     for state, cfg in sorted(STATES.items()):
         sim = Simulation(situation=create_situation(state, 1, CHILD_STRUCTURES["two"], 30_000))
         sim.trace = True
-        sim.calculate("child_care_subsidies", YEAR)
+        sim.calculate("child_care_subsidies", REFERENCE_MONTH)
         used = set()
         for node in sim.tracer.get_flat_trace().values():
             for p in node.get("parameters", {}):
@@ -255,7 +255,7 @@ def main():
         }
         print(state, root, len(parameters), flush=True)
     with open(OUT, "w") as f:
-        json.dump(finite({"year": YEAR, "states": index}), f, indent=1, default=str, allow_nan=False)
+        json.dump(finite({"year": YEAR, "reference_month": REFERENCE_MONTH, "states": index}), f, indent=1, default=str, allow_nan=False)
     print("wrote", OUT)
 
 

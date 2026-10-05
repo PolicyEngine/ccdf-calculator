@@ -1,5 +1,6 @@
 {
  "year": 2026,
+ "reference_month": "2026-10",
  "states": {
   "AK": {
    "code": "AK",
@@ -1282,15 +1283,11 @@
      "label": "Massachusetts Child Care Financial Assistance (CCFA) care provider type",
      "entity": "person",
      "type": "enum",
-     "default": "CENTER_BASED_CARE_SCHOOL_AGE",
+     "default": "CENTER_BASED_CARE",
      "options": [
       {
-       "value": "CENTER_BASED_CARE_EARLY_EDUCATION",
-       "label": "Center-Based Care Early Education"
-      },
-      {
-       "value": "CENTER_BASED_CARE_SCHOOL_AGE",
-       "label": "Center-Based Care School Age"
+       "value": "CENTER_BASED_CARE",
+       "label": "Center-Based Care"
       },
       {
        "value": "HEAD_START_PARTNER_AND_KINDERGARTEN",
@@ -1380,7 +1377,7 @@
      "label": "Maryland CCS child care provider type",
      "entity": "person",
      "type": "enum",
-     "default": "NONE",
+     "default": "LICENSED_CENTER",
      "options": [
       {
        "value": "LICENSED_CENTER",
@@ -3152,13 +3149,6 @@
      "entity": "spm_unit",
      "type": "bool",
      "default": false
-    },
-    {
-     "name": "va_ccsp_is_full_day",
-     "label": "Virginia CCSP full day care",
-     "entity": "person",
-     "type": "bool",
-     "default": true
     },
     {
      "name": "va_ccsp_provider_type",

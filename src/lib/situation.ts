@@ -29,16 +29,12 @@ export interface HouseholdSpec {
 type PersonOverride = (age: number) => InputValue;
 
 /**
- * Baked-in per-child overrides from `create_situation`. The model default for
- * Maryland's provider type pays nothing, and Massachusetts splits its provider
- * type by age. A user-chosen value for the same variable wins.
+ * Explicit provider choices shared with `create_situation`, so the grid and
+ * live inputs agree. A user-chosen value for the same variable wins.
  */
 const PERSON_OVERRIDES: Record<string, Record<string, PersonOverride>> = {
   MD: { md_ccs_provider_type: () => 'LICENSED_CENTER' },
-  MA: {
-    ma_ccfa_care_provider_type: (age) =>
-      age < 5 ? 'CENTER_BASED_CARE_EARLY_EDUCATION' : 'CENTER_BASED_CARE_SCHOOL_AGE',
-  },
+  MA: { ma_ccfa_care_provider_type: () => 'CENTER_BASED_CARE' },
 };
 
 type YearMap = Record<string, InputValue | null>;
@@ -59,6 +55,7 @@ export function buildSituation(
   year: number,
   /** When given, variables absent from the live model are dropped. */
   availableVariables?: Set<string> | null,
+  referenceMonth?: string,
 ): Situation {
   const y = String(year);
   const known = (name: string) => !availableVariables || availableVariables.has(name);
@@ -72,7 +69,7 @@ export function buildSituation(
   const members: string[] = [];
 
   const adults = Math.min(Math.max(household.adults, 1), 2);
-  for (let i = 0; i < adults; i += 1) {
+  for (let i = 0; i < adults; i = i + 1) {
     const id = `adult_${i + 1}`;
     people[id] = {
       age: { [y]: 35 },
@@ -119,12 +116,13 @@ export function buildSituation(
   config.outputs.forEach((variable) => {
     if (!known(variable)) return;
     if (variable === config.copay && config.copay_entity === 'person') return;
-    if (spmUnit[variable] === undefined) spmUnit[variable] = { [y]: null };
+    const period = ['spm_unit_fpg', 'hhs_smi'].includes(variable) ? y : (referenceMonth ?? y);
+    if (spmUnit[variable] === undefined) spmUnit[variable] = { [period]: null };
   });
   if (config.copay_entity === 'person' && known(config.copay)) {
     childAges.forEach((_, i) => {
       const person = people[`child_${i + 1}`];
-      person[config.copay] = { [y]: null };
+      person[config.copay] = { [referenceMonth ?? y]: null };
     });
   }
 

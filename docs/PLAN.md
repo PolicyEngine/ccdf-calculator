@@ -24,8 +24,8 @@ Development Fund (CCDF) and encoded in policyengine-us.
 - 29 states read `meets_ccdf_activity_test` (a boolean input). Nevada returns
   zero unless it is set; the calculator sets it from "parent works or studies".
 - Most states have their own provider type enum and many have a quality tier
-  enum. Maryland defaults its provider type to `NONE`, which pays zero, so the
-  calculator always sets a provider type.
+  enum. Maryland now defaults to a licensed center; the calculator keeps that
+  provider choice explicit.
 - 30 states read `county_fips`; the reference households use each state's
   most populous county (see `scripts/state_config.py`).
 - Subsidy formula shape is common: `min(provider charge, state max rate) -
@@ -131,12 +131,24 @@ subset is shown as secondary with sample sizes.
   the population page once a machine with enough memory is available.
 - Transcribe ACF's FY 2024 Table 1 into `scripts/acf_served.py` when it is
   published.
-- **Decide: twelve-month average vs "rules as of month X".** The grid
-  averages the policy year, so an Indiana family at $30,000 shows "$366 a
-  month, eligible" although the rules in force since 2026-04-05 pay nothing.
-  A month-snapshot grid would need: a `reference_month` in `state_config.py`
-  and `metadata.json`, monthly (not annual/12) reads in `precompute.py`,
-  month-period keys in `src/lib/situation.ts` and `api.ts` (the live API
-  accepts `{"2026-12": null}`), copay factors unchanged, and a rewrite of the
-  averaging note in `Methodology.tsx`. Only Indiana is affected in 2026.
-  Decision pending (Ziming, 2026-09-09).
+- The annual population scenario still needs a fresh run and sensitivity checks.
+
+## October 3, 2026 refresh
+
+- Household and comparison results now use an explicit October 2026 snapshot,
+  superseding the September annual-average decision. The snapshot prevents
+  South Dakota's missing earlier rate regime and Indiana's earlier eligibility
+  rules from being displayed as current monthly payments.
+- Model source is pinned to upstream commit `c916aae265d0ece149a55bebd1a430e467698bf6`
+  (2.23.5), including upstream schedule and Massachusetts provider improvements.
+  Court-supervision controls remain outside the interface.
+- The live API requests that same month. Older deployments are blocked until
+  compatible with the refreshed model inputs.
+- Charges interpolate along the grid; warnings accompany clamped charges and
+  mismatched household inputs. Comparison cutoffs use the selected charge.
+- Population output remains separately versioned and explicitly labeled as an
+  older annual scenario. Child counts describe children in qualifying families;
+  no claim is made that each sibling is individually eligible.
+- This refresh does not repair upstream reimbursement-policy gaps identified
+  in Colorado, Maine, North Carolina, New Mexico, or South Dakota. October
+  outputs describe the current model, not a new legal validation of every rule.

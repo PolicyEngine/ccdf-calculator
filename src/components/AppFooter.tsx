@@ -1,3 +1,4 @@
+import { fmtMonth } from '@/lib/format';
 import type { Metadata } from '@/lib/types';
 
 export default function AppFooter({ metadata }: { metadata: Metadata | null }) {
@@ -12,8 +13,8 @@ export default function AppFooter({ metadata }: { metadata: Metadata | null }) {
       </p>
       {metadata ? (
         <p className="data-version">
-          Data version: policyengine-us {metadata.policyengine_us_version}, policy year{' '}
-          {metadata.year}.
+          Household estimates: policyengine-us {metadata.policyengine_us_version}, rules for{' '}
+          {fmtMonth(metadata.reference_month)}. Population estimates show their own vintage.
         </p>
       ) : null}
     </footer>

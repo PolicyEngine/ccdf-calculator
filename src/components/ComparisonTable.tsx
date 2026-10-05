@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import type { StateComparisonRow } from '@/lib/dataLookup';
-import { fmtCurrency, fmtPercent } from '@/lib/format';
+import { fmtCurrency, fmtCutoff } from '@/lib/format';
 
 type ColumnId = 'name' | 'program' | 'subsidy' | 'copay' | 'cutoff' | 'fpg' | 'smi';
 
@@ -111,10 +111,10 @@ export default function ComparisonTable({
               <td className="numeric">{row.copay === null ? '—' : fmtCurrency(row.copay)}</td>
               <td className="numeric">{cutoffText(row)}</td>
               <td className="numeric">
-                {row.cutoffShareOfFpg === null ? '—' : fmtPercent(row.cutoffShareOfFpg, 0)}
+                {fmtCutoff(row.cutoffShareOfFpg, row.cutoffBeyondAxis, true)}
               </td>
               <td className="numeric">
-                {row.cutoffShareOfSmi === null ? '—' : fmtPercent(row.cutoffShareOfSmi, 0)}
+                {fmtCutoff(row.cutoffShareOfSmi, row.cutoffBeyondAxis, true)}
               </td>
             </tr>
           ))}

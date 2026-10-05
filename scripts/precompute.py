@@ -36,23 +36,25 @@ from state_config import (
     INCOME_STEP,
     STATES,
     YEAR,
+    REFERENCE_MONTH,
+    MODEL_REVISION,
 )
 
 OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "data")
 
 
-def monthly_copay(sim, state, num_children, year):
+def monthly_copay(sim, state, period):
     cfg = STATES[state]
     factor = cfg["copay_factor"]
     var = cfg["copay"]
     entity = sim.tax_benefit_system.variables[var].entity.key
-    # copay variables are MONTH-defined; summing over the year and dividing by
-    # 12 handles mid-year parameter changes the same way the subsidy does.
+    # Read the reference month directly: annual aggregation is not uniform
+    # across integer and float copays. Keep daily/weekly unit conversion.
     if entity == "person":
-        values = sim.calculate(var, year, map_to="spm_unit")
+        values = sim.calculate(var, period, map_to="spm_unit")
     else:
-        values = sim.calculate(var, year)
-    values = np.asarray(values) / 12
+        values = sim.calculate(var, period)
+    values = np.asarray(values)
     if factor == "days":
         return values * ATTENDING_DAYS_PER_MONTH
     return values * factor
@@ -62,7 +64,7 @@ CHARGE_COUNT = len(CHARGE_LEVELS)
 GRID_SHAPE = (CHARGE_COUNT, INCOME_COUNT)
 
 
-def compute_structure(state, num_adults, child_ages, year=YEAR):
+def compute_structure(state, num_adults, child_ages, year=YEAR, reference_month=REFERENCE_MONTH):
     """One simulation with two axis groups: income (group 0) and the annual
     provider charge for the SPM unit (group 1). Core lays the cells out with
     group 0 varying fastest, so results reshape to (charge, income)."""
@@ -92,18 +94,10 @@ def compute_structure(state, num_adults, child_ages, year=YEAR):
     ]
     sim = Simulation(situation=situation)
     cfg = STATES[state]
-    subsidy = (np.asarray(sim.calculate(cfg["main"], year)) / 12).reshape(GRID_SHAPE)
-    copay = monthly_copay(sim, state, n, year).reshape(GRID_SHAPE)
+    subsidy = np.asarray(sim.calculate(cfg["main"], reference_month)).reshape(GRID_SHAPE)
+    copay = monthly_copay(sim, state, reference_month).reshape(GRID_SHAPE)
     if cfg["eligible"]:
-        # The subsidy is the average over the twelve months, so it is positive
-        # whenever the household qualified in any month. Read the flag the
-        # same way: eligible in at least one month of the year. Asking Core
-        # for a MONTH-defined boolean over the whole year does not do this
-        # (Indiana's April 2026 income-limit change surfaced the difference).
-        eligible = np.zeros(GRID_SHAPE, dtype=bool)
-        for month in range(1, 13):
-            monthly = sim.calculate(cfg["eligible"], f"{year}-{month:02d}")
-            eligible |= np.asarray(monthly).astype(bool).reshape(GRID_SHAPE)
+        eligible = np.asarray(sim.calculate(cfg["eligible"], reference_month)).astype(bool).reshape(GRID_SHAPE)
     else:
         eligible = subsidy > 0
     fpg = float(np.asarray(sim.calculate("spm_unit_fpg", year))[0])
@@ -122,7 +116,7 @@ def compute_structure(state, num_adults, child_ages, year=YEAR):
 
 
 def compute_state(state, year=YEAR):
-    out = {"state": state, "year": year, "structures": {}}
+    out = {"state": state, "year": year, "reference_month": REFERENCE_MONTH, "structures": {}}
     for num_adults in ADULTS_RANGE:
         for key, ages in CHILD_STRUCTURES.items():
             out["structures"][f"{num_adults}_{key}"] = compute_structure(state, num_adults, ages, year)
@@ -133,6 +127,8 @@ def metadata():
     return {
         "policyengine_us_version": importlib.metadata.version("policyengine-us"),
         "year": YEAR,
+        "reference_month": REFERENCE_MONTH,
+        "model_revision": MODEL_REVISION,
         "income_steps": list(range(0, INCOME_MAX + 1, INCOME_STEP)),
         "charge_levels": CHARGE_LEVELS,
         "default_charge_index": DEFAULT_CHARGE_INDEX,

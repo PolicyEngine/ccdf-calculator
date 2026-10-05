@@ -49,12 +49,15 @@ def build(metadata, state_files):
                     "subsidy": grid["subsidy"][charge_index],
                     "copay": grid["copay"][charge_index],
                     "eligible": grid["eligible"][charge_index],
+                    "fpg": grid["fpg"],
+                    "smi": grid["smi"],
                 }
             files[f"{key}_{charge_index}"] = {
                 "structure": key,
                 "charge_index": charge_index,
                 "charge_level": charge_level,
                 "policyengine_us_version": metadata["policyengine_us_version"],
+                "reference_month": metadata["reference_month"],
                 "income_steps": metadata["income_steps"],
                 "states": states,
             }
@@ -73,7 +76,7 @@ def main():
         path = os.path.join(OUTPUT_DIR, f"{name}.json")
         with open(path, "w", encoding="utf-8") as handle:
             json.dump(payload, handle, separators=(",", ":"))
-        total += os.path.getsize(path)
+        total = total + os.path.getsize(path)
     print(f"wrote {len(files)} files to {os.path.abspath(OUTPUT_DIR)} ({total / 1e6:.1f} MB total, "
           f"{total / len(files) / 1e3:.0f} KB each)")
 

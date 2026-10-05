@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   cleanLabel,
   fmtCount,
+  fmtMonth,
+  fmtCutoff,
   fmtCurrency,
   fmtCurrencyCents,
   fmtCurrencyCompact,
@@ -103,5 +105,18 @@ describe('formatCountyName', () => {
   it('handles empty and single-token input', () => {
     expect(formatCountyName('')).toBe('');
     expect(formatCountyName('STATEWIDE')).toBe('STATEWIDE');
+  });
+});
+
+describe('snapshot and cutoff labels', () => {
+  it('labels the month without a local-time-zone shift', () => {
+    expect(fmtMonth('2026-10')).toBe('October 2026');
+  });
+  it('keeps censored dollar and percentage cutoffs consistent', () => {
+    expect(fmtCutoff(200000, true)).toBe('Above $200,000');
+    expect(fmtCutoff(7.32, true, true)).toBe('Above 732%');
+    expect(fmtCutoff(2.71, true, true)).toBe('Above 271%');
+    expect(fmtCutoff(1.5, false, true)).toBe('150%');
+    expect(fmtCutoff(null, true, true)).toBe('—');
   });
 });

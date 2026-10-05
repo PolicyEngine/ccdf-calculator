@@ -18,6 +18,8 @@ export interface ChildStructure {
 export interface Metadata {
   policyengine_us_version: string;
   year: number;
+  reference_month: string;
+  model_revision?: string;
   income_steps: number[];
   charge_levels: number[];
   default_charge_index: number;
@@ -68,7 +70,7 @@ export interface StateInputConfig {
   code: string;
   name: string;
   program: string;
-  /** Monthly subsidy variable (annual sum over the year in the API result). */
+  /** Monthly subsidy variable, requested for the reference month. */
   main: string;
   copay: string;
   copay_entity: 'spm_unit' | 'person';
@@ -88,6 +90,8 @@ export interface StateInputsFile {
 
 /** One state's income series for one (structure, charge) cell of the grid. */
 export interface CompareSeries {
+  fpg: number;
+  smi: number;
   subsidy: number[];
   copay: number[];
   eligible: boolean[];

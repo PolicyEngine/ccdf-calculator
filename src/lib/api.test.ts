@@ -104,9 +104,11 @@ describe('calculateLive', () => {
 
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
-    expect(url).toBe('https://api.policyengine.org/us/calculate');
+    expect(url).toBe('https://www.policyengine.org/api/household/calculate');
     expect(init.method).toBe('POST');
     const body = JSON.parse(init.body as string);
+    expect(body.country).toBe('us');
+    expect(body).not.toHaveProperty('policy');
     expect(body.household.households.household.state_code).toEqual({ '2026': 'MD' });
     expect(body.household.spm_units.spm_unit.md_ccs).toEqual({ '2026-10': null });
   });
@@ -213,7 +215,7 @@ describe('calculateLive', () => {
     );
     await expect(
       calculateLive({ config: MD_CONFIG, household: household(), year: 2026, referenceMonth: '2026-10', metadata: METADATA }),
-    ).rejects.toThrow('The PolicyEngine API returned 502.');
+    ).rejects.toThrow('HTTP 502');
   });
 });
 
@@ -225,6 +227,8 @@ describe('fetchApiMetadata', () => {
   it('keeps only the version and variable names, and fetches once', async () => {
     const fetchMock = vi.fn(async () =>
       jsonResponse({
+        status: 'ok',
+        message: null,
         result: {
           version: '1.764.6',
           variables: { md_ccs: { label: 'x' }, employment_income: { label: 'y' } },
@@ -242,6 +246,6 @@ describe('fetchApiMetadata', () => {
     expect(second).toBe(first);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [metadataUrl] = fetchMock.mock.calls[0] as unknown as [string];
-    expect(metadataUrl).toBe('https://api.policyengine.org/us/metadata');
+    expect(metadataUrl).toBe('https://www.policyengine.org/api/metadata/us');
   });
 });

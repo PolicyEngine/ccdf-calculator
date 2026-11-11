@@ -1,17 +1,21 @@
 /**
- * Live household calculations against the v1 PolicyEngine API.
+ * Live household calculations through www.policyengine.org's dashboard API,
+ * which forwards them to the PolicyEngine Public API with PolicyEngine's
+ * credential.
  *
- * The API runs whatever policyengine-us version is deployed, which lags the
- * version the precomputed grid was built with, and some state programs are not
- * in it yet. `fetchApiMetadata` gives us the deployed version and the set of
+ * The Public API runs whatever policyengine-us version is deployed, which lags
+ * the version the precomputed grid was built with, and some state programs are
+ * not in it yet. `fetchApiMetadata` gives us the deployed version and the set of
  * variables that exist, so the UI can gate the "calculate exactly" button.
  */
+
+import { createPolicyEngineApiClient } from '@policyengine/api-client';
 
 import { outOfPocketCost } from './dataLookup';
 import { buildSituation, type HouseholdSpec } from './situation';
 import type { StateInputConfig } from './types';
 
-const API_BASE = 'https://api.policyengine.org/us';
+const policyengine = createPolicyEngineApiClient();
 const CACHE_KEY = 'ccdf-calculator:us-api-metadata';
 
 export interface ApiMetadata {
@@ -67,14 +71,11 @@ export function fetchApiMetadata(): Promise<ApiMetadata> {
   }
   if (inFlight) return inFlight;
 
-  inFlight = fetch(`${API_BASE}/metadata`)
-    .then(async (res) => {
-      if (!res.ok) throw new Error(`The PolicyEngine API returned ${res.status}.`);
-      const body = (await res.json()) as {
-        result?: { version?: string; variables?: Record<string, unknown> };
-      };
-      const version = body.result?.version ?? 'unknown';
-      const variables = new Set(Object.keys(body.result?.variables ?? {}));
+  inFlight = policyengine
+    .getMetadata<{ version?: string; variables?: Record<string, unknown> } | null>('us')
+    .then((result) => {
+      const version = result?.version ?? 'unknown';
+      const variables = new Set(Object.keys(result?.variables ?? {}));
       const metadata: ApiMetadata = { version, variables };
       memory = metadata;
       writeSessionCache(metadata);
@@ -111,15 +112,11 @@ export interface LiveResult {
 type YearValues = Record<string, number | boolean | string | null>;
 type EntityResult = Record<string, YearValues>;
 
-interface CalculateResponse {
-  status?: string;
-  message?: string;
-  result?: Record<string, Record<string, EntityResult>> | null;
-}
+type CalculatedHousehold = Record<string, Record<string, EntityResult>>;
 
 /** Sum a variable across every entity of every group it appears in. */
 function readTotal(
-  result: NonNullable<CalculateResponse['result']>,
+  result: CalculatedHousehold,
   variable: string,
   year: string,
 ): number {
@@ -138,7 +135,7 @@ function readTotal(
 }
 
 function readFirst(
-  result: NonNullable<CalculateResponse['result']>,
+  result: CalculatedHousehold,
   variable: string,
   year: string,
 ): number | boolean | string | null {
@@ -182,25 +179,18 @@ export async function calculateLive({
     );
   }
   const situation = buildSituation(config, household, year, metadata.variables, referenceMonth);
-  const response = await fetch(`${API_BASE}/calculate`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ household: situation }),
-    signal,
-  });
-
-  let body: CalculateResponse;
-  try {
-    body = (await response.json()) as CalculateResponse;
-  } catch {
-    throw new Error(`The PolicyEngine API returned ${response.status}.`);
-  }
-  if (body.status !== 'ok' || !body.result) {
-    throw new Error(body.message || 'The PolicyEngine API could not compute this household.');
+  // Throws PolicyEngineApiError, carrying the dashboard API's or the Public
+  // API's message, for anything but a calculated household.
+  const result = await policyengine.calculateHousehold<CalculatedHousehold | null>(
+    // The spread gives the client the plain object type its Household expects.
+    { country: 'us', household: { ...situation } },
+    { signal },
+  );
+  if (!result) {
+    throw new Error('The PolicyEngine API could not compute this household.');
   }
 
   const year_ = String(year);
-  const result = body.result;
   const subsidy = readTotal(result, config.main, referenceMonth);
   const factor =
     config.copay_factor === 'days' ? household.attendingDaysPerMonth : config.copay_factor;

@@ -8,7 +8,7 @@ Development Fund (CCDF) and encoded in policyengine-us.
 
 | Page | Purpose | Data layer |
 |---|---|---|
-| Calculator | Pick a state, describe the household (parents, children's ages, income, care schedule, provider type and quality tier), see the monthly subsidy, the family copay, and eligibility. Chart of subsidy vs income. | Precomputed grid for the reference households; live household API (`POST https://api.policyengine.org/us/calculate`) for the exact household the user enters. |
+| Calculator | Pick a state, describe the household (parents, children's ages, income, care schedule, provider type and quality tier), see the monthly subsidy, the family copay, and eligibility. Chart of subsidy vs income. | Precomputed grid for the reference households; live household API (www.policyengine.org's dashboard API, `POST /api/household/calculate`) for the exact household the user enters. |
 | Compare states | Map and ranked bar of subsidy or copay for a chosen reference household at a chosen income. Table of effective entry income limits (as % SMI and % FPL) and program facts. | Precomputed grid + `policy_index.json` built from parameter YAML. |
 | Population impact | Estimated eligible families, enrolled families and annual subsidy dollars by state from the Microcosm microsimulation. Secondary feature. | `impact.json` produced by `scripts/microsim.py` (heavy; run separately). |
 

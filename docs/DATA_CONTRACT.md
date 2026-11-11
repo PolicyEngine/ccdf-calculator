@@ -147,8 +147,11 @@ labelled "Currently receiving this subsidy".
 
 ## Live household API
 
-`POST https://api.policyengine.org/us/calculate` with body
-`{"household": <situation>}`. The situation mirrors
+`POST https://www.policyengine.org/api/household/calculate` (www.policyengine.org's
+dashboard API, through `@policyengine/api-client`) with body
+`{"country": "us", "household": <situation>}`. The dashboard API forwards it to
+the PolicyEngine Public API's `/us/calculate`; the page never calls
+api.policyengine.org itself. The situation mirrors
 `scripts/calculator.py::create_situation` exactly:
 
 ```jsonc

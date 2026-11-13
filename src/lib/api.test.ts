@@ -227,7 +227,7 @@ describe('calculateLive', () => {
     );
     await expect(
       calculateLive({ config: MD_CONFIG, household: household(), year: 2026, referenceMonth: '2026-10', metadata: METADATA }),
-    ).rejects.toThrow('HTTP 502');
+    ).rejects.toMatchObject({ message: 'The dashboard API answered HTTP 502.' });
   });
 });
 

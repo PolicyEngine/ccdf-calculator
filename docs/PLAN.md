@@ -124,8 +124,8 @@ subset is shown as secondary with sample sizes.
 
 ## Open items
 
-- Production household API lags the repo (1.764.6 vs 1.824.8 on
-  2026-09-09); the live mode gates on the model version from the dashboard
+- Production household API lags the repo (2.2.1 vs 2.23.5 on
+  2026-11-13); the live mode gates on the model version from the dashboard
   API's `/api/metadata/us` and keeps the grid
   estimate as the headline when the API model is older.
 - Register the deployed app in policyengine-app-v2 (`appZoneRoutes.ts`,

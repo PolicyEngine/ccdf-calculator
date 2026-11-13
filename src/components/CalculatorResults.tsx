@@ -184,16 +184,18 @@ export default function CalculatorResults({
           >
             {calculateButtonLabel(calculating, calculationPause.secondsRemaining)}
           </button>
-          {calculationsPaused ? (
-            <p className="mode-note">
-              {/* Only the failure's message is announced; the countdown changes every second. */}
-              <span role="status">{calculationPause.reason}</span>{' '}
-              {calculationPauseCountdown(calculationPause.secondsRemaining)}
-            </p>
-          ) : null}
         </div>
       </div>
 
+      {/* Outside the exact-calculation card, which is dimmed when the inputs have changed,
+          so the refusal's message stays as readable as the error box it replaces. */}
+      {calculationsPaused ? (
+        <p className="calculation-pause-notice">
+          {/* Only the failure's message is announced; the countdown changes every second. */}
+          <span role="status">{calculationPause.reason}</span>{' '}
+          {calculationPauseCountdown(calculationPause.secondsRemaining)}
+        </p>
+      ) : null}
       {liveError ? <div className="error">{liveError}</div> : null}
 
 

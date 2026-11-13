@@ -125,9 +125,11 @@ subset is shown as secondary with sample sizes.
 ## Open items
 
 - Production household API lags the repo (2.2.1 vs 2.23.5 on
-  2026-11-13); the live mode gates on the model version from the dashboard
-  API's `/api/metadata/us` and keeps the grid
-  estimate as the headline when the API model is older.
+  2026-11-13). The calculator reads the deployed model version from the
+  dashboard API's `/api/metadata/us`; while it is older than the grid's,
+  "Calculate exactly" is disabled for every state, so no live calculation
+  can run against production today and the grid estimate is the only
+  result shown.
 - Register the deployed app in policyengine-app-v2 (`appZoneRoutes.ts`,
   `apps.json`) after the Vercel project exists. That also lets its own
   `*.vercel.app` host call the dashboard API; until then only

@@ -1,11 +1,12 @@
 'use client';
 
-import type { LiveResult } from '@/lib/api';
+import { calculateButtonLabel, calculationPauseCountdown, type LiveResult } from '@/lib/api';
 import type { Estimate } from '@/lib/dataLookup';
 import { CHILD_STRUCTURE_LABELS } from '@/lib/dataLookup';
 import { fmtCurrency, fmtPercent, fmtMonth } from '@/lib/format';
 import type { CalculatorForm } from '@/lib/household';
 import type { Metadata, StateInputConfig } from '@/lib/types';
+import type { HouseholdCalculationPause } from '@/lib/useHouseholdCalculationPause';
 
 interface Props {
   config: StateInputConfig;
@@ -17,6 +18,8 @@ interface Props {
   liveStale: boolean;
   liveError: string | null;
   calculating: boolean;
+  /** The pause after a rate-limit refusal: seconds left (0 when calculations may be sent) and its reason. */
+  calculationPause: HouseholdCalculationPause;
   apiVersion: string | null;
   /** The live API runs an older policyengine-us than the grid was built with. */
   apiOlderThanGrid: boolean;
@@ -34,11 +37,13 @@ export default function CalculatorResults({
   liveStale,
   liveError,
   calculating,
+  calculationPause,
   apiVersion,
   apiOlderThanGrid,
   apiBlockedReason,
   onCalculate,
 }: Props) {
+  const calculationsPaused = calculationPause.secondsRemaining > 0;
   const gridVersion = metadata.policyengine_us_version;
   const liveFresh = Boolean(live) && !liveStale;
   // An older API models older rules, so it never replaces the headline.
@@ -175,13 +180,22 @@ export default function CalculatorResults({
             type="button"
             className="calculate-btn"
             onClick={onCalculate}
-            disabled={calculating || Boolean(apiBlockedReason) || !apiVersion}
+            disabled={calculating || calculationsPaused || Boolean(apiBlockedReason) || !apiVersion}
           >
-            {calculating ? 'Calculating…' : 'Calculate exactly'}
+            {calculateButtonLabel(calculating, calculationPause.secondsRemaining)}
           </button>
         </div>
       </div>
 
+      {/* Outside the exact-calculation card, which is dimmed when the inputs have changed,
+          so the refusal's message stays as readable as the error box it replaces. */}
+      {calculationsPaused ? (
+        <p className="calculation-pause-notice">
+          {/* Only the failure's message is announced; the countdown changes every second. */}
+          <span role="status">{calculationPause.reason}</span>{' '}
+          {calculationPauseCountdown(calculationPause.secondsRemaining)}
+        </p>
+      ) : null}
       {liveError ? <div className="error">{liveError}</div> : null}
 
 

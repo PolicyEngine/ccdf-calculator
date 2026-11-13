@@ -4,6 +4,7 @@ import {
   calculateLive,
   calculationPauseCountdown,
   fetchApiMetadata,
+  householdCalculationPauseReason,
   householdCalculationPauseRemaining,
   householdCalculationPauseSeconds,
   missingVariables,
@@ -404,6 +405,34 @@ describe('calculateLive and the shared limit on calculations', () => {
 
     await expect(calculateMaryland()).rejects.toMatchObject({ rateLimited: true });
     expect(fetchMock).toHaveBeenCalledTimes(2);
+    // The notice gives the refusal's reason, which the caller never saw.
+    expect(householdCalculationPauseReason()).toBe(`${SHARED_LIMIT}, and it has been reached.`);
+  });
+
+  it('keeps the message of the failure that started the pause as its reason', async () => {
+    vi.stubGlobal('location', { origin: 'http://localhost:3000' });
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        throw new TypeError('Failed to fetch');
+      }),
+    );
+
+    await failureOf(calculateMaryland());
+
+    // A dropped connection on localhost reads the same, so the notice must
+    // still say the service could not be reached.
+    expect(householdCalculationPauseReason()).toBe(
+      `PolicyEngine's calculation service could not be reached. ${SHARED_LIMIT}, which may have been reached.`,
+    );
+  });
+
+  it('gives a pause started without a reason the message of a calculation held back', () => {
+    pauseHouseholdCalculations();
+    expect(householdCalculationPauseReason()).toBe(`${SHARED_LIMIT}, which may have been reached.`);
+
+    pauseHouseholdCalculations(60_000, 'Refused for the limit.');
+    expect(householdCalculationPauseReason()).toBe('Refused for the limit.');
   });
 
   it('rethrows a cancelled calculation unchanged and does not pause', async () => {

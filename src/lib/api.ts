@@ -35,22 +35,39 @@ export const SHARED_LIMIT_EXPLANATION =
   'Everyone on your network, such as a workshop or an office, shares a limit on calculations a minute';
 
 /**
+ * The message of a calculation held back during a pause, and the reason of a
+ * pause started without one. The pause may have started from a request with
+ * no answer, which only may have met the limit.
+ */
+const HELD_BACK_MESSAGE = `${SHARED_LIMIT_EXPLANATION}, which may have been reached.`;
+
+/**
  * When the page may send household calculations again after a refusal for
  * the firewall's limit, in `Date.now()` milliseconds. `calculateLive` checks
  * it before sending.
  */
 let householdCalculationsPausedUntil = 0;
+/** The user-facing message of the failure that started the pause. */
+let pauseReason = HELD_BACK_MESSAGE;
 const pauseListeners = new Set<() => void>();
 
 /**
  * Stops the page from sending household calculations for `milliseconds`
- * (the firewall's minute unless given); 0 ends a pause.
+ * (the firewall's minute unless given); 0 ends a pause. `reason` is the
+ * user-facing message of the failure that started it.
  */
 export function pauseHouseholdCalculations(
   milliseconds: number = RATE_LIMIT_WAIT_MILLISECONDS,
+  reason: string = HELD_BACK_MESSAGE,
 ): void {
   householdCalculationsPausedUntil = Date.now() + milliseconds;
+  pauseReason = reason;
   pauseListeners.forEach((listener) => listener());
+}
+
+/** The user-facing message of the failure that started the current or last pause. */
+export function householdCalculationPauseReason(): string {
+  return pauseReason;
 }
 
 /** Milliseconds until the page may send household calculations again; 0 when it may now. */
@@ -77,7 +94,7 @@ export function calculateButtonLabel(calculating: boolean, pauseSeconds: number)
   return calculating ? 'Calculating…' : 'Calculate exactly';
 }
 
-/** The sentence after `SHARED_LIMIT_EXPLANATION` in the notice shown during a pause. */
+/** The sentence after the pause's reason in the notice shown during a pause. */
 export function calculationPauseCountdown(pauseSeconds: number): string {
   return `This page can calculate again in ${pauseSeconds} s.`;
 }
@@ -303,10 +320,8 @@ export async function calculateLive({
   }
   const situation = buildSituation(config, household, year, metadata.variables, referenceMonth);
   if (householdCalculationPauseRemaining() > 0) {
-    // Held back during the pause after a refusal, so never sent. The pause
-    // may have started from a request with no answer, which only may have
-    // met the limit.
-    throw new LiveCalculationError(`${SHARED_LIMIT_EXPLANATION}, which may have been reached.`, null, true);
+    // Held back during the pause after a refusal, so never sent.
+    throw new LiveCalculationError(HELD_BACK_MESSAGE, null, true);
   }
   let result: CalculatedHousehold | null;
   try {
@@ -323,8 +338,9 @@ export async function calculateLive({
     const failure = calculationError(error);
     if (failure.rateLimited) {
       // Pause at once, even if the caller has already seen another
-      // calculation fail and never sees this refusal.
-      pauseHouseholdCalculations();
+      // calculation fail and never sees this refusal. The notice beside
+      // the button gives this failure's message.
+      pauseHouseholdCalculations(RATE_LIMIT_WAIT_MILLISECONDS, failure.message);
     }
     throw failure;
   }

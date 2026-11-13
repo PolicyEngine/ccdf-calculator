@@ -1,16 +1,12 @@
 'use client';
 
-import {
-  calculateButtonLabel,
-  calculationPauseCountdown,
-  SHARED_LIMIT_EXPLANATION,
-  type LiveResult,
-} from '@/lib/api';
+import { calculateButtonLabel, calculationPauseCountdown, type LiveResult } from '@/lib/api';
 import type { Estimate } from '@/lib/dataLookup';
 import { CHILD_STRUCTURE_LABELS } from '@/lib/dataLookup';
 import { fmtCurrency, fmtPercent, fmtMonth } from '@/lib/format';
 import type { CalculatorForm } from '@/lib/household';
 import type { Metadata, StateInputConfig } from '@/lib/types';
+import type { HouseholdCalculationPause } from '@/lib/useHouseholdCalculationPause';
 
 interface Props {
   config: StateInputConfig;
@@ -22,8 +18,8 @@ interface Props {
   liveStale: boolean;
   liveError: string | null;
   calculating: boolean;
-  /** Whole seconds until calculations may be sent again after a rate-limit refusal; 0 when they may now. */
-  calculationPauseSeconds: number;
+  /** The pause after a rate-limit refusal: seconds left (0 when calculations may be sent) and its reason. */
+  calculationPause: HouseholdCalculationPause;
   apiVersion: string | null;
   /** The live API runs an older policyengine-us than the grid was built with. */
   apiOlderThanGrid: boolean;
@@ -41,13 +37,13 @@ export default function CalculatorResults({
   liveStale,
   liveError,
   calculating,
-  calculationPauseSeconds,
+  calculationPause,
   apiVersion,
   apiOlderThanGrid,
   apiBlockedReason,
   onCalculate,
 }: Props) {
-  const calculationsPaused = calculationPauseSeconds > 0;
+  const calculationsPaused = calculationPause.secondsRemaining > 0;
   const gridVersion = metadata.policyengine_us_version;
   const liveFresh = Boolean(live) && !liveStale;
   // An older API models older rules, so it never replaces the headline.
@@ -186,13 +182,13 @@ export default function CalculatorResults({
             onClick={onCalculate}
             disabled={calculating || calculationsPaused || Boolean(apiBlockedReason) || !apiVersion}
           >
-            {calculateButtonLabel(calculating, calculationPauseSeconds)}
+            {calculateButtonLabel(calculating, calculationPause.secondsRemaining)}
           </button>
           {calculationsPaused ? (
             <p className="mode-note">
-              {/* Only the explanation is announced; the countdown changes every second. */}
-              <span role="status">{SHARED_LIMIT_EXPLANATION}.</span>{' '}
-              {calculationPauseCountdown(calculationPauseSeconds)}
+              {/* Only the failure's message is announced; the countdown changes every second. */}
+              <span role="status">{calculationPause.reason}</span>{' '}
+              {calculationPauseCountdown(calculationPause.secondsRemaining)}
             </p>
           ) : null}
         </div>

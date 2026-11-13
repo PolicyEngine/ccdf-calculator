@@ -56,7 +56,7 @@ export default function Calculator() {
   const [liveStale, setLiveStale] = useState(false);
   const [liveError, setLiveError] = useState<string | null>(null);
   const [calculating, setCalculating] = useState(false);
-  const calculationPauseSeconds = useHouseholdCalculationPause();
+  const calculationPause = useHouseholdCalculationPause();
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -227,8 +227,8 @@ export default function Calculator() {
       setLiveStale(false);
     } catch (error) {
       if ((error as Error).name === 'AbortError') return;
-      // The notice beside the button explains a refusal for the shared
-      // limit, and the last result stays on screen.
+      // The notice beside the button gives a rate-limited failure's
+      // message, and the last result stays on screen.
       if (error instanceof LiveCalculationError && error.rateLimited) return;
       setLiveError((error as Error).message);
     } finally {
@@ -282,7 +282,7 @@ export default function Calculator() {
               liveStale={liveStale}
               liveError={liveError}
               calculating={calculating}
-              calculationPauseSeconds={calculationPauseSeconds}
+              calculationPause={calculationPause}
               apiVersion={apiVersion}
               apiOlderThanGrid={apiOlderThanGrid}
               apiBlockedReason={apiBlockedReason}

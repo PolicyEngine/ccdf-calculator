@@ -1,6 +1,11 @@
 'use client';
 
-import type { LiveResult } from '@/lib/api';
+import {
+  calculateButtonLabel,
+  calculationPauseCountdown,
+  SHARED_LIMIT_EXPLANATION,
+  type LiveResult,
+} from '@/lib/api';
 import type { Estimate } from '@/lib/dataLookup';
 import { CHILD_STRUCTURE_LABELS } from '@/lib/dataLookup';
 import { fmtCurrency, fmtPercent, fmtMonth } from '@/lib/format';
@@ -17,6 +22,8 @@ interface Props {
   liveStale: boolean;
   liveError: string | null;
   calculating: boolean;
+  /** Whole seconds until calculations may be sent again after a rate-limit refusal; 0 when they may now. */
+  calculationPauseSeconds: number;
   apiVersion: string | null;
   /** The live API runs an older policyengine-us than the grid was built with. */
   apiOlderThanGrid: boolean;
@@ -34,11 +41,13 @@ export default function CalculatorResults({
   liveStale,
   liveError,
   calculating,
+  calculationPauseSeconds,
   apiVersion,
   apiOlderThanGrid,
   apiBlockedReason,
   onCalculate,
 }: Props) {
+  const calculationsPaused = calculationPauseSeconds > 0;
   const gridVersion = metadata.policyengine_us_version;
   const liveFresh = Boolean(live) && !liveStale;
   // An older API models older rules, so it never replaces the headline.
@@ -175,10 +184,17 @@ export default function CalculatorResults({
             type="button"
             className="calculate-btn"
             onClick={onCalculate}
-            disabled={calculating || Boolean(apiBlockedReason) || !apiVersion}
+            disabled={calculating || calculationsPaused || Boolean(apiBlockedReason) || !apiVersion}
           >
-            {calculating ? 'Calculating…' : 'Calculate exactly'}
+            {calculateButtonLabel(calculating, calculationPauseSeconds)}
           </button>
+          {calculationsPaused ? (
+            <p className="mode-note">
+              {/* Only the explanation is announced; the countdown changes every second. */}
+              <span role="status">{SHARED_LIMIT_EXPLANATION}.</span>{' '}
+              {calculationPauseCountdown(calculationPauseSeconds)}
+            </p>
+          ) : null}
         </div>
       </div>
 

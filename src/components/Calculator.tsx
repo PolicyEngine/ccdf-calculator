@@ -9,7 +9,13 @@ import Methodology from './Methodology';
 import StructureChart from './StructureChart';
 import SubsidyChart from './SubsidyChart';
 import TabNav from './TabNav';
-import { calculateLive, fetchApiMetadata, missingVariables, type LiveResult } from '@/lib/api';
+import {
+  calculateLive,
+  fetchApiMetadata,
+  LiveCalculationError,
+  missingVariables,
+  type LiveResult,
+} from '@/lib/api';
 import {
   CHILD_STRUCTURE_LABELS,
   estimate as estimateFromGrid,
@@ -27,6 +33,7 @@ import {
   type CalculatorForm,
 } from '@/lib/household';
 import type { Metadata, StateData, StateInputsFile } from '@/lib/types';
+import { useHouseholdCalculationPause } from '@/lib/useHouseholdCalculationPause';
 import { isOlderThan } from '@/lib/version';
 
 const DEFAULT_STATE = 'CA';
@@ -49,6 +56,7 @@ export default function Calculator() {
   const [liveStale, setLiveStale] = useState(false);
   const [liveError, setLiveError] = useState<string | null>(null);
   const [calculating, setCalculating] = useState(false);
+  const calculationPauseSeconds = useHouseholdCalculationPause();
   const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
@@ -219,6 +227,9 @@ export default function Calculator() {
       setLiveStale(false);
     } catch (error) {
       if ((error as Error).name === 'AbortError') return;
+      // The notice beside the button explains a refusal for the shared
+      // limit, and the last result stays on screen.
+      if (error instanceof LiveCalculationError && error.rateLimited) return;
       setLiveError((error as Error).message);
     } finally {
       setCalculating(false);
@@ -271,6 +282,7 @@ export default function Calculator() {
               liveStale={liveStale}
               liveError={liveError}
               calculating={calculating}
+              calculationPauseSeconds={calculationPauseSeconds}
               apiVersion={apiVersion}
               apiOlderThanGrid={apiOlderThanGrid}
               apiBlockedReason={apiBlockedReason}

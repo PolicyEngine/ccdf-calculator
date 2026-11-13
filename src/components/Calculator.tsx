@@ -227,8 +227,8 @@ export default function Calculator() {
       setLiveStale(false);
     } catch (error) {
       if ((error as Error).name === 'AbortError') return;
-      // The notice beside the button gives a rate-limited failure's
-      // message, and the last result stays on screen.
+      // The pause notice below the exact-calculation card gives a
+      // rate-limited failure's message, and the last result stays on screen.
       if (error instanceof LiveCalculationError && error.rateLimited) return;
       setLiveError((error as Error).message);
     } finally {

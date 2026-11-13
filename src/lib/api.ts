@@ -54,7 +54,9 @@ const pauseListeners = new Set<() => void>();
 /**
  * Stops the page from sending household calculations for `milliseconds`
  * (the firewall's minute unless given); 0 ends a pause. `reason` is the
- * user-facing message of the failure that started it.
+ * user-facing message of the failure that started it; without one, it is
+ * the message of a calculation held back during a pause, which also
+ * replaces the previous pause's reason when a pause is ended with 0.
  */
 export function pauseHouseholdCalculations(
   milliseconds: number = RATE_LIMIT_WAIT_MILLISECONDS,
@@ -65,7 +67,10 @@ export function pauseHouseholdCalculations(
   pauseListeners.forEach((listener) => listener());
 }
 
-/** The user-facing message of the failure that started the current or last pause. */
+/**
+ * The user-facing message of the failure that started the current or last
+ * pause, or the held-back message after a pause started or ended without one.
+ */
 export function householdCalculationPauseReason(): string {
   return pauseReason;
 }
@@ -338,8 +343,8 @@ export async function calculateLive({
     const failure = calculationError(error);
     if (failure.rateLimited) {
       // Pause at once, even if the caller has already seen another
-      // calculation fail and never sees this refusal. The notice beside
-      // the button gives this failure's message.
+      // calculation fail and never sees this refusal. The pause notice
+      // below the exact-calculation card gives this failure's message.
       pauseHouseholdCalculations(RATE_LIMIT_WAIT_MILLISECONDS, failure.message);
     }
     throw failure;
